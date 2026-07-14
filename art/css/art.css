@@ -1,0 +1,991 @@
+/* ── Art site custom properties ──────────────────────────────────────────── */
+/* glitch / system-error theme — always dark, ignores the site light toggle  */
+
+:root {
+  --art-bg:        #292929; /* sampled from images/chrchie.png's flat background fill */
+  --art-card-bg:   var(--art-bg); /* same tone on purpose — window frames should blend into the artwork's own canvas fill, not stand out as a lighter box */
+  --art-ink:       #f0f0f0;
+  --art-ink-dim:   #999999;
+  --art-error:     #ff6677; /* ~5.1:1 on --art-bg/--art-card-bg (AA) */
+  --art-error-on-light: #b3001f; /* for text on the light --art-ink bar (.error-window-code) — no single red clears AA on both a light and a dark background, so this is a separate darker shade, ~6.3:1 on --art-ink */
+  --art-font:      'Fira Mono', monospace, sans-serif;
+  --art-radius:    0px;
+}
+
+/* ── Page structure ──────────────────────────────────────────────────────── */
+
+body {
+  background: var(--art-bg);
+}
+
+#art-main {
+  position: relative;
+  color: var(--art-ink);
+  animation: artFadeIn 0.2s ease-in;
+}
+
+[data-reduced-motion="true"] #art-main {
+  animation: none;
+}
+
+@keyframes artFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Glitch hero — draggable error-window peephole ───────────────────────── */
+
+.glitch-hero {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--art-bg);
+  border-bottom: 1px solid var(--art-ink-dim);
+}
+
+/* Mesh grid (js/mesh-grid.js), sits behind everything; pointer-events:none since it's purely decorative. */
+#glitch-hero-mesh {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  display: block;
+}
+
+/* Always-visible "normal" copy; the zoomed copy only appears inside an error-window viewport. */
+.glitch-hero-bg {
+  position: absolute;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.glitch-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  -webkit-user-drag: none;
+  user-select: none;
+  animation: art-hero-bg-float 4s ease-in-out infinite;
+}
+
+@keyframes art-hero-bg-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+[data-reduced-motion="true"] .glitch-hero-bg img {
+  animation: none;
+}
+
+/* Grain texture between the art (z0) and windows (z2) — windows occlude it where they sit. */
+.glitch-hero-texture {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(240, 240, 240, 0.07) 1px, transparent 1px);
+  background-size: 5px 5px;
+}
+
+/* #glitch-artifacts styles live in shared css/tui.css, not here. */
+
+.glitch-hero-hint {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1rem;
+  font-family: var(--art-font);
+  font-size: 0.8rem;
+  color: var(--art-ink-dim);
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Background bio text (see js/pages.js) — non-interactive, sits below the draggable windows. */
+#hero-bg-text {
+  position: absolute;
+  top: 8rem;
+  left: 2rem;
+  z-index: 1;
+  max-width: 26rem;
+  box-sizing: border-box;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.65); /* darker than --art-bg — separates the text from the mesh grid/texture without reading as an opaque window */
+  font-family: var(--art-font);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--art-ink-dim);
+  pointer-events: none;
+}
+
+#hero-bg-text p {
+  margin: 0 0 1rem;
+}
+
+#hero-bg-text p:last-child {
+  margin-bottom: 0;
+}
+
+#hero-bg-text[hidden] {
+  display: none;
+}
+
+.error-window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--art-ink);
+  background: var(--art-card-bg);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6);
+  z-index: 2;
+  touch-action: none;
+}
+
+/* Deliberately different sizes per window — part of the glitchy, not-quite-
+   uniform "error window" look, not just visual variety. */
+#error-window-1 { width: 30rem; height: 50rem; }
+#error-window-2 { width: 15rem; height: 20rem; }
+#error-window-3 { width: 25rem; height: 30rem; }
+#error-window-4 { width: 15rem; height: 15rem; }
+
+/* Re-triggered per page-open (js/glitch-hero.js) via temp class + opacity lock — see .gallery-popup below for why. */
+.glitch-hero > .error-window {
+  opacity: 0;
+}
+
+/* Own duration on top of the shared keyframe, so gallery/page popups keep their own 220ms. */
+.glitch-hero > .error-window.window-spawn {
+  animation: gallery-pop-in 720ms ease forwards;
+}
+
+[data-reduced-motion="true"] .glitch-hero > .error-window {
+  opacity: 1;
+}
+
+[data-reduced-motion="true"] .glitch-hero > .error-window.window-spawn {
+  animation: none;
+}
+
+.error-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  height: 1.6rem;
+  padding: 0 0.5rem;
+  background: var(--art-ink);
+  color: var(--art-bg);
+  font-family: var(--art-font);
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+  cursor: grab;
+  user-select: none;
+}
+
+.error-window.dragging .error-window-bar {
+  cursor: grabbing;
+}
+
+.error-window-fname {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.error-window-code {
+  color: var(--art-error-on-light);
+  white-space: nowrap;
+}
+
+.error-window-x {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.error-window-viewport {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+.error-window-img {
+  position: absolute;
+  display: block;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* Beats [hidden]{display:none} at equal specificity, so glitch-hero.js can toggle the zoom layer via the native attribute. */
+.error-window-img[hidden] {
+  display: none;
+}
+
+/* Visible layer paints in front of the hidden zoom layer within each
+   window, rather than whichever happens to come later in the markup. */
+.error-window-img-zoom {
+  z-index: 0;
+}
+
+.error-window-img-normal {
+  z-index: 1;
+  animation: art-hero-float 6s ease-in-out infinite;
+}
+
+/* Negative delays start each window already partway through the cycle
+   instead of all four launching in phase together -- same "not quite in
+   sync" feel as the jitter offsets in js/glitch-hero.js. */
+#error-window-1 .error-window-img-normal { animation-delay: -1.2s; }
+#error-window-2 .error-window-img-normal { animation-delay: -3.5s; }
+#error-window-3 .error-window-img-normal { animation-delay: -0.4s; }
+#error-window-4 .error-window-img-normal { animation-delay: -4.8s; }
+
+@keyframes art-hero-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+[data-reduced-motion="true"] .error-window-img-normal {
+  animation: none;
+}
+
+/* ── Gallery popups — flood of full-piece "error" windows ────────────────── */
+/* Rendered by js/gallery.js inside .glitch-hero's coordinate space; only populated on the gallery page. */
+
+#gallery-popups {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none; /* individual .gallery-popup children opt back in */
+}
+
+.glitch-hero.gallery-active .error-window:not(.gallery-popup),
+.glitch-hero.gallery-active #glitch-hero-bg {
+  display: none;
+}
+
+.gallery-popup {
+  position: absolute;
+  height: auto; /* unlike the hero's fixed-size #error-window-N rules — sized by its own artwork */
+  pointer-events: auto;
+  opacity: 0; /* js/gallery.js adds .spawning to animate in, then locks this open with an inline style */
+}
+
+/* Class-based so bringToFront()'s re-parenting doesn't restart the animation on every click. */
+.gallery-popup.spawning {
+  animation: gallery-pop-in 220ms ease forwards;
+}
+
+[data-reduced-motion="true"] .gallery-popup {
+  opacity: 1;
+}
+
+[data-reduced-motion="true"] .gallery-popup.spawning {
+  animation: none;
+}
+
+@keyframes gallery-pop-in {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.gallery-popup-body {
+  position: relative;
+  line-height: 0; /* collapses the whitespace gap under the inline img */
+}
+
+/* Cursor stays zoom-in until a drag actually starts. */
+.gallery-popup.dragging .gallery-popup-img {
+  cursor: grabbing;
+}
+
+.gallery-popup-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: zoom-in;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* The hero's own .error-window-x is pointer-events:none (purely decorative,
+   never intercepts the bar's drag). This one needs to actually receive the
+   click so it can refuse it. */
+.gallery-popup .error-window-x {
+  pointer-events: auto;
+  cursor: not-allowed;
+}
+
+/* The one text popup (js/gallery.js's ABOUT_ENTRY) — reuses .gallery-popup-body, undoing its img-only line-height reset. */
+.gallery-popup-body--text {
+  line-height: normal;
+  padding: 0.75rem 0.85rem;
+  cursor: default;
+  /* Prevents text selection while dragging. */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.gallery-popup-text-title {
+  margin: 0 0 0.4rem;
+  font-family: var(--art-font);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--art-ink);
+}
+
+.gallery-popup-text-body {
+  margin: 0 0 0.6rem;
+  font-family: var(--art-font);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--art-ink-dim);
+}
+
+.gallery-popup-text-body:last-child {
+  margin-bottom: 0;
+}
+
+/* Clicking ✕ can't close a gallery popup — it shakes and flashes red
+   instead, like the system is refusing the request. */
+@keyframes gallery-deny-shake {
+  0%, 100% { transform: translateX(0);     border-color: var(--art-ink); }
+  20%      { transform: translateX(-4px);  border-color: var(--art-error); }
+  40%      { transform: translateX(4px); }
+  60%      { transform: translateX(-3px);  border-color: var(--art-error); }
+  80%      { transform: translateX(3px); }
+}
+
+@keyframes gallery-deny-flash {
+  0%, 100% { border-color: var(--art-ink); }
+  50%      { border-color: var(--art-error); }
+}
+
+.gallery-popup.deny-shake {
+  animation: gallery-deny-shake 320ms ease;
+}
+
+[data-reduced-motion="true"] .gallery-popup.deny-shake {
+  animation: gallery-deny-flash 320ms ease;
+}
+
+/* Light-toggle "error" easter egg — js/glitch-hero.js flips this class briefly */
+.glitch-hero-toast {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 5;
+  font-family: var(--art-font);
+  font-size: 0.8rem;
+  color: var(--art-error);
+  background: var(--art-card-bg);
+  border: 1px solid var(--art-error);
+  padding: 0.4rem 0.6rem;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  pointer-events: none;
+}
+
+.glitch-hero-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Page content popups ──────────────────────────────────────────────────── */
+/* Rendered by js/pages.js's renderPagePopups() — reuses .error-window chrome, stacked as a static flex column. */
+
+#page-popups {
+  position: absolute;
+  top: 1.5rem;
+  left: 32rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 20rem;
+  pointer-events: none; /* individual .page-popup children opt back in */
+}
+
+.page-popup {
+  position: static; /* .error-window is position:absolute by default — cancelled here, same as .nav-box, so the flex column above handles stacking instead */
+  pointer-events: auto;
+  opacity: 0; /* js/pages.js adds .spawning to animate in, then locks this open with an inline style — see .gallery-popup's own version of this above */
+}
+
+.page-popup.spawning {
+  animation: gallery-pop-in 220ms ease forwards;
+}
+
+[data-reduced-motion="true"] .page-popup {
+  opacity: 1;
+}
+
+[data-reduced-motion="true"] .page-popup.spawning {
+  animation: none;
+}
+
+/* Opts one popup (js/pages.js's draggable:true) out of the flex column into free positioning. */
+.page-popup--draggable {
+  position: absolute;
+  width: 100%; /* resolves against #page-popups' own width, whatever that computes to per breakpoint */
+}
+
+.field-list {
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-family: var(--art-font);
+  font-size: 0.8rem; /* matches #art-bio/.virus-alert-warn — one shared size for all "secondary" nav text, see the note above .virus-alert-warn */
+  line-height: 1.4;
+}
+
+/* Prose-style popups reuse the gallery about-text classes; not draggable, so selection isn't blocked. */
+.page-popup-prose {
+  padding: 0.75rem 0.85rem;
+}
+
+.field-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.field-row dt {
+  flex-shrink: 0;
+  width: 6.5rem;
+  color: var(--art-ink-dim);
+}
+
+.field-row dd {
+  margin: 0;
+  color: var(--art-ink);
+}
+
+.field-status {
+  color: var(--art-error);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Optional trailing note under a fields popup — the only spot that can hold a real link. */
+.page-popup-note {
+  margin: -0.2rem 0 0;
+  padding: 0 0.85rem 0.75rem;
+  font-family: var(--art-font);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--art-ink-dim);
+}
+
+.page-popup-note a {
+  color: var(--art-ink);
+  text-decoration: underline;
+}
+
+.page-popup-note a:hover,
+.page-popup-note a:focus-visible {
+  color: var(--art-error);
+}
+
+/* ── Nav ─────────────────────────────────────────────────────────────────── */
+/* Rendered entirely by js/pages.js: always 4 boxes, in fixed PAGES order —
+   whichever is current renders as the about.txt-style info box
+   (.nav-box--active), the other 3 as virus-alert links (.nav-box--alert). */
+
+#nav-list {
+  position: fixed;
+  bottom: calc(var(--footer-height) + 1rem);
+  right: 1.5rem;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 25rem; /* wide enough for the longest bold/uppercase page name */
+}
+
+/* Only exists for the mobile hamburger-popup pattern — the mobile media
+   query below overrides this to display:flex/none based on the .open
+   class. Must come before that @media block so it doesn't win the cascade
+   tie against it (equal specificity, same origin — later wins). */
+#nav-toggle {
+  display: none;
+}
+
+/* .error-window is position:absolute by default (for the draggable hero
+   pieces) — cancel that here so both box types lay out normally in the flex
+   list above, instead of floating free and overlapping it. */
+.nav-box {
+  position: static;
+  opacity: 0; /* js/pages.js's renderNav() adds .nav-box-stack-in to animate in, staggered top to bottom */
+  transform: translateY(14px);
+}
+
+/* Rebuilds every page switch, so the top-to-bottom stagger replays each time. */
+.nav-box.nav-box-stack-in {
+  animation: nav-box-stack-in 220ms ease forwards;
+}
+
+[data-reduced-motion="true"] .nav-box {
+  opacity: 1;
+  transform: none;
+}
+
+[data-reduced-motion="true"] .nav-box.nav-box-stack-in {
+  animation: none;
+}
+
+@keyframes nav-box-stack-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.nav-box--active {
+  pointer-events: none;
+}
+
+.nav-box--active .error-window-bar {
+  cursor: default;
+}
+
+.virus-alert {
+  cursor: pointer;
+  touch-action: auto;
+}
+
+.virus-alert:hover,
+.virus-alert:focus-visible {
+  border-color: var(--art-error);
+  outline: none;
+}
+
+.virus-alert .error-window-bar {
+  cursor: pointer;
+}
+
+.virus-alert-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.6rem 0.75rem;
+}
+
+/* One shared 0.8rem size for all "secondary" nav text — color, not size, differentiates emphasis/alerts. */
+.virus-alert-warn {
+  font-family: var(--art-font);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--art-error);
+}
+
+.virus-alert-msg {
+  font-family: var(--art-font);
+  font-size: 0.8rem;
+  color: var(--art-ink-dim);
+}
+
+/* ── Header (the .nav-box--active info box content) ─────────────────────── */
+
+.art-header-body {
+  padding: 0.75rem 1rem;
+}
+
+#art-title {
+  font-family: var(--art-font);
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--art-ink);
+  margin: 0 0 0.3em;
+  letter-spacing: -0.01em;
+  pointer-events: auto;
+}
+
+#art-subtitle {
+  font-family: var(--art-font);
+  font-size: 0.8rem;
+  color: var(--art-ink-dim);
+  margin: 0;
+}
+
+#art-bio {
+  font-family: var(--art-font);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--art-ink-dim);
+  margin: 0.6em 0 0;
+}
+
+/* Only present when js/pages.js's bioHTML() renders #art-bio as a <div>
+   wrapping multiple lines (an array bio, e.g. commission's two-line
+   error) rather than its usual single <p> — spacing between those lines. */
+#art-bio p {
+  margin: 0 0 0.3em;
+}
+
+#art-bio p:last-child {
+  margin-bottom: 0;
+}
+
+/* #art-bio.foo needed for specificity to beat the #art-bio id rule above. */
+#art-bio.art-bio--alert {
+  color: var(--art-error);
+  font-weight: 700; /* matches .virus-alert-warn's boldness — both are the same "threat detected" language */
+}
+
+/* Corrupted-text glitch — triggers on hover/focus only, never idle */
+
+.glitch-text {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.glitch-text::before { color: #ff2d4a; }
+.glitch-text::after  { color: #2de1ff; }
+
+.glitch-text:hover::before,
+.glitch-text:focus-visible::before {
+  opacity: 0.8;
+  animation: glitch-shift-1 0.4s steps(2, end) 1;
+}
+
+.glitch-text:hover::after,
+.glitch-text:focus-visible::after {
+  opacity: 0.8;
+  animation: glitch-shift-2 0.4s steps(2, end) 1;
+}
+
+@keyframes glitch-shift-1 {
+  0%   { transform: translate(0, 0);     clip-path: inset(10% 0 65% 0); }
+  25%  { transform: translate(-3px, 1px); clip-path: inset(45% 0 20% 0); }
+  50%  { transform: translate(2px, -1px); clip-path: inset(65% 0 5% 0); }
+  75%  { transform: translate(-2px, 0);   clip-path: inset(15% 0 70% 0); }
+  100% { transform: translate(0, 0);      clip-path: inset(0 0 0 0); opacity: 0; }
+}
+
+@keyframes glitch-shift-2 {
+  0%   { transform: translate(0, 0);     clip-path: inset(60% 0 15% 0); }
+  25%  { transform: translate(3px, -1px); clip-path: inset(20% 0 50% 0); }
+  50%  { transform: translate(-2px, 1px); clip-path: inset(5% 0 70% 0); }
+  75%  { transform: translate(2px, 0);    clip-path: inset(70% 0 10% 0); }
+  100% { transform: translate(0, 0);      clip-path: inset(0 0 0 0); opacity: 0; }
+}
+
+/* ── Lightbox — crash dialog ─────────────────────────────────────────────── */
+
+#art-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+#art-lightbox[hidden] {
+  display: none;
+}
+
+#art-lb-inner {
+  position: relative;
+  max-width: min(90vw, 900px);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--art-ink);
+  background: var(--art-card-bg);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.6);
+}
+
+#art-lb-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2.25rem;
+  height: 1.8rem;
+  background: var(--art-ink);
+  border: none;
+  color: var(--art-bg);
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+  z-index: 1;
+}
+#art-lb-close:hover { background: var(--art-error); color: var(--art-ink); }
+
+#art-lb-img {
+  max-width: 100%;
+  max-height: calc(90vh - 6rem);
+  object-fit: contain;
+  display: block;
+}
+
+#art-lb-caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid var(--art-ink-dim);
+}
+
+#art-lb-title {
+  font-family: var(--art-font);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--art-ink);
+}
+#art-lb-title::before {
+  content: 'ERR ';
+  color: var(--art-error);
+}
+
+#art-lb-meta {
+  font-family: var(--art-font);
+  font-size: 0.85rem;
+  color: var(--art-ink-dim);
+  white-space: nowrap;
+}
+
+#art-lb-desc {
+  font-family: var(--art-font);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--art-ink-dim);
+  margin: 0;
+  padding: 0 0.75rem 0.75rem;
+}
+
+#art-lb-desc:empty {
+  display: none;
+}
+
+#art-lb-prev,
+#art-lb-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--art-ink);
+  font-family: var(--art-font);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.6;
+  padding: 0.5rem 1rem;
+}
+
+#art-lb-prev { left: 0.5rem; }
+#art-lb-next { right: 0.5rem; }
+
+#art-lb-prev:hover,
+#art-lb-next:hover {
+  opacity: 1;
+  color: var(--art-error);
+}
+
+#art-lb-prev[hidden],
+#art-lb-next[hidden] {
+  display: none;
+}
+
+/* ── Mobile ──────────────────────────────────────────────────────────────── */
+/* Matches tui.css's own mobile breakpoint (768px) exactly — using a
+   different one here would leave a gap where tui's mobile chrome is active
+   but these fixes aren't, or vice versa. */
+
+@media screen and (max-width: 768px) {
+  /* Overrides tui.css's mobile scroll/padding, which fights this page's full-bleed hero. */
+  body {
+    padding: 0 !important;
+    overflow: hidden !important;
+    height: 100% !important;
+  }
+
+  /* This site has no #mobile-tabbar — just a small safe-area-aware corner margin. */
+  #nav-toggle {
+    display: flex;
+    position: fixed;
+    right: 0.75rem;
+    bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    z-index: 7;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    background: var(--art-card-bg);
+    border: 1px solid var(--art-ink);
+    color: var(--art-ink);
+    font-family: var(--art-font);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.6);
+  }
+
+  #nav-toggle[aria-expanded="true"] {
+    background: var(--art-error);
+    color: var(--art-bg);
+  }
+
+  /* .nav-box--active is pinned via `order` to stay next to the toggle regardless of PAGES order. */
+  #nav-list {
+    top: auto;
+    bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px) + 3.25rem);
+    left: 0.75rem;
+    right: 0.75rem;
+    width: auto;
+    max-width: none;
+  }
+
+  .nav-box--active {
+    order: 1;
+  }
+
+  .nav-box--alert {
+    order: 0;
+    display: none;
+  }
+
+  #nav-list.open .nav-box--alert {
+    display: flex;
+  }
+
+  /* Only 2 windows on mobile — 4 read as clutter at phone size. */
+  #error-window-3,
+  #error-window-4 {
+    display: none;
+  }
+
+  /* Left/right insets instead of fixed width so it can't overflow the screen. */
+  #hero-bg-text {
+    left: 1rem;
+    right: 1rem;
+    top: calc(72px + 1rem);
+    max-width: none;
+    width: auto;
+  }
+
+  .hero-bg-text-desktop-only {
+    display: none;
+  }
+
+  /* Wider than the shared column — only .page-popup--draggable needs it, already pulled out of that layout. */
+  .page-popup--draggable {
+    width: calc(100vw - 5rem);
+  }
+
+  /* Desktop sizes (up to 30x50rem) are bigger than most phone screens —
+     scaled down but kept proportionally distinct per window. */
+  #error-window-1 { width: 12rem; height: 20rem; }
+  #error-window-2 { width: 8rem;  height: 10.5rem; }
+
+  /* Anchored to the bottom, just above #nav-list's active info box, instead
+     of the top — bottom: matches #nav-list's own bottom offset (0.75rem +
+     safe-area + 3.25rem for the hamburger) plus --nav-box-clearance, a
+     guess at that box's own height (it's a rendered .art-header-body —
+     title + subtitle + bio — so its real height depends on how much text
+     is actually in it, not a fixed number). Was overlapping the nav box at
+     8rem — raise --nav-box-clearance if it's still overlapping, lower it
+     if the gap between the two is bigger than it needs to be. */
+  #page-popups {
+    --nav-box-clearance: 11rem;
+    top: auto; /* top beats bottom when both are set with no explicit height */
+    bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px) + 3.25rem + var(--nav-box-clearance));
+    left: 0.75rem;
+    width: auto;
+    right: 10rem;
+  }
+
+  /* Trimmed on mobile — a field marked hideOnMobile in a PAGES popup's
+     `fields` array (see js/pages.js's pagePopupHTML()) still renders, just
+     dropped here, so the popup can carry more detail on wider screens
+     without needing two separate copies of its content. */
+  .field-row--desktop-only {
+    display: none;
+  }
+
+  /* ── Gallery — swipeable stack ───────────────────────────────────────── */
+  /* Mobile gets one centered card at a time instead of the scattered flood — see js/gallery.js's buildMobileStack(). */
+  .gallery-stack {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-start; /* anchored near the header, not vertically centered — centering pushed taller portrait pieces down into the always-visible title box near the bottom */
+    justify-content: center;
+    padding-top: 72px; /* matches js/gallery.js's verticalClearance() top margin on mobile — clears #mobile-header */
+  }
+
+  .gallery-stack-card {
+    position: relative; /* .gallery-popup is position:absolute by default — centered via the flex wrapper instead here */
+    width: min(78vw, 320px);
+    touch-action: pan-y; /* horizontal swipe is handled manually in JS; don't fight vertical scroll gestures */
+  }
+
+  .gallery-stack-nav {
+    position: absolute;
+    /* Aligned with the card's title bar rather than the whole card — the
+       card's height varies with each piece's aspect ratio, but the bar
+       sitting right under the same top padding as .gallery-stack doesn't. */
+    top: calc(72px + 0.8rem);
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--art-ink);
+    font-family: var(--art-font);
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.6;
+    padding: 0.5rem 1rem;
+    z-index: 3;
+    pointer-events: auto; /* #gallery-popups itself is pointer-events:none */
+  }
+
+  .gallery-stack-nav:hover,
+  .gallery-stack-nav:focus-visible {
+    opacity: 1;
+    color: var(--art-error);
+    outline: none;
+  }
+
+  .gallery-stack-prev { left: 0.25rem; }
+  .gallery-stack-next { right: 0.25rem; }
+
+  .gallery-stack-nav[hidden] {
+    display: none;
+  }
+}
+
+/* ── Tablet (in-between) ─────────────────────────────────────────────────── */
+/* All 4 windows stay, sized ~70% of desktop; zoom layer disabled (js/glitch-hero.js's isTablet()). */
+@media screen and (min-width: 769px) and (max-width: 1350px) {
+  #error-window-1 { width: 25rem; height: 40rem; }
+  #error-window-2 { width: 15rem; height: 20rem; }
+  #error-window-3 { width: 20rem; height: 23rem; }
+  #error-window-4 { width: 13rem; height: 13rem; }
+
+  /* Anchored from the right so it can't run off-screen at the narrow end; top/left cleared since the base rule sets both. */
+  #page-popups {
+    top: 5rem;
+    bottom: auto;
+    left: auto;
+    right: .5rem;
+    width: calc(20rem - 20px);
+  }
+}

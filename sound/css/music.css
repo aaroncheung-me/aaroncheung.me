@@ -1,0 +1,1275 @@
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url('../fonts/fraunces-v38-latin-normal-variable.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  font-style: italic;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url('../fonts/fraunces-v38-latin-italic-variable.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/oswald-v57-latin-700.woff2') format('woff2');
+}
+
+/* ── Music site custom properties ────────────────────────────────────────── */
+/* Ink-on-paper, deliberately no dark/light toggle (see .record below).
+   Doesn't use the shared --clr-* tokens from tui.css -- scoped under
+   .record so it can't leak into/clash with the shared header & footer. */
+
+html, body {
+  height: 100svh;
+  overflow: hidden;
+}
+
+body {
+  /* Zeroes tui.css's shared body padding here rather than editing tui.css
+     itself; desktop only, see mobile block below. */
+  padding: 0;
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    /* Restores tui.css's mobile body padding (reserved for the fixed
+       #mobile-header) that the desktop rule above zeroed. */
+    padding: 2vw;
+    padding-top: calc(2vw + 2.5rem);
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    /* tui.css !important-forces overflow-y:scroll here; this !important
+       beats it down to 761px, where the real mobile layout (media query
+       further below, wins on source order) takes back over. */
+    overflow-y: hidden !important;
+  }
+}
+
+#music-main {
+  min-height: 100svh;
+}
+
+.record {
+  --paper: #fbfaf7;
+  --paper-line: #dcd8cf;
+  --ink: #16130f;
+  --ink-soft: #5c564a;
+  --ink-faint: #a39b89;
+  --accent: #c81e18;
+  --accent-deep: #8a1310;
+  --accent-tint: #f3d9d6;
+
+  /* True variable font (opsz 9-144) -- font-optical-sizing:auto lets one
+     family read as display type at 200px and text type at 16px. */
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --utility: 'Oswald', 'Arial Narrow', sans-serif;
+
+  --edge: clamp(20px, 3.6vw, 56px);
+
+  /* Reserves the shared fixed #footer's height as padding-bottom so
+     content doesn't sit underneath it. */
+  box-sizing: border-box;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  padding-bottom: var(--footer-height, 2.8rem);
+}
+
+.record * { box-sizing: border-box; }
+.record a { color: inherit; }
+.record ::selection { background: var(--accent); color: var(--paper); }
+
+/* ── scroller ──────────────────────────────────────────────────────── */
+
+.record .scroller {
+  position: relative;
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* No scroll-snap -- it fought native touch momentum on mobile (the
+     browser trying to snap to a panel edge mid-gesture reads as the scroll
+     getting yanked back, causing visible jitter on swipe), so this is
+     plain continuous scroll instead of a snap-to-panel slideshow. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-faint) transparent;
+}
+
+.record .scroller::-webkit-scrollbar { height: 8px; }
+.record .scroller::-webkit-scrollbar-thumb { background: var(--ink-faint); }
+.record .scroller::-webkit-scrollbar-track { background: transparent; }
+
+/* ── rail nav ──────────────────────────────────────────────────────── */
+/* Repeats the full chapter list inside every rail rather than a floating
+   overlay, so nav reads as part of the current position. margin-top:auto
+   pins it under the letter/caption. */
+.record .rail-nav {
+  margin-top: auto;
+  padding-top: 18px;
+  width: 100%;
+}
+
+.record .rail-index {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.record .rail-index > li {
+  padding: 7px 0;
+  border-top: 1px solid var(--paper-line);
+}
+
+.record .rail-index > li:first-child { border-top: none; }
+
+.record .rail-index a {
+  display: block;
+  font-family: var(--utility);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-decoration: none;
+  /* Invisible tap-target padding -- the negative margin cancels the
+     layout push so the rail's tight row spacing looks untouched, but the
+     link's own hit-rect (what touch-target-size checks measure) grows to
+     a proper size instead of just the ~13px text line-height. */
+  padding: 6px 0;
+  margin: -6px 0;
+}
+
+.record .rail-index a:hover { color: var(--ink); }
+
+.record .rail-index a b {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--accent);
+  margin-right: 4px;
+}
+
+.record .rail-index li.is-current > a { color: var(--ink); }
+
+.record .rail-subindex {
+  list-style: none;
+  margin: 6px 0 0;
+  padding-left: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.record .rail-subindex a {
+  display: block;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--ink-soft);
+  /* Same invisible tap-target padding as .rail-index a. */
+  padding: 5px 0;
+  margin: -5px 0;
+}
+
+.record .rail-subindex li.is-active > a { color: var(--accent); }
+
+@media (max-width: 760px) {
+  /* Full chapter titles/entry lists don't fit at phone width -- collapse to bare letters, tappable, with the sub-entry list dropped. */
+  .record .rail-nav { padding-top: 10px; }
+  .record .rail-index a { font-size: 0; }
+  .record .rail-index a b { font-size: 14px; margin-right: 0; }
+  .record .rail-subindex { display: none; }
+}
+
+/* ── panel ─────────────────────────────────────────────────────────── */
+
+.record .panel {
+  position: relative;
+  flex: 0 0 min(1180px, 96vw);
+  min-height: 100%;
+  border-right: 1px solid var(--paper-line);
+  /* Padding clears the .masthead/.folio bars (up to 38px) with a small
+     buffer so they never touch on short viewports. */
+  padding: clamp(40px, 5.2vh, 58px) var(--edge) clamp(42px, 5.5vh, 54px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.record .panel--compact { flex-basis: min(760px, 92vw); }
+.record .panel:last-child { border-right: none; }
+
+/* Double barline (music notation for "something changes here") marks a
+   light<->dark seam as structural, not just another panel edge. */
+.record .panel:not(.panel--dark):has(+ .panel--dark)::after,
+.record .panel--dark:has(+ .panel:not(.panel--dark))::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 5px;
+  width: 1px;
+  background: var(--paper-line);
+  z-index: 4;
+}
+
+/* Five-line staff as fixed 1px hard stops (not %, so lines don't thicken
+   as the bar's clamp()'d height changes). currentColor matches whichever
+   text color the bar already has. Applied directly on .masthead/.folio so
+   it runs unbroken across every panel's bar. */
+.record {
+  --staff-lines: linear-gradient(
+    to bottom,
+    currentColor 0, currentColor 1px, transparent 1px, transparent 5px,
+    currentColor 5px, currentColor 6px, transparent 6px, transparent 10px,
+    currentColor 10px, currentColor 11px, transparent 11px, transparent 15px,
+    currentColor 15px, currentColor 16px, transparent 16px, transparent 20px,
+    currentColor 20px, currentColor 21px
+  );
+}
+
+/* Full-bleed bar across every panel and the rail, so it reads as one
+   continuous strip. Literal colors (not tokens) since the bar never
+   inverts with panel tone; border-bottom keeps its edge visible on dark
+   panels. Label/clef only render on cover & rails -- other panels get the
+   same bar with no children. */
+.record .masthead {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: -1px; /* -1px, not 0 -- .panel has its own border-right dividing adjacent panels */
+  height: clamp(30px, 4.2vh, 38px);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 var(--edge);
+  background-color: #fbfaf7;
+  background-image: var(--staff-lines);
+  background-size: 100% 21px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  color: #16130f;
+  border-bottom: 1px solid #dcd8cf;
+  font-family: var(--utility);
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  z-index: 3;
+}
+
+.record .bar-label { flex: none; position: relative; }
+
+/* Solid patch behind the label blanks out the staff lines running through
+   it, so text reads as sitting above the staff rather than crossed by it. */
+.record .masthead .bar-label {
+  z-index: 2;
+  background-color: #fbfaf7;
+  padding: 5px 30px;
+  margin: 0 -3px;
+}
+
+.record .folio .bar-label {
+  z-index: 2;
+  background-color: #16130f;
+  padding: 5px 30px;
+  margin: 0 -3px;
+}
+
+.record .staff-clef {
+  flex: none;
+  position: relative;
+  z-index: 2;
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1;
+}
+
+/* -8px pulls the sharp against the clef instead of the bar's full 14px
+   gap. Staff pattern is vertically centered in the bar, so -10px lands on
+   the top line (treble F#) and -5px on the second line from top (bass
+   F#), regardless of the bar's clamp()'d height. */
+.record .chapter-rail .staff-sharp {
+  flex: none;
+  position: relative;
+  z-index: 2;
+  margin-left: -8px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.record .masthead .staff-sharp { transform: translateY(-13px); }
+.record .folio .staff-sharp { transform: translateY(-7px); }
+
+/* Decorative note pattern, one line per hand (masthead/folio). Applied as
+   a mask (not a background image) so background-color:currentColor paints
+   it correctly on both light and dark bars from one shared rule. z-index 1
+   keeps it behind the label patch and clef (z-index 2). */
+.record .masthead::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: currentColor;
+  opacity: 1;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 24' preserveAspectRatio='none'%3E%3Ccircle cx='10' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='30' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='50' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='70' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='90' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='110' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='130' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='150' cy='18' r='2.2' fill='white'/%3E%3Ccircle cx='170' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='190' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='210' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='230' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='250' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='270' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='290' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='310' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='330' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='350' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='370' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='390' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='410' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='430' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='450' cy='18' r='2.2' fill='white'/%3E%3Ccircle cx='470' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='490' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='510' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='530' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='550' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='570' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='590' cy='18' r='2.2' fill='white'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 24' preserveAspectRatio='none'%3E%3Ccircle cx='10' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='30' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='50' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='70' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='90' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='110' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='130' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='150' cy='18' r='2.2' fill='white'/%3E%3Ccircle cx='170' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='190' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='210' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='230' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='250' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='270' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='290' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='310' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='330' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='350' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='370' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='390' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='410' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='430' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='450' cy='18' r='2.2' fill='white'/%3E%3Ccircle cx='470' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='490' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='510' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='530' cy='6' r='2.2' fill='white'/%3E%3Ccircle cx='550' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='570' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='590' cy='18' r='2.2' fill='white'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 60%;
+  mask-size: 100% 60%;
+  -webkit-mask-position: left center;
+  mask-position: left center;
+  pointer-events: none;
+}
+
+.record .folio::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: currentColor;
+  opacity: 1;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 24' preserveAspectRatio='none'%3E%3Ccircle cx='10' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='30' cy='18' r='2.2' fill='white'/%3E%3Ccircle cx='50' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='70' cy='21' r='2.2' fill='white'/%3E%3Ccircle cx='90' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='110' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='130' cy='21' r='2.2' fill='white'/%3E%3Ccircle cx='150' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='170' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='190' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='210' cy='21' r='2.2' fill='white'/%3E%3Ccircle cx='230' cy='18' r='2.2' fill='white'/%3E%3Ccircle cx='250' cy='12' r='2.2' fill='white'/%3E%3Ccircle cx='270' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='290' cy='18' r='2.2' fill='white'/%3E%3Ccircle cx='310' cy='12' r='2.2' fill='white'/%3E%3Ccircle cx='330' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='350' cy='12' r='2.2' fill='white'/%3E%3Ccircle cx='370' cy='18' r='2.2' fill='white'/%3E%3Ccircle cx='390' cy='15' r='2.2' fill='white'/%3E%3Ccircle cx='410' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='430' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='450' cy='15' r='2.2' fill='white'/%3E%3Ccircle cx='470' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='490' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='510' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='530' cy='15' r='2.2' fill='white'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 24' preserveAspectRatio='none'%3E%3Ccircle cx='10' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='30' cy='18' r='2.2' fill='white'/%3E%3Ccircle cx='50' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='70' cy='21' r='2.2' fill='white'/%3E%3Ccircle cx='90' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='110' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='130' cy='21' r='2.2' fill='white'/%3E%3Ccircle cx='150' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='170' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='190' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='210' cy='21' r='2.2' fill='white'/%3E%3Ccircle cx='230' cy='18' r='2.2' fill='white'/%3E%3Ccircle cx='250' cy='12' r='2.2' fill='white'/%3E%3Ccircle cx='270' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='290' cy='18' r='2.2' fill='white'/%3E%3Ccircle cx='310' cy='12' r='2.2' fill='white'/%3E%3Ccircle cx='330' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='350' cy='12' r='2.2' fill='white'/%3E%3Ccircle cx='370' cy='18' r='2.2' fill='white'/%3E%3Ccircle cx='390' cy='15' r='2.2' fill='white'/%3E%3Ccircle cx='410' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='430' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='450' cy='15' r='2.2' fill='white'/%3E%3Ccircle cx='470' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='490' cy='3' r='2.2' fill='white'/%3E%3Ccircle cx='510' cy='9' r='2.2' fill='white'/%3E%3Ccircle cx='530' cy='15' r='2.2' fill='white'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 60%;
+  mask-size: 100% 60%;
+  -webkit-mask-position: left center;
+  mask-position: left center;
+  pointer-events: none;
+}
+
+/* content:none removes the note pattern on the rail and cover masthead/folio, where it read as clutter behind the clef/sharp. */
+.record .chapter-rail .masthead::before,
+.record .chapter-rail .folio::before,
+.record .cover .masthead::before,
+.record .cover .folio::before {
+  content: none;
+}
+
+.record .staff-clef--treble { font-size: 29px; }
+.record .staff-clef--bass { font-size: 29px; }
+
+/* Inverted panels -- used sparingly, tied to what's actually happening in
+   a chapter (its turn, a threshold into the next letter), never just
+   alternated for its own sake. Every component color below is already
+   driven by these tokens, so redefining them here re-inverts everything
+   inside -- marks, rules, accent -- without a separate dark ruleset. */
+.record .panel--dark {
+  background: #16130f;
+  color: var(--paper);
+  --ink: var(--paper);
+  --ink-soft: #c7c0b1;
+  --ink-faint: #8b8474;
+  --paper-line: rgba(251, 250, 247, 0.2);
+  --accent: #ff4d3f;
+  --accent-deep: #ff8177;
+  --accent-tint: rgba(255, 77, 63, 0.2);
+}
+
+/* ── shared editorial furniture ───────────────────────────────────────── */
+
+/* margin-bottom here (not just spacing added lower down the page) --
+   every entry panel puts .kicker directly above .entry-copy with no
+   other gap between them, so without this the label sat flush against
+   the giant number/title below it on all 17 entries. .cover-blurb zeroes
+   it back out below since that context already spaces its own kicker
+   via flex gap. */
+.record .kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: clamp(10px, 1.8vh, 22px);
+  font-family: var(--utility);
+  font-weight: 700;
+  font-size: clamp(11px, 1.02vh, 12.5px);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  flex: none;
+}
+
+.record .kicker::before {
+  content: "";
+  width: 24px;
+  height: 2px;
+  background: var(--accent);
+  flex: none;
+}
+
+.record .kicker b {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--accent);
+}
+
+/* Mirrors .masthead above (same literal-color and empty-panel reasoning), just pinned to the bottom. */
+.record .folio {
+  position: absolute;
+  left: 0;
+  right: -1px;
+  bottom: 0;
+  height: clamp(30px, 4.2vh, 38px);
+  padding: 0 var(--edge);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background-color: #16130f;
+  background-image: var(--staff-lines);
+  background-size: 100% 21px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  color: #fbfaf7;
+  border-top: 1px solid rgba(251, 250, 247, 0.15);
+  font-family: var(--utility);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  z-index: 3;
+}
+
+/* ── cover / index ─────────────────────────────────────────────────── */
+
+/* clip-path polygon draws the diagonal natively regardless of aspect
+   ratio; inset to the content area so its corners meet the header/footer
+   bars exactly. */
+.record .cover-split {
+  position: absolute;
+  top: clamp(30px, 4.2vh, 38px);
+  right: 0;
+  bottom: clamp(30px, 4.2vh, 38px);
+  left: 0;
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
+  background: #16130f;
+  z-index: 1;
+}
+
+/* S is solid over the split's dark triangle; O/U/N/D run hollow
+   (transparent fill, red stroke) down the middle, readable on either half. */
+.record .cover-sound {
+  position: absolute;
+  top: clamp(30px, 4.2vh, 38px);
+  right: 0;
+  bottom: clamp(30px, 4.2vh, 38px);
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.record .cover-sound-letter {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-family: var(--serif);
+  font-weight: 900;
+  font-style: italic;
+  font-size: clamp(110px, 20vw, 270px);
+  line-height: 0.1;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--accent);
+}
+
+.record .cover-sound-letter.is-solid {
+  color: #16130f;
+  -webkit-text-stroke: 0;
+}
+
+.record .cover-sound-letter:nth-child(1) { top: 12.5%; left: 30%; }
+.record .cover-sound-letter:nth-child(2) { top: 31.25%; left: 40%; }
+.record .cover-sound-letter:nth-child(3) { top: 50%; left: 50%; }
+.record .cover-sound-letter:nth-child(4) { top: 68.75%; left: 60%; }
+.record .cover-sound-letter:nth-child(5) { top: 87.5%; left: 70%; }
+
+/* Anchored top-right, under the header, clear of the black triangle in the bottom-left. */
+.record .cover-body {
+  position: relative;
+  z-index: 3;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  min-height: 0;
+  gap: 4px;
+}
+
+/* Positioned separately from .cover-body's right-anchored flow, over the
+   split's dark triangle -- light colors for the same reason the footer
+   byline is. */
+.record .cover-blurb {
+  position: absolute;
+  left: var(--edge);
+  bottom: calc(clamp(30px, 4.2vh, 38px) + 24px);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 19ch;
+}
+
+.record .cover-blurb .kicker { color: #c7c0b1; margin-bottom: 0; }
+
+/* Mobile-only hero (see the mobile block further down) -- desktop's cover
+   already has its own title moment (the masthead's "From the Top" label,
+   the SOUND cascade, this same kicker), so this stays hidden there rather
+   than adding a second, competing one. */
+.record .cover-hero { display: none; }
+
+.record .cover-title {
+  color: #fbfaf7;
+  font-weight: 500;
+  font-size: clamp(19px, 2.6vw, 30px);
+  line-height: 1.2;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.record .cover-title em { font-style: italic; color: var(--accent); }
+
+.record .index { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+
+.record .index li {
+  display: grid;
+  grid-template-columns: 1.1em auto;
+  gap: 14px;
+  align-items: baseline;
+  padding: 8px 0;
+  border-top: 1px solid var(--paper-line);
+  font-family: var(--utility);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.record .index li:first-child { border-top: none; }
+
+/* grid + subgrid gives the <a> a real box (proper tap-target) while still
+   handing the same column tracks to its children -- a boxless
+   display:contents anchor reports a 0x0 tap-target. */
+.record .index li > a {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  align-items: baseline;
+  text-decoration: none;
+  color: inherit;
+}
+
+.record .index li b {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-style: italic;
+  font-size: 20px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--accent);
+}
+
+.record .index li.is-current { color: var(--ink); }
+.record .index li.is-current b { color: var(--ink); }
+
+.record .sub-index {
+  grid-column: 2;
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.record .sub-index li {
+  display: flex;
+  gap: 10px;
+  padding: 0;
+  border: none;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13.5px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-soft);
+}
+
+.record .sub-index li a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  /* Same invisible tap-target padding as .rail-index a -- the li's flex
+     gap (4px) provides the visible spacing, this just grows the anchor's
+     own hit-rect around its ~16px line-height without touching layout. */
+  padding: 5px 0;
+  margin: -5px 0;
+}
+
+.record .index li a:hover,
+.record .sub-index li a:hover {
+  color: var(--ink);
+}
+
+.record .sub-index li::before {
+  content: "";
+  width: 12px;
+  height: 1px;
+  margin-top: 0.7em;
+  background: var(--paper-line);
+  flex: none;
+}
+
+/* ── chapter / sticky rail ─────────────────────────────────────────────
+   Each chapter's giant letter lives in a sticky rail rather than its first
+   entry -- it stays stuck for the whole chapter's run of entries, releasing
+   once you scroll into the next .chapter. */
+.record .chapter {
+  display: flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+  border-right: 1px solid var(--paper-line);
+}
+
+.record .chapter:last-child { border-right: none; }
+
+.record .chapter-rail {
+  position: sticky;
+  left: 0;
+  z-index: 6;
+  flex: 0 0 auto;
+  width: clamp(150px, 17vw, 240px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  /* auto, not hidden -- rail content (letter + caption + nav) can exceed
+     its height on short viewports; this lets it scroll internally instead of clipping. */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: clamp(56px, 9vh, 90px) 20px clamp(46px, 7vh, 56px);
+  background: var(--paper);
+  border-right: 1px solid var(--paper-line);
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+/* Overrides the bars' horizontal padding to the rail's fixed 20px so
+   "Music"/"Aaron Cheung" stay aligned with the rest of the rail's content. */
+.record .chapter-rail .masthead,
+.record .chapter-rail .folio {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+/* Toggled by JS to match whichever entry is currently alongside the rail
+   -- same token-swap trick as .panel--dark, so the letter, caption and
+   rule all invert together automatically. */
+.record .chapter-rail.is-dark {
+  background: #16130f;
+  --ink: var(--paper);
+  --ink-soft: #c7c0b1;
+  --ink-faint: #8b8474;
+  --paper-line: rgba(251, 250, 247, 0.2);
+  --accent: #ff4d3f;
+}
+
+/* Wrap letter+caption(+term-def) so mobile can lay them out as a compact
+   row (letter left, text right) without disturbing desktop's own
+   flex-column rail at all -- display: contents removes these wrapper
+   boxes from layout entirely, so on desktop their children (the letter,
+   and in turn the term-def/caption) fall right back into being direct
+   flex-column children of .chapter-rail exactly as if the wrappers
+   weren't there. Mobile overrides both to real boxes (see the mobile
+   block further down). */
+.record .chapter-rail-head,
+.record .chapter-rail-text {
+  display: contents;
+}
+
+.record .chapter-rail-letter {
+  /* align-self centers just this child against the rail's flex-start;
+     width:100%+text-align:center is needed too since align-self alone only
+     centers the glyph's box, not its text. */
+  align-self: center;
+  width: 100%;
+  text-align: center;
+  font-family: var(--serif);
+  font-size: clamp(90px, 13vw, 170px);
+  line-height: 0.8;
+  font-weight: 900;
+  font-style: italic;
+  color: var(--ink);
+}
+
+/* Chapter-opener line -- sits under the giant letter, introducing the
+   whole chapter rather than any one entry within it. Stays sticky
+   alongside the letter for as long as the rail itself is stuck. */
+.record .chapter-rail-caption {
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(13px, 1.2vw, 15px);
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 22ch;
+  margin-top: clamp(16px, 2.4vh, 24px);
+}
+
+/* Dictionary-style term definition -- used once, on D's rail, since "da
+   capo" is the one chapter title that's also a real musical term worth
+   spelling out. */
+.record .term-def {
+  font-weight: 400;
+  font-size: clamp(12.5px, 1.1vw, 14px);
+  line-height: 1.5;
+  color: var(--ink-faint);
+  max-width: 22ch;
+  margin-top: clamp(12px, 1.6vh, 16px);
+}
+
+.record .term-def b { font-weight: 700; font-style: italic; color: var(--ink); }
+.record .term-def i { font-style: italic; }
+
+.record .flare { color: var(--accent); font-style: italic; }
+
+.record .essay-deck {
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(15px, 1.4vh, 17.5px);
+  line-height: 1.35;
+  color: var(--ink-soft);
+  max-width: 54ch;
+  margin: 0 0 clamp(12px, 1.5vh, 20px);
+}
+
+/* 66ch keeps a comfortable reading measure while using more of the
+   panel's own width, cutting how many lines a long entry wraps to. */
+.record .essay-body p {
+  font-size: clamp(14.5px, 1.35vh, 16px);
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0 0 clamp(9px, 1.1vh, 15px);
+  max-width: 66ch;
+}
+
+.record .essay-body p:first-of-type::first-letter {
+  font-style: italic;
+  font-weight: 900;
+  font-size: 3.5em;
+  line-height: 0.76;
+  float: left;
+  margin: 0.01em 0.08em 0 -0.01em;
+  color: var(--accent);
+}
+
+.record .annot { position: relative; margin-top: clamp(12px, 1.5vh, 20px); padding: 3px 0 3px 18px; border-left: 3px solid var(--accent); max-width: 60ch; }
+
+/* Hatch pattern behind the label is thinned (wider gaps, lighter line) so
+   bold+uppercase+tight-tracking text at this small size stays legible over it. */
+.record .annot-label {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--utility);
+  font-weight: 700;
+  font-size: clamp(11.5px, 1.05vh, 12.5px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+  margin-bottom: 6px;
+  padding: 2px 8px 2px 0;
+  background-image: repeating-linear-gradient(-45deg, var(--accent-tint) 0 1.5px, transparent 1.5px 10px);
+  background-repeat: no-repeat;
+  background-position: -6px 0;
+  background-size: calc(100% + 6px) 100%;
+}
+
+.record .annot p { font-size: clamp(13.5px, 1.25vh, 15px); line-height: 1.55; color: var(--ink-soft); margin: 0 0 clamp(6px, 0.8vh, 10px); }
+.record .annot cite { display: block; font-style: italic; font-size: clamp(11px, 1.02vh, 12px); color: var(--ink-faint); }
+
+/* Motif note -- a structural aside tracking a recurring thread (e.g. the
+   violin motif) across chapters, distinct from .annot's research
+   citations: dashed rule instead of a solid accent border, so it reads as
+   "a note to self about the story's shape" rather than another source. */
+.record .motif-note {
+  margin-top: clamp(14px, 1.7vh, 22px);
+  padding-top: clamp(10px, 1.2vh, 16px);
+  border-top: 1px dashed var(--paper-line);
+  max-width: 54ch;
+}
+
+.record .motif-label {
+  font-family: var(--utility);
+  font-weight: 700;
+  font-size: clamp(9.5px, 0.88vh, 10.5px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.record .motif-note p {
+  font-style: italic;
+  font-size: clamp(12.5px, 1.16vh, 13.5px);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* Pull quote -- a line lifted out of the body copy and given real
+   typographic weight, framed by thin accent rules rather than a box, so
+   it reads as emphasis rather than another annotation. */
+.record .pull-quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(19px, 1.75vh, 26px);
+  line-height: 1.28;
+  color: var(--ink);
+  border-top: 1px solid var(--accent);
+  border-bottom: 1px solid var(--accent);
+  padding: clamp(10px, 1.2vh, 16px) 0;
+  margin: 6px 0 clamp(12px, 1.5vh, 20px);
+  max-width: 48ch;
+}
+
+/* Coda-only device -- the closing panel skips the usual research .annot
+   ("let it breathe") but keeps one small quiet flourish: a closing line
+   of real weight. */
+.record .coda-line {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(19px, 1.76vh, 25px);
+  color: var(--accent);
+  margin: clamp(14px, 1.7vh, 22px) 0 0;
+}
+
+/* ── coda: wide panel, diagonal mirror of the cover ────────────────────
+   Same geometry as .cover-split, but the opposite triangle is filled (mirrors the cover). */
+.record .coda-split {
+  position: absolute;
+  top: clamp(30px, 4.2vh, 38px);
+  right: 0;
+  bottom: clamp(30px, 4.2vh, 38px);
+  left: 0;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+  background: #16130f;
+  z-index: 1;
+}
+
+/* Same cascade as the cover's SOUND (one extra letter); fills are flipped since the underlying zones flipped too. */
+.record .coda-mark {
+  position: absolute;
+  top: clamp(30px, 4.2vh, 38px);
+  right: 0;
+  bottom: clamp(30px, 4.2vh, 38px);
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.record .coda-mark-letter {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-family: var(--serif);
+  font-weight: 900;
+  font-style: italic;
+  font-size: clamp(90px, 16vw, 270px);
+  line-height: 0.1;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--accent);
+}
+
+.record .coda-mark-letter.is-solid {
+  color: #fbfaf7;
+  -webkit-text-stroke: 0;
+}
+
+.record .coda-mark-letter:nth-child(1) { top: 10%; left: 25%; }
+.record .coda-mark-letter:nth-child(2) { top: 25%; left: 33%; }
+.record .coda-mark-letter:nth-child(3) { top: 45%; left: 45%; }
+.record .coda-mark-letter:nth-child(4) { top: 60%; left: 55%; }
+.record .coda-mark-letter:nth-child(5) { top: 75%; left: 65%; }
+.record .coda-mark-letter:nth-child(6) { top: 90%; left: 75%; }
+
+/* Same slot as .cover-blurb, but no color-inversion needed here --
+   bottom-left is the light triangle in this mirrored layout. */
+.record .coda-blurb {
+  position: absolute;
+  left: var(--edge);
+  bottom: calc(clamp(30px, 4.2vh, 38px) + 24px);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 46ch;
+}
+
+.record .coda-blurb .kicker { margin-bottom: 0; }
+
+/* Mirrors the cover's TOC slot, now over the dark triangle (hence
+   --paper-line/faint tokens). max-height/overflow is just a safety net
+   for unusually short viewports. */
+.record .sources {
+  position: absolute;
+  top: calc(clamp(30px, 4.2vh, 38px) + 24px);
+  right: var(--edge);
+  bottom: calc(clamp(30px, 4.2vh, 38px) + 24px);
+  z-index: 3;
+  max-width: 34ch;
+  text-align: right;
+  overflow-y: auto;
+}
+
+.record .sources-label {
+  font-family: var(--utility);
+  font-weight: 700;
+  font-size: clamp(10px, 0.93vh, 11px);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #c7c0b1;
+  margin-bottom: 10px;
+}
+
+.record .sources-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.record .sources-list cite {
+  display: block;
+  font-style: italic;
+  font-size: clamp(11px, 1vh, 12px);
+  line-height: 1.45;
+  color: #8b8474;
+}
+
+/* Links inherit the cite's own color (.record a { color: inherit } is
+   the site-wide default) -- just a thin underline to read as clickable
+   without looking like a different kind of text. */
+.record .sources-list cite a {
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  opacity: 0.85;
+}
+
+.record .sources-list cite a:hover { opacity: 1; }
+
+.record .sources-note {
+  display: block;
+  font-size: clamp(10px, 0.9vh, 11px);
+  color: var(--accent);
+  margin-top: 2px;
+}
+
+/* ── compact follow-on entry (same letter, no new bleed mark) ─────────
+   Follow-on entries under a chapter's letter skip the giant mark; a
+   smaller running numeral carries continuity instead. */
+
+.record .entry-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: clamp(8px, 1.3vh, 18px); }
+
+.record .entry-num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 900;
+  font-size: clamp(80px, 7.4vh, 140px);
+  line-height: 0.75;
+  -webkit-text-stroke: 1px var(--accent);
+  color: transparent;
+}
+
+.record .entry-copy h2 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(30px, 2.8vh, 46px);
+  line-height: 1.05;
+  margin: 0;
+  text-wrap: balance;
+}
+
+/* flex-start, not center -- these entries now carry a deck, several body
+   paragraphs, a pull-quote and a research annotation, same as a full
+   essay entry just without the giant mark, so centering a block this
+   tall would just push its top out of view on shorter screens. */
+.record .entry-copy { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; min-height: 0; overflow-y: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  .record * { animation: none !important; transition: none !important; }
+  /* Only matters combined with the mobile block -- desktop's scroller
+     drives scrollLeft directly via music.js, never through html's scroll-behavior. */
+  html { scroll-behavior: auto; }
+}
+
+/* ── mobile: vertical stack, not a side-scroller ────────────────────────
+   Mobile reflows the same markup to a normal top-to-bottom page: chapters
+   stack, the sticky rail becomes a compact inline divider, masthead/folio
+   bars drop. music.js gates its scroll-rig behind this same breakpoint, so
+   none of that runs here either. */
+@media (max-width: 760px) {
+  /* Undoes the desktop overflow:hidden lock (see top of file) -- mobile
+     wants a normal scrolling page; wins the specificity tie with tui.css's
+     own mobile override by being declared later. */
+  html {
+    height: auto;
+    overflow: visible;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    height: auto;
+    overflow-y: visible !important;
+    overflow-x: hidden;
+    /* Zeroes tui.css's shared mobile side padding/grid background so
+       .record runs full-bleed, same as desktop -- this page opts out of
+       the shared theme everywhere else too. */
+    padding-left: 0;
+    padding-right: 0;
+    background-image: none;
+  }
+
+  .record .scroller {
+    display: block;
+    flex: none;
+    overflow: visible;
+  }
+
+  .record .chapter {
+    display: block;
+    border-right: none;
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .record .chapter:last-child { border-bottom: none; }
+
+  /* Staff-line/clef/note motif drops entirely at phone width -- no room
+     for it to read as texture rather than clutter. The site title still
+     appears once via the cover's kicker. */
+  .record .masthead,
+  .record .folio {
+    display: none;
+  }
+
+  .record .panel {
+    flex: none;
+    width: 100%;
+    min-height: 0;
+    border-right: none;
+    padding: 48px 22px 44px;
+    overflow: visible;
+  }
+
+  /* Desktop's vertical double-barline seam doesn't apply once panels
+     stack -- replaced with the same "something changes here" notation
+     turned horizontal. */
+  .record .panel:not(.panel--dark):has(+ .panel--dark)::after,
+  .record .panel--dark:has(+ .panel:not(.panel--dark))::after {
+    display: none;
+  }
+
+  .record .panel:not(.panel--dark) + .panel.panel--dark,
+  .record .panel--dark + .panel:not(.panel--dark) {
+    border-top: 3px double var(--paper-line);
+  }
+
+  .record .entry-copy {
+    flex: none;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  /* Native anchor scroll now handles jumps; this offset accounts for the
+     fixed mobile header plus the sticky chapter-rail's height
+     (approximate -- rail height varies with caption length, erring generous). */
+  .record .panel {
+    scroll-margin-top: calc(2.5rem + 122px);
+  }
+
+  .record .essay-body p:first-of-type::first-letter { font-size: 2.6em; }
+
+  .record .entry-head { gap: 10px; }
+  .record .entry-num { font-size: clamp(50px, 18vw, 84px); }
+  .record .entry-copy h2 { font-size: clamp(32px, 10vw, 48px); }
+
+  /* ── chapter-rail: sticky sidebar -> sticky compact header ──────────
+     Still sticky, turned 90deg: letter left, caption right, cutting rail
+     height enough to leave room for the nav row. */
+  .record .chapter-rail {
+    position: sticky;
+    /* 2.5rem matches the fixed site header's real height (see tui.css) --
+       the page's own 2vw margin would leave a visible gap below it instead. */
+    top: 2.5rem;
+    /* Resets desktop's left:0 (horizontal sticky) -- inert here since
+       body's overflow-x:hidden means no horizontal scroll, kept clean rather than stale. */
+    left: auto;
+    z-index: 5;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    overflow: visible;
+    padding: 12px 20px;
+    border-right: none;
+    border-bottom: 1px solid var(--paper-line);
+    background: var(--paper);
+  }
+
+  .record .chapter-rail-head {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .record .chapter-rail-text {
+    display: block;
+    min-width: 0;
+  }
+
+  .record .chapter-rail-letter {
+    align-self: center;
+    width: auto;
+    flex: none;
+    font-size: clamp(32px, 11vw, 44px);
+    line-height: 1;
+  }
+
+  .record .chapter-rail-caption,
+  .record .term-def {
+    display: block;
+    max-width: none;
+    margin-top: 2px;
+    font-size: clamp(11.5px, 3vw, 13px);
+    line-height: 1.35;
+  }
+
+  .record .term-def { margin-top: 0; }
+  .record .term-def + .chapter-rail-caption { margin-top: 3px; }
+
+  /* Sub-entry list stays hidden (redundant with page scroll); chapter-jump strip stays, in the old nav's slot. */
+  .record .rail-nav {
+    margin: 0;
+    padding-top: 8px;
+    border-top: 1px solid var(--paper-line);
+  }
+
+  .record .rail-index {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .record .rail-index > li {
+    flex: 1;
+    padding: 6px 0;
+    border-top: none;
+    text-align: center;
+  }
+
+  .record .rail-index a { text-align: center; }
+
+  /* ── cover: diagonal split + SOUND cascade -> plain vertical hero ──── */
+  .record .cover-split,
+  .record .cover-sound {
+    display: none;
+  }
+
+  .record .cover-body {
+    position: static;
+    flex: none;
+    align-items: stretch;
+    min-height: 0;
+    gap: 0;
+  }
+
+  /* Stand-in hero for the cover without a photo. order:-2 is needed
+     despite being first in DOM order, since flex order always wins over source order. */
+  .record .cover-hero {
+    display: block;
+    order: -2;
+    font-family: var(--serif);
+    font-weight: 900;
+    font-style: italic;
+    font-size: clamp(48px, 15vw, 80px);
+    line-height: 0.95;
+    color: var(--ink);
+    margin: 0 0 28px;
+    text-wrap: balance;
+  }
+
+  /* order: -1 puts this after the hero but before .index despite coming
+     second in the markup (still needed there for the desktop bottom-left
+     anchor) -- hero, then kicker/title, then TOC. */
+  .record .cover-blurb {
+    position: static;
+    order: -1;
+    max-width: none;
+    bottom: auto;
+    overflow: visible;
+    margin: 0 0 32px;
+  }
+
+  /* Flips from light-on-dark back to dark-on-light -- mobile shows this over plain paper, not the (hidden) dark triangle. */
+  .record .cover-blurb .kicker { color: var(--ink-soft); }
+  .record .cover-title { color: var(--ink); }
+
+  .record .index li { padding: 12px 0; }
+
+  /* Chapter-level only on mobile -- 17 individual entries expanded under
+     all 5 chapters at once (unlike the rail nav, which only ever expands
+     the current chapter) is what made this list run so long. Jumping to a
+     specific entry is still possible, just via scrolling to it or the
+     sticky chapter-rail's own compact nav instead of from here. */
+  .record .sub-index { display: none; }
+
+  /* ── coda: diagonal mirror + DA CAPO cascade -> plain closing block ── */
+  .record .coda-split,
+  .record .coda-mark {
+    display: none;
+  }
+
+  .record .coda-blurb {
+    position: static;
+    max-width: none;
+    bottom: auto;
+    overflow: visible;
+    margin: 0 0 40px;
+  }
+
+  /* Same light-on-dark -> dark-on-light flip as the cover's blurb above. */
+  .record .sources {
+    position: static;
+    max-width: none;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    overflow: visible;
+    text-align: left;
+  }
+
+  .record .sources-label { color: var(--ink-faint); }
+  .record .sources-list cite { color: var(--ink-soft); }
+}

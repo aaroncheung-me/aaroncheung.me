@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "title": "Before the Code",
+      "subtitle": "the maker habits that got me here: <span class=\"text-pink\">music</span>, <span class=\"text-pink\">art</span>, and <span class=\"text-pink\">woodworking</span>",
+      "content": [
+        "Before I wrote any code, I made things. That's the through-line of everything on this site, and honestly of everything I do: I like picturing something that doesn't exist yet and figuring out how to build it. Software just turned out to be the fastest place to do that. This page is about the other places, and about a pattern it took me years to notice.",
+        "It starts with <span class=\"text-pink\">piano</span>, which I was taught young and taught strictly: scales, theory, correct finger placement. I never liked it, and by middle school <span class=\"text-pink\">violin</span> had mostly replaced it for orchestra while piano lessons quietly stopped. The realization came late in high school: the problem was never the piano. It was the approach. I came back on my own terms, learning music I actually wanted to play, caring less about hitting notes properly than about the overall sound and feeling. The current project is training my ear, hearing a melody and finding the chords underneath it by sound alone. I'm not there yet.",
+        "<span class=\"text-pink\">Drawing</span> should have taught me the same lesson sooner, from the opposite direction. Nobody ever taught me strictly, or at all, and that was its own trap: because I was self-taught, everything I made was \"impressive,\" and the compliments quietly became the reason I kept going. It took until college to let go of what people expected my art to look like and make it fully mine. These days I work in <span class=\"text-orange\">Krita</span> and <span class=\"text-orange\">Photoshop</span>, post finished pieces to an art account kept alive by a bot I wrote, and the logo on this site is mine too: drawn by hand, then run through my own <span class=\"text-pink\">ASCII converter</span> until it spoke the site's native language.",
+        "Going digital had one cost, though. I used to make art in physical mediums, and once I got a tablet, that part of the process disappeared. <span class=\"text-pink\">Woodworking</span> is where it came back, with more math and more planning. True to form, I never took a class: I learned from online resources and built janky rigs to stand in for the fancy machinery the YouTubers used. The latest builds were a monitor stand and a laptop stand, <span class=\"text-orange\">Baltic birch</span> with <span class=\"text-orange\">cherry</span> accents, measured for my own desk. There's no undo in wood. You think first, then cut.",
+        "That's the pattern, in case it slipped past: piano stuck when I dropped the lesson plan, art became mine when I stopped performing it for other people, and the wood shop is a pile of workarounds that do the job of tools I don't own. I've never learned anything the way I was supposed to. Everything I know well, including the code this site runs on, I learned by chasing what pulled me and building until it worked.",
+        "Somewhere on the long-term list: a proper home here for the art and the music. The directory's been planned for years. One day it'll exist."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "data": [
+    {
+      "title": "Theme Switcher",
+      "depth": 0,
+      "technologies": [
+        "<span class=\"text-blue\">CSS Custom Properties   </span>",
+        "<span class=\"text-blue\">localStorage   </span>",
+        "<span class=\"text-blue\">JavaScript   </span>"
+      ],
+      "content": [
+        "This section is the control panel for the site's look and feel, and a sandbox where I try new <span class=\"text-orange\">UI/UX</span> ideas. Everything here shares one architecture: a <span class=\"text-orange\">data attribute</span> on the html element, <span class=\"text-orange\">CSS custom properties</span> that respond to it, and <span class=\"text-orange\">localStorage</span> so your choices survive between visits.",
+        "It exists because building is how I learn design. Ideas get tested out loud here, and I keep what works: some experiments graduate into permanent features, the rest get quietly retired. The entries after this one break down each piece that made the cut.",
+        "The same controls are also available as quick-access icons — <span class=\"text-pink\">◐ Aa ▦ ▶ ☀</span> in the bottom right on desktop, or <span class=\"text-pink\">▦ ▶ ☀</span> in the top right on mobile.",
+        "<div class='theme-panel'><div class='theme-panel-group'><div class='title decorating-text'><p>theme</p></div><div class='ui-demo'><button data-theme-btn='dark' onclick=\"setTheme('dark')\">dark_mode</button><button data-theme-btn='light' onclick=\"setTheme('light')\">light_mode</button></div></div><div class='theme-panel-group'><div class='title decorating-text'><p>palette</p></div><div class='ui-demo'><button data-palette-btn='default' onclick=\"setPalette('default')\">default</button><button data-palette-btn='ocean' onclick=\"setPalette('ocean')\">ocean</button><button data-palette-btn='forest' onclick=\"setPalette('forest')\">forest</button><button data-palette-btn='ember' onclick=\"setPalette('ember')\">ember</button></div></div><div class='theme-panel-group'><div class='title decorating-text'><p>font</p></div><div class='ui-demo'><button data-font-btn='fira' onclick=\"setFont('fira')\">fira mono</button><button data-font-btn='jetbrains' onclick=\"setFont('jetbrains')\">jetbrains</button><button data-font-btn='ibm-plex' onclick=\"setFont('ibm-plex')\">ibm plex</button><button data-font-btn='space' onclick=\"setFont('space')\">space mono</button></div></div><div class='theme-panel-group'><div class='title decorating-text'><p>crt</p></div><div class='ui-demo'><button data-crt-btn='on' onclick=\"setCrt(true)\">crt_on</button><button data-crt-btn='off' onclick=\"setCrt(false)\">crt_off</button></div></div><div class='theme-panel-group'><div class='title decorating-text'><p>motion</p></div><div class='ui-demo'><button data-motion-btn='on' onclick=\"setReducedMotion(false)\">motion_on</button><button data-motion-btn='off' onclick=\"setReducedMotion(true)\">motion_off</button></div></div></div>"
+      ]
+    },
+    {
+      "title": "Dark / Light Mode",
+      "depth": 1,
+      "technologies": [
+        "<span class=\"text-blue\">CSS Custom Properties   </span>",
+        "<span class=\"text-blue\">data-theme attribute   </span>",
+        "<span class=\"text-blue\">localStorage   </span>"
+      ],
+      "content": [
+        "Every colour on this site hangs off one attribute: <span class=\"text-orange\">data-theme</span> on the html element. <span class=\"text-orange\">CSS custom properties</span> define a dark and a light value for each colour, so flipping that single attribute recolours the entire page at once. No per-element JavaScript, no chasing components around, and adding a new themed element costs nothing: it just references the variables and both modes work automatically.",
+        "The detail I care about most is the one you never see. On reload, an inline script in the head applies your saved theme before the first paint, so there's no flash of the wrong theme while the page loads. That flash is the tell of most dark mode implementations, and killing it is a one-script fix that has to live in exactly the right place.",
+        "<div class='ui-demo'><button data-theme-btn='dark' onclick=\"setTheme('dark')\">dark_mode</button><button data-theme-btn='light' onclick=\"setTheme('light')\">light_mode</button></div>"
+      ]
+    },
+    {
+      "title": "Colour Palette",
+      "depth": 1,
+      "technologies": [
+        "<span class=\"text-blue\">CSS Custom Properties   </span>",
+        "<span class=\"text-blue\">data-palette attribute   </span>",
+        "<span class=\"text-blue\">localStorage   </span>"
+      ],
+      "content": [
+        "Four accent palettes swap the <span class=\"text-orange\">orange</span>, <span class=\"text-pink\">pink</span>, and <span class=\"text-blue\">blue</span> highlights used across the site. Those three colours aren't decoration; they're the site's syntax highlighting. <span class=\"text-orange\">Orange</span> marks technical concepts, <span class=\"text-pink\">pink</span> marks named things — specific tools, projects, and creative work — <span class=\"text-blue\">blue</span> marks identities, and that convention holds everywhere from the intro to the entry you're reading now. Changing the palette reskins the syntax without breaking it.",
+        "Each palette defines separate dark and light variants, because a colour that glows on a dark background can wash out completely on a light one. Picking colours you like is easy. Picking four sets of three that stay readable on two opposite backgrounds, and still feel like the same personality, is the actual design problem this feature taught me.",
+        "<div class='ui-demo'><button data-palette-btn='default' onclick=\"setPalette('default')\">default</button><button data-palette-btn='ocean' onclick=\"setPalette('ocean')\">ocean</button><button data-palette-btn='forest' onclick=\"setPalette('forest')\">forest</button><button data-palette-btn='ember' onclick=\"setPalette('ember')\">ember</button></div>"
+      ]
+    },
+    {
+      "title": "Font",
+      "depth": 1,
+      "technologies": [
+        "<span class=\"text-blue\">CSS Custom Properties   </span>",
+        "<span class=\"text-blue\">Google Fonts (lazy)   </span>",
+        "<span class=\"text-blue\">localStorage   </span>"
+      ],
+      "content": [
+        "Four monospace fonts, because the terminal aesthetic demands monospace but doesn't demand <em>this</em> monospace. <span class=\"text-pink\">Fira Mono</span> is the site's voice by default, but <span class=\"text-pink\">JetBrains</span>, <span class=\"text-pink\">IBM Plex</span>, and <span class=\"text-pink\">Space Mono</span> each shift its personality a little without breaking the grid. Switching sets a single <span class=\"text-orange\">--font-mono</span> custom property, and every text element on the site inherits the change.",
+        "The default is self-hosted, so the first paint never waits on a third party. The other three load lazily: the Google Fonts stylesheet is injected into the head only the first time you pick that font. Visitors who never open this menu never download a byte of them, which is the difference between offering variety and charging everyone for it.",
+        "<div class='ui-demo'><button data-font-btn='fira' onclick=\"setFont('fira')\">fira mono</button><button data-font-btn='jetbrains' onclick=\"setFont('jetbrains')\">jetbrains</button><button data-font-btn='ibm-plex' onclick=\"setFont('ibm-plex')\">ibm plex</button><button data-font-btn='space' onclick=\"setFont('space')\">space mono</button></div>"
+      ]
+    },
+    {
+      "title": "CRT Overlay",
+      "depth": 1,
+      "technologies": [
+        "<span class=\"text-blue\">CSS pseudo-element   </span>",
+        "<span class=\"text-blue\">repeating-linear-gradient   </span>",
+        "<span class=\"text-blue\">data-crt attribute   </span>"
+      ],
+      "content": [
+        "The full retro payoff. An <span class=\"text-orange\">html::after</span> pseudo-element stretches across the entire viewport with <span class=\"text-orange\">pointer-events: none</span>, so it's pure atmosphere: it tints everything and blocks nothing. The whole effect is one element, zero markup changes, and a single data attribute to switch on.",
+        "It also knows what kind of screen it's pretending to be. Dark mode renders <span class=\"text-orange\">RGB phosphor scanlines</span> with a radial vignette — an old monitor that's been on all night. Light mode swaps to faint horizontal lines, less glowing tube, more soft static over a bright screen. Both are drawn entirely with <span class=\"text-orange\">repeating CSS gradients</span>. No images, no canvas, no JavaScript in the render path, just math.",
+        "<div class='ui-demo'><button data-crt-btn='on' onclick=\"setCrt(true)\">crt_on</button><button data-crt-btn='off' onclick=\"setCrt(false)\">crt_off</button></div>",
+        "The overlay isn't just static, either — short <span class=\"text-orange\">glitch flashes</span> fire on their own <span class=\"text-orange\">randomized timer</span> the whole time it's on, like the signal itself is degrading. They're independently switchable and tunable, live, right here: turn them off entirely, or drag the slider to set the range of seconds between flashes.",
+        "<div class='ui-demo'><button data-glitch-btn='on' onclick=\"setGlitchEnabled(true)\">glitch_on</button><button data-glitch-btn='off' onclick=\"setGlitchEnabled(false)\">glitch_off</button></div>",
+        "<div class='ui-demo'><div class='dual-range'><span class='ascii-ctrl-label'>glitch every</span><div class='dual-range-track'><div class='dual-range-fill' id='glitch-range-fill'></div><input type='range' id='glitch-min-range' min='0.2' max='15' step='0.1' value='0.5' oninput='handleGlitchRangeInput()' aria-label='minimum seconds between glitches'><input type='range' id='glitch-max-range' min='0.2' max='15' step='0.1' value='4.5' oninput='handleGlitchRangeInput()' aria-label='maximum seconds between glitches'></div><span class='ascii-ctrl-val' id='glitch-range-val'>0.5s – 4.5s</span></div></div>"
+      ]
+    },
+    {
+      "title": "Reduced Motion",
+      "depth": 1,
+      "technologies": [
+        "<span class=\"text-blue\">data-reduced-motion attribute   </span>",
+        "<span class=\"text-blue\">CSS animation toggle   </span>",
+        "<span class=\"text-blue\">localStorage   </span>"
+      ],
+      "content": [
+        "This site likes to move: text scrambles on load, cursors blink, transitions ease. Not everyone wants that, and for some visitors motion isn't a preference but a health issue, so one toggle turns all of it off. Setting <span class=\"text-orange\">data-reduced-motion</span> on the html element lets CSS suppress every decorative animation site-wide, from the scramble effect down to the cursor blink.",
+        "First-time visitors never have to find this toggle: the site reads your operating system's reduced-motion preference and starts there, so if you've already told your device you want less motion, this site listens. The switch below overrides it either way, and your choice is saved to <span class=\"text-orange\">localStorage</span>, because an accessibility setting you have to re-apply every page load isn't much of a setting.",
+        "<div class='ui-demo'><button data-motion-btn='on' onclick=\"setReducedMotion(false)\">motion_on</button><button data-motion-btn='off' onclick=\"setReducedMotion(true)\">motion_off</button></div>"
+      ]
+    },
+    {
+      "title": "Keyboard Navigation",
+      "depth": 0,
+      "technologies": [
+        "<span class=\"text-blue\">JavaScript   </span>",
+        "<span class=\"text-blue\">keydown events   </span>"
+      ],
+      "content": [
+        "A terminal-styled site where you have to reach for the mouse would be a broken promise. The entire portfolio drives from the keyboard: <span class=\"text-orange\">number keys</span> jump straight to any section, <span class=\"text-orange\">arrow keys</span> walk between sections and through the items inside them, and <span class=\"text-orange\">Ctrl+K</span> summons the command palette from anywhere.",
+        "It's not just for show, either. What started as an aesthetic commitment turned into the fastest way to use the site: once you know the shortcuts, everything is a keystroke away, and every feature I add gets wired into the same system.",
+        "<div class='ui-demo'><table class='kb-legend'><tr><td class='kb-key'>1&ndash;6</td><td class='kb-desc'>Jump to a section directly</td></tr><tr><td class='kb-key'>&larr; &rarr;</td><td class='kb-desc'>Cycle between sections</td></tr><tr><td class='kb-key'>&uarr; &darr;</td><td class='kb-desc'>Cycle through items within the current section</td></tr><tr><td class='kb-key'>Ctrl+K</td><td class='kb-desc'>Open the command palette</td></tr></table></div>"
+      ]
+    },
+    {
+      "title": "Command Palette",
+      "depth": 1,
+      "technologies": [
+        "<span class=\"text-blue\">JavaScript   </span>",
+        "<span class=\"text-blue\">fuzzy search   </span>"
+      ],
+      "content": [
+        "Press <span class=\"text-orange\">Ctrl+K</span> (<span class=\"text-orange\">Cmd+K</span> on Mac) anywhere on the site, the same muscle memory as your editor. Start typing to search every section and item by name, and select one to jump there instantly. It's the fastest way to move around this site, and the closest thing it has to a real terminal prompt.",
+        "Matching is fuzzy: your letters just have to appear in the right order, so \"crsr\" still finds the Cursor Heatmap and a typo'd fragment usually lands where you meant. The matcher is hand-written like everything else here, about fifteen lines of it.",
+        "<div class='ui-demo'><button onclick='openCommandPalette()'>open palette</button></div>"
+      ]
+    },
+    {
+      "title": "Easter Egg",
+      "depth": 0,
+      "technologies": [
+        "<span class=\"text-blue\">JavaScript   </span>",
+        "<span class=\"text-blue\">keydown sequence   </span>"
+      ],
+      "content": [
+        "There's a hidden trigger somewhere on this site. Find it, and it'll take you somewhere.",
+        "<span class=\"text-pink\">Hint:</span> it's a classic."
+      ]
+    }
+  ]
+}

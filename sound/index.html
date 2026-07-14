@@ -1,0 +1,749 @@
+<!Doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <script>
+        // Shares theme/palette/font/crt/motion settings with the main
+        // portfolio -- switch to independent overrides here (see
+        // art/index.html) if this site wants its own defaults.
+        document.documentElement.setAttribute("data-theme", localStorage.getItem("site-theme") || "dark");
+        var _osRM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var _savedMotion = localStorage.getItem("site-reduced-motion");
+        if (_savedMotion === "true" || (_savedMotion === null && _osRM)) {
+            document.documentElement.setAttribute("data-reduced-motion", "true");
+        }
+        var _savedPalette = localStorage.getItem("site-palette");
+        if (_savedPalette && _savedPalette !== "default") {
+            document.documentElement.setAttribute("data-palette", _savedPalette);
+        }
+        var _savedFont = localStorage.getItem("site-font");
+        if (_savedFont && _savedFont !== "fira") {
+            document.documentElement.setAttribute("data-font", _savedFont);
+        }
+        var _savedCrt = localStorage.getItem("site-crt");
+        if (_savedCrt === "on" || (_savedCrt === null && !_osRM)) {
+            document.documentElement.setAttribute("data-crt", "on");
+        }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d1117">
+    <meta name="author" content="Aaron Cheung" />
+    <meta name="description" content="From the Top by Aaron Cheung." />
+    <meta property="og:title" content="Aaron Cheung — From the Top" />
+    <meta property="og:description" content="From the Top by Aaron Cheung." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aaroncheung.me/sound/" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preload" as="font" href="fonts/fraunces-v38-latin-normal-variable.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" as="font" href="fonts/fraunces-v38-latin-italic-variable.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" as="font" href="fonts/oswald-v57-latin-700.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/tui.css?v=8">
+    <link rel="stylesheet" href="css/music.css?v=52">
+
+    <script src="/js/overlay-esc.js" defer></script>
+    <script src="/js/theme.js" defer></script>
+    <script src="/js/glitch-artifacts.js" defer></script>
+    <script src="/js/include-partials.js" defer></script>
+    <script src="js/music.js?v=16" defer></script>
+
+    <title>Aaron Cheung — From the Top</title>
+</head>
+
+<body>
+    <!-- Ambient glitch artifacts (shared js/glitch-artifacts.js, also used on
+         the portfolio/art sites) -- fixed/full-viewport (css/tui.css), gated
+         on the CRT toggle, so it lives outside #music-main rather than inside it. -->
+    <div id="glitch-artifacts" aria-hidden="true"></div>
+    <div data-include="/partials/mobile-header.html"></div>
+
+    <div id="music-main" role="main">
+        <div class="record">
+            <div class="scroller" tabindex="0" role="region" aria-label="From the Top, scroll through chapters">
+
+                <!-- Cover / index -->
+                <section class="panel cover">
+                    <div class="masthead"><span class="bar-label">From the Top</span><span class="staff-clef staff-clef--treble">&#x1D11E;</span></div>
+                    <div class="cover-split" aria-hidden="true"></div>
+                    <div class="cover-sound" aria-hidden="true">
+                        <span class="cover-sound-letter is-solid">S</span>
+                        <span class="cover-sound-letter">O</span>
+                        <span class="cover-sound-letter">U</span>
+                        <span class="cover-sound-letter">N</span>
+                        <span class="cover-sound-letter">D</span>
+                    </div>
+                    <div class="cover-body">
+                        <h1 class="cover-hero">S<span class="flare">OUND</span></h1>
+                        <ol class="index">
+                                <li class="is-current">
+                                    <a href="#s-01" data-jump="s-01"><b>S</b> Secondhand sound</a>
+                                    <ol class="sub-index">
+                                        <li><a href="#s-01" data-jump="s-01">He went first</a></li>
+                                        <li><a href="#s-02" data-jump="s-02">I just tagged along</a></li>
+                                        <li><a href="#s-03" data-jump="s-03">I wanted it so bad</a></li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    <a href="#o-01" data-jump="o-01"><b>O</b> On someone else&rsquo;s terms</a>
+                                    <ol class="sub-index">
+                                        <li><a href="#o-01" data-jump="o-01">The regret was fast</a></li>
+                                        <li><a href="#o-02" data-jump="o-02">How I fought back</a></li>
+                                        <li><a href="#o-03" data-jump="o-03">Taking pieces apart until they died</a></li>
+                                        <li><a href="#o-04" data-jump="o-04">The violin, sort of</a></li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    <a href="#u-01" data-jump="u-01"><b>U</b> Under no one&rsquo;s watch</a>
+                                    <ol class="sub-index">
+                                        <li><a href="#u-01" data-jump="u-01">They finally let me quit</a></li>
+                                        <li><a href="#u-02" data-jump="u-02">But the piano stayed</a></li>
+                                        <li><a href="#u-03" data-jump="u-03">I still flinched</a></li>
+                                        <li><a href="#u-04" data-jump="u-04">Violin, minus the shadow</a></li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    <a href="#n-01" data-jump="n-01"><b>N</b> Nothing but ear</a>
+                                    <ol class="sub-index">
+                                        <li><a href="#n-01" data-jump="n-01">I put down the sheet music</a></li>
+                                        <li><a href="#n-02" data-jump="n-02">Turns out I had an ear</a></li>
+                                        <li><a href="#n-03" data-jump="n-03">Now I&rsquo;m doing it on piano</a></li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    <a href="#d-01" data-jump="d-01"><b>D</b> Da Capo</a>
+                                    <ol class="sub-index">
+                                        <li><a href="#d-01" data-jump="d-01">What I&rsquo;d tell the kid on the bench</a></li>
+                                        <li><a href="#d-02" data-jump="d-02">So I&rsquo;m starting over on purpose</a></li>
+                                        <li><a href="#d-coda" data-jump="d-coda">To be continued</a></li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        <div class="cover-blurb">
+                            <div class="kicker"><b>&sect;</b>From the Top</div>
+                            <p class="cover-title">how i was taught music, lost interest in it, and <em>taught myself</em> to love it again.</p>
+                        </div>
+                    </div>
+                    <div class="folio"><span class="bar-label">Aaron Cheung</span><span class="staff-clef staff-clef--bass">&#x1D122;</span></div>
+                </section>
+
+                <!-- Chapter S — Secondhand sound -->
+                <div class="chapter">
+                    <div class="chapter-rail">
+                        <div class="masthead"><span class="bar-label">From the Top</span><span class="staff-clef staff-clef--treble">&#x1D11E;</span><span class="staff-sharp">&#9839;</span></div>
+                        <div class="chapter-rail-head">
+                            <span class="chapter-rail-letter">S</span>
+                            <div class="chapter-rail-text">
+                                <p class="chapter-rail-caption">before i ever played a note, i had already spent years listening to someone else play them.</p>
+                            </div>
+                        </div>
+                        <nav class="rail-nav" aria-label="Chapters">
+                            <ol class="rail-index">
+                                <li class="is-current">
+                                    <a href="#s-01" data-jump="s-01"><b>S</b> Secondhand sound</a>
+                                    <ol class="rail-subindex">
+                                        <li><a href="#s-01" data-jump="s-01">He went first</a></li>
+                                        <li><a href="#s-02" data-jump="s-02">I just tagged along</a></li>
+                                        <li><a href="#s-03" data-jump="s-03">I wanted it so bad</a></li>
+                                    </ol>
+                                </li>
+                                <li><a href="#o-01" data-jump="o-01"><b>O</b> On someone else&rsquo;s terms</a></li>
+                                <li><a href="#u-01" data-jump="u-01"><b>U</b> Under no one&rsquo;s watch</a></li>
+                                <li><a href="#n-01" data-jump="n-01"><b>N</b> Nothing but ear</a></li>
+                                <li><a href="#d-01" data-jump="d-01"><b>D</b> Da Capo</a></li>
+                            </ol>
+                        </nav>
+                        <div class="folio"><span class="bar-label">Aaron Cheung</span><span class="staff-clef staff-clef--bass">&#x1D122;</span><span class="staff-sharp">&#9839;</span></div>
+                    </div>
+
+                    <section id="s-01" class="panel panel--compact">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>S</b>Secondhand sound &mdash; 01</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">01</span>
+                                <h2>He <span class="flare">went</span> first</h2>
+                            </div>
+                            <p class="essay-deck">Being the younger brother means most things reach you used. Piano was supposed to be one of them.</p>
+                            <div class="essay-body">
+                                <p>I&rsquo;m a younger brother by two years. That number set the rhythm of my whole childhood: he did things first, and when I was old enough, I followed. New school, new hobby, new everything. He was the test run and I was the second edition.</p>
+                                <p>It was a fine way to grow up. Someone&rsquo;s always ahead of you, breaking the trail, finding out which things hurt so you don&rsquo;t have to. I didn&rsquo;t resent it. I just assumed that was the order of things.</p>
+                                <p>Piano started the same way. He got the lessons. I got dragged along. What neither of us knew was that this was the one thing where following him would turn into wanting it more than he ever did.</p>
+                            </div>
+                            <blockquote class="pull-quote">He was the test run. I was the second edition.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">Why I copied him</div>
+                                <p>Turns out this is how it&rsquo;s supposed to work. Observational studies find that young children imitate, observe, and consult their older siblings far more than they do their peers, and that a sibling&rsquo;s example can matter as much as a parent&rsquo;s for how a younger kid picks up new skills. I wasn&rsquo;t unusually impressionable &mdash; I was just doing what younger brothers are wired to do.</p>
+                                <cite>McHale, Updegraff &amp; Whiteman, &ldquo;Sibling Relationships and Influences in Childhood and Adolescence,&rdquo; Journal of Marriage and Family (2012)</cite>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+
+                    <section id="s-02" class="panel panel--compact panel--dark">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>S</b>Secondhand sound &mdash; 02</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">02</span>
+                                <h2>I just tagged along</h2>
+                            </div>
+                            <p class="essay-deck">I was too young to leave at home, so I went to every one of his lessons. I was there to wait. I ended up listening.</p>
+                            <div class="essay-body">
+                                <p>The reason I was in the room at all was logistics. I was too young to be left alone, so when my brother had piano lessons, I came too. I wasn&rsquo;t there to learn. I was there because there was nowhere else to put me.</p>
+                                <p>So I sat. And I listened. Week after week, I watched someone slightly bigger than me sit down and make a sound I didn&rsquo;t have a name for yet. I wasn&rsquo;t studying it. Nobody was teaching me. It just went in.</p>
+                                <p>Here&rsquo;s the part that still gets me: he hated it. He complained about the practice constantly, the drills, the repetition, all of it. And none of it landed on me. My brain filtered out every single warning and kept one thing: he pressed the keys, and music came out.</p>
+                            </div>
+                            <blockquote class="pull-quote">I wasn&rsquo;t there to learn. I was there because there was nowhere else to put me.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">Does just being in the room do anything</div>
+                                <p>More than you&rsquo;d think. Research on auditory development shows that even passive exposure to sound produces measurable, lasting changes in how the brain responds to it, though the biggest gains come once a kid actively engages rather than just listens. Which fits exactly what happened: the years of sitting in primed the ear, but the wanting is what turned the sound into something I had to chase.</p>
+                                <cite>Kraus et al., &ldquo;Auditory learning through active engagement with sound,&rdquo; Frontiers in Neuroscience (2014)</cite>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+
+                    <section id="s-03" class="panel panel--compact">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>S</b>Secondhand sound &mdash; 03</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">03</span>
+                                <h2>I wanted it so bad</h2>
+                            </div>
+                            <p class="essay-deck">He made piano look miserable. I wanted it anyway. It&rsquo;s the first thing I ever wanted before he did.</p>
+                            <div class="essay-body">
+                                <p>Somewhere in all that tagging along, the order of things broke.</p>
+                                <p>For once, I didn&rsquo;t want something because my brother had already made it look easy. He&rsquo;d made it look miserable, actually. But I wanted it anyway, and I wanted it before he could hand it down to me. I pestered my parents until they gave in and signed me up for my own lessons.</p>
+                                <p>I want to be honest about what I wanted, though. I didn&rsquo;t want lessons. I didn&rsquo;t know what lessons were. I wanted the sound. I wanted to be the one making it. No scales, no theory, no assignments in my head &mdash; just a kid certain that whatever that noise was, it was worth having.</p>
+                                <p>That wanting was the purest the whole thing ever got. It would take me about a decade to feel it again.</p>
+                            </div>
+                            <blockquote class="pull-quote">I didn&rsquo;t want lessons. I wanted the sound.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">Why my parents said yes</div>
+                                <p>They probably just got tired of the begging. But the science backed them up. A longitudinal study at USC&rsquo;s Brain and Creativity Institute followed kids who began music training at six and seven and found that even two years of it accelerated brain development, speeding up how the auditory pathway matured and sharpening how accurately they processed sound. Early exposure isn&rsquo;t only sentimental. It rewires the hardware, right at the age I was pushing to get in.</p>
+                                <cite>Habibi et al., &ldquo;Music Training and Child Development: A Review of Recent Findings from a Longitudinal Study,&rdquo; Annals of the New York Academy of Sciences (2018)</cite>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+                </div>
+
+                <!-- Chapter O — On someone else's terms -->
+                <div class="chapter">
+                    <div class="chapter-rail">
+                        <div class="masthead"><span class="bar-label">From the Top</span><span class="staff-clef staff-clef--treble">&#x1D11E;</span><span class="staff-sharp">&#9839;</span></div>
+                        <div class="chapter-rail-head">
+                            <span class="chapter-rail-letter">O</span>
+                            <div class="chapter-rail-text">
+                                <p class="chapter-rail-caption">i got what i asked for. it turned out the sound came bundled with everything around it.</p>
+                            </div>
+                        </div>
+                        <nav class="rail-nav" aria-label="Chapters">
+                            <ol class="rail-index">
+                                <li><a href="#s-01" data-jump="s-01"><b>S</b> Secondhand sound</a></li>
+                                <li class="is-current">
+                                    <a href="#o-01" data-jump="o-01"><b>O</b> On someone else&rsquo;s terms</a>
+                                    <ol class="rail-subindex">
+                                        <li><a href="#o-01" data-jump="o-01">The regret was fast</a></li>
+                                        <li><a href="#o-02" data-jump="o-02">How I fought back</a></li>
+                                        <li><a href="#o-03" data-jump="o-03">Taking pieces apart until they died</a></li>
+                                        <li><a href="#o-04" data-jump="o-04">The violin, sort of</a></li>
+                                    </ol>
+                                </li>
+                                <li><a href="#u-01" data-jump="u-01"><b>U</b> Under no one&rsquo;s watch</a></li>
+                                <li><a href="#n-01" data-jump="n-01"><b>N</b> Nothing but ear</a></li>
+                                <li><a href="#d-01" data-jump="d-01"><b>D</b> Da Capo</a></li>
+                            </ol>
+                        </nav>
+                        <div class="folio"><span class="bar-label">Aaron Cheung</span><span class="staff-clef staff-clef--bass">&#x1D122;</span><span class="staff-sharp">&#9839;</span></div>
+                    </div>
+
+                    <section id="o-01" class="panel panel--compact panel--dark">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>O</b>On someone else&rsquo;s terms &mdash; 01</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">01</span>
+                                <h2>The regret was <span class="flare">fast</span></h2>
+                            </div>
+                            <p class="essay-deck">I wanted piano more than anything. It took about three weeks for that to curdle.</p>
+                            <div class="essay-body">
+                                <p>I got my lessons. And almost immediately, I wanted out.</p>
+                                <p>The thing I hadn&rsquo;t understood from the waiting room was that the sound I loved came attached to something else: practice. Hours of it. The music I&rsquo;d been chasing was maybe five percent of what piano actually was. The rest was drills.</p>
+                                <p>I was a little kid who had begged for this, and within a few weeks I was already trying to get rid of it. But now the roles had flipped. Before, I was the one pleading to get in. Now my parents were the ones making me stay. I wanted to quit almost as fast as I&rsquo;d wanted to start, and this time nobody was caving.</p>
+                            </div>
+                            <blockquote class="pull-quote">The music I loved was maybe five percent of what piano actually was.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">So how much of it is really practice</div>
+                                <p>Almost all of it, by design. The most influential study on musical skill, Ericsson&rsquo;s research on expert performers, was run on violinists and pianists and concluded that the hours of solitary, effortful practice a player accumulates is what separates skill levels, more than any inborn talent. The drills weren&rsquo;t a detour from learning piano. The drills were piano. I had signed up for the sound and walked into the machine that produces it.</p>
+                                <cite>Ericsson, Krampe &amp; Tesch-R&ouml;mer, &ldquo;The Role of Deliberate Practice in the Acquisition of Expert Performance,&rdquo; Psychological Review (1993)</cite>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+
+                    <section id="o-02" class="panel panel--compact panel--dark">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>O</b>On someone else&rsquo;s terms &mdash; 02</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">02</span>
+                                <h2>How I fought back</h2>
+                            </div>
+                            <p class="essay-deck">If I couldn&rsquo;t quit, I could refuse to get better. I got very good at not practicing.</p>
+                            <div class="essay-body">
+                                <p>Since I couldn&rsquo;t leave, I did the next thing. I stopped trying.</p>
+                                <p>I put real effort, more than I ever put into playing, into not playing. I&rsquo;d avoid the bench. I&rsquo;d fake my way through. I found every possible way to not practice, and it worked exactly as well as you&rsquo;d expect: I went long stretches without getting any better at all. I&rsquo;d plateau for months, not because I couldn&rsquo;t improve but because improving was the one thing I wouldn&rsquo;t do.</p>
+                                <p>Looking back, the effort I spent dodging practice probably rivaled the effort practice would have taken. But that wasn&rsquo;t the point. The point was that it was mine to withhold. Refusing was the only part of piano I actually controlled.</p>
+                            </div>
+                            <blockquote class="pull-quote">Refusing was the only part of piano I actually controlled.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">Why forcing it backfires</div>
+                                <p>Because the motivation you use matters as much as the hours. Self-determination research on music students finds that kids driven by external pressure rather than their own choice are the ones most likely to stall and quit, and that a student&rsquo;s sense of autonomy is one of the strongest predictors of whether they keep going. I wasn&rsquo;t lazy. I was a kid with no say, doing the only thing a kid with no say can do.</p>
+                                <cite>Evans, McPherson &amp; Davidson, &ldquo;The role of psychological needs in ceasing music and music learning activities,&rdquo; Psychology of Music (2013)</cite>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+
+                    <section id="o-03" class="panel panel--compact panel--dark">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>O</b>On someone else&rsquo;s terms &mdash; 03</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">03</span>
+                                <h2>Taking pieces apart until they died</h2>
+                            </div>
+                            <p class="essay-deck">The method worked. That was the problem. It drained the exact thing that made me want to play.</p>
+                            <div class="essay-body">
+                                <p>Here&rsquo;s what the practice actually looked like. Take a song. Break it into fragments. Play one hand alone, then the other. Play it slow. Play it a little faster. Loop the hard bar until it&rsquo;s muscle memory. Add the second hand. Slow again. Faster.</p>
+                                <p>By the book, this is correct. It&rsquo;s how you&rsquo;re supposed to learn a piece. But doing it, I often had no idea what the song was even supposed to sound like until I was deep into it, finally putting the hands together at something close to tempo. The music showed up last, if it showed up at all. Everything that made me point at my brother&rsquo;s piano and say <em>I want that</em> was buried under mechanics.</p>
+                                <p>The scales, the chords, the theory, the arpeggios, the etudes. I learned them. I just couldn&rsquo;t feel why anymore.</p>
+                            </div>
+                            <blockquote class="pull-quote">The music showed up last, if it showed up at all.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">Was the method wrong</div>
+                                <p>No, and that&rsquo;s the hard part. Breaking a piece into hands-separate, slow-to-fast, repeated fragments is deliberate practice exactly as the research defines it, and it demonstrably works. The method wasn&rsquo;t broken. What it cost me was the wonder, and no method accounts for that, because the science optimizes for the skill, not for whether you still love the thing at the end.</p>
+                                <cite>Ericsson, Krampe &amp; Tesch-R&ouml;mer, &ldquo;The Role of Deliberate Practice in the Acquisition of Expert Performance,&rdquo; Psychological Review (1993)</cite>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+
+                    <section id="o-04" class="panel panel--compact panel--dark" data-tone="hairline-light">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>O</b>On someone else&rsquo;s terms &mdash; 04</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">04</span>
+                                <h2>The violin, sort of</h2>
+                            </div>
+                            <p class="essay-deck">A second instrument entered around middle school. I liked it more. I still made sure not to practice it.</p>
+                            <div class="essay-body">
+                                <p>Around middle school, a family friend started a teaching business and I began learning violin.</p>
+                                <p>I&rsquo;ll admit I liked it more. Violin is one note at a time, one line, the melody itself. I didn&rsquo;t have to grind out accompanying chords under my left hand while my right carried the tune. I could just play the part that sounded like the song. For a moment there was a little more air in it.</p>
+                                <p>But piano had already taught me what lessons meant, and that lesson transferred. I went into violin with the same reflex to dodge practice, the same instinct to not improve on schedule. I enjoyed it more and still did everything I could to avoid the work. The tint from piano colored everything, even the instrument I actually liked.</p>
+                            </div>
+                            <blockquote class="pull-quote">I enjoyed it more and still did everything I could to avoid the work.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">Did the piano really poison the violin</div>
+                                <p>There&rsquo;s a name for this. In evaluative conditioning, when something gets paired with an unpleasant experience, the bad taste it picks up doesn&rsquo;t stay contained. It spreads to similar things in the same category, things that never did anything to earn it. Piano lessons taught me what lessons meant. Violin was a different instrument in the same category, and it inherited the whole verdict before it had a chance to defend itself.</p>
+                                <cite>Patterson, Lipp &amp; Luck, &ldquo;Examining Conceptual Generalisation after Acquisition, Extinction, and Reinstatement in Evaluative Conditioning,&rdquo; Cognition and Emotion (2024)</cite>
+                            </div>
+                            <div class="motif-note">
+                                <div class="motif-label">Recurring thread &mdash; violin</div>
+                                <p>Appearance 1 of 3. Enters here as the lesser evil. Remember it liked melody &mdash; that detail pays off in N.</p>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+                </div>
+
+                <!-- Chapter U — Under no one's watch -->
+                <div class="chapter">
+                    <div class="chapter-rail">
+                        <div class="masthead"><span class="bar-label">From the Top</span><span class="staff-clef staff-clef--treble">&#x1D11E;</span><span class="staff-sharp">&#9839;</span></div>
+                        <div class="chapter-rail-head">
+                            <span class="chapter-rail-letter">U</span>
+                            <div class="chapter-rail-text">
+                                <p class="chapter-rail-caption">nobody made me play anymore. so for the first time, i found out whether i actually wanted to.</p>
+                            </div>
+                        </div>
+                        <nav class="rail-nav" aria-label="Chapters">
+                            <ol class="rail-index">
+                                <li><a href="#s-01" data-jump="s-01"><b>S</b> Secondhand sound</a></li>
+                                <li><a href="#o-01" data-jump="o-01"><b>O</b> On someone else&rsquo;s terms</a></li>
+                                <li class="is-current">
+                                    <a href="#u-01" data-jump="u-01"><b>U</b> Under no one&rsquo;s watch</a>
+                                    <ol class="rail-subindex">
+                                        <li><a href="#u-01" data-jump="u-01">They finally let me quit</a></li>
+                                        <li><a href="#u-02" data-jump="u-02">But the piano stayed</a></li>
+                                        <li><a href="#u-03" data-jump="u-03">I still flinched</a></li>
+                                        <li><a href="#u-04" data-jump="u-04">Violin, minus the shadow</a></li>
+                                    </ol>
+                                </li>
+                                <li><a href="#n-01" data-jump="n-01"><b>N</b> Nothing but ear</a></li>
+                                <li><a href="#d-01" data-jump="d-01"><b>D</b> Da Capo</a></li>
+                            </ol>
+                        </nav>
+                        <div class="folio"><span class="bar-label">Aaron Cheung</span><span class="staff-clef staff-clef--bass">&#x1D122;</span><span class="staff-sharp">&#9839;</span></div>
+                    </div>
+
+                    <section id="u-01" class="panel panel--compact panel--dark">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>U</b>Under no one&rsquo;s watch &mdash; 01</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">01</span>
+                                <h2>They finally let me <span class="flare">quit</span></h2>
+                            </div>
+                            <p class="essay-deck">It didn&rsquo;t happen because I asked. It happened because my parents saw how hard I was working to go nowhere.</p>
+                            <div class="essay-body">
+                                <p>The end didn&rsquo;t come from a big conversation. It came from math.</p>
+                                <p>By the time I hit high school, my parents had watched me spend years pouring effort into not improving. I&rsquo;d become so committed to dodging practice that the dodging itself had become the visible thing. At some point the accounting became obvious to them: they were paying for lessons, and I was spending all my energy making sure those lessons didn&rsquo;t work. So they let me stop.</p>
+                                <p>I should have felt pure relief. Mostly I did. But there was something underneath it I couldn&rsquo;t name yet, the strange quiet of a fight suddenly ending because the other side walked away. I&rsquo;d won. The piano was no longer required. And I had no idea that this was the exact moment things would start to turn.</p>
+                            </div>
+                            <blockquote class="pull-quote">They were paying for lessons, and I was spending all my energy making sure those lessons didn&rsquo;t work.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">What pressure does when it finally lifts</div>
+                                <p>Usually something bleak. In Edward Deci&rsquo;s foundational experiments, people who were pressured or paid to do a task they&rsquo;d once enjoyed ended up less interested in it than when they started, once the pressure was removed. The external control doesn&rsquo;t just fail to help &mdash; it can hollow out the original interest and leave nothing behind. By that logic, quitting should have been the end of piano for me. The interesting part of my story is that it wasn&rsquo;t.</p>
+                                <cite>Deci, &ldquo;Effects of externally mediated rewards on intrinsic motivation,&rdquo; Journal of Personality and Social Psychology (1971)</cite>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+
+                    <section id="u-02" class="panel panel--compact panel--dark" data-tone="fade-to-light">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>U</b>Under no one&rsquo;s watch &mdash; 02</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">02</span>
+                                <h2>But the piano stayed</h2>
+                            </div>
+                            <p class="essay-deck">The lessons ended. The instrument didn&rsquo;t leave the house. That turned out to matter more than anything.</p>
+                            <div class="essay-body">
+                                <p>Here&rsquo;s the detail the whole story hinges on: we still had a piano.</p>
+                                <p>It just sat there in the house, no longer attached to a teacher or a practice log or anyone&rsquo;s expectations. And every so often, I&rsquo;d walk up to it and play. Not practice. Play. I&rsquo;d pick pieces I actually liked and pick my way through them. I&rsquo;d hit notes just to hear what they did. No fragments, no hands-separate drills, no slow-to-fast. Just me and a sound I was finally choosing again.</p>
+                                <p>Nobody knew I was doing it. There was no reason to, no lesson to prep for, no one to perform it for. And somewhere in those quiet unsupervised sessions, the thing I&rsquo;d felt in the waiting room as a little kid started coming back. I didn&rsquo;t announce it. I probably didn&rsquo;t even realize it. But that was the beginning of me actually loving music.</p>
+                            </div>
+                            <blockquote class="pull-quote">Not practice. Play.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">Why the same piano felt different</div>
+                                <p>Because the one thing that changed was the one thing that matters most: choice. A large meta-analysis found that simply giving people a genuine sense of choice over an activity measurably increases their intrinsic motivation and effort. The piano was identical. The room was identical. My hands knew the same drills. But nobody was assigning it anymore, and that single difference was enough to turn an obligation back into a want.</p>
+                                <cite>Patall, Cooper &amp; Robinson, &ldquo;The effects of choice on intrinsic motivation and related outcomes: a meta-analysis,&rdquo; Psychological Bulletin (2008)</cite>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+
+                    <section id="u-03" class="panel panel--compact" data-tone="mismatch-shadow">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>U</b>Under no one&rsquo;s watch &mdash; 03</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">03</span>
+                                <h2>I still flinched</h2>
+                            </div>
+                            <p class="essay-deck">Nobody was making me play anymore. I was still bracing like they were.</p>
+                            <div class="essay-body">
+                                <p>It would be a cleaner story if the moment the lessons stopped, the wanting came back. It didn&rsquo;t.</p>
+                                <p>I&rsquo;d sit down at the piano by choice, and some part of me would still tense up. Still expect a drill. Still treat the bench like a place where work gets assigned. The pressure was gone and my hands hadn&rsquo;t gotten the message. I was free and I was flinching, which is a strange thing to be.</p>
+                                <p>What I didn&rsquo;t understand then is that nothing was going to give the feeling back to me. Quitting only removed the thing that was in the way. It didn&rsquo;t restore anything. Every time I sat down and played something I liked for no reason, I was doing the actual work of getting it back, and it was slow, and it didn&rsquo;t feel like progress, it felt like flinching.</p>
+                                <p>So the flinch wasn&rsquo;t the training winning. It was what recovery feels like from the inside, before you know that&rsquo;s what it is.</p>
+                            </div>
+                            <blockquote class="pull-quote">The pressure was gone and my hands hadn&rsquo;t gotten the message.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">Why didn&rsquo;t the feeling just come back</div>
+                                <p>Because it doesn&rsquo;t work that way. Deci&rsquo;s experiments found that once an activity gets bound to external pressure, the original interest doesn&rsquo;t simply return when the pressure lifts. Removing the coercion isn&rsquo;t the same as restoring the wanting. It just clears the space where the wanting used to be, and leaves you to do the rest.</p>
+                                <cite>Deci, &ldquo;Effects of externally mediated rewards on intrinsic motivation,&rdquo; Journal of Personality and Social Psychology (1971)</cite>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+
+                    <section id="u-04" class="panel panel--compact">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>U</b>Under no one&rsquo;s watch &mdash; 04</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">04</span>
+                                <h2>Violin, minus the shadow</h2>
+                            </div>
+                            <p class="essay-deck">Violin was still a school requirement. Nothing about it changed. I did.</p>
+                            <div class="essay-body">
+                                <p>Violin didn&rsquo;t end when piano did. It was a high school elective, so I kept going, still assigned, still required, still someone else&rsquo;s schedule.</p>
+                                <p>Which is the part worth sitting with. By the logic I&rsquo;d been living under, violin should have felt exactly the same. It was still an obligation. Nobody had handed me any freedom there. But it got better anyway, and it got better fast. I was more engaged, more present, more willing to actually work at it.</p>
+                                <p>For a long time I assumed piano leaving had just taken the weight off everything. Easier story. But violin&rsquo;s circumstances never changed by even an inch, so the weight couldn&rsquo;t have lifted on its own. I think what actually happened is that once I had one place in my life where music was mine, I started showing up to violin like someone who wanted to be there. I brought the wanting with me. It wasn&rsquo;t given back to me, I carried it in.</p>
+                                <p>Nobody gives it back to you.</p>
+                            </div>
+                            <blockquote class="pull-quote">Violin&rsquo;s circumstances never changed by an inch. I did.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">So violin got better on its own once piano ended?</div>
+                                <p>Probably not, and that&rsquo;s the part I didn&rsquo;t understand at the time. The research on how a bad association spreads also suggests the reverse doesn&rsquo;t come free: sourness generalizes easily, but un-learning it in one place doesn&rsquo;t automatically un-learn it everywhere else. Violin didn&rsquo;t get better because piano stopped. It got better because I started showing up to it differently, and I had to do that part myself.</p>
+                            </div>
+                            <div class="motif-note">
+                                <div class="motif-label">Recurring thread &mdash; violin</div>
+                                <p>Appearance 2 of 3. Entered as the lesser evil, returns here as the thing I finally admit I like. One appearance left, where the ear takes over.</p>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+                </div>
+
+                <!-- Chapter N — Nothing but ear -->
+                <div class="chapter">
+                    <div class="chapter-rail">
+                        <div class="masthead"><span class="bar-label">From the Top</span><span class="staff-clef staff-clef--treble">&#x1D11E;</span><span class="staff-sharp">&#9839;</span></div>
+                        <div class="chapter-rail-head">
+                            <span class="chapter-rail-letter">N</span>
+                            <div class="chapter-rail-text">
+                                <p class="chapter-rail-caption">i stopped reading music and started listening to it. that turned out to be the whole difference.</p>
+                            </div>
+                        </div>
+                        <nav class="rail-nav" aria-label="Chapters">
+                            <ol class="rail-index">
+                                <li><a href="#s-01" data-jump="s-01"><b>S</b> Secondhand sound</a></li>
+                                <li><a href="#o-01" data-jump="o-01"><b>O</b> On someone else&rsquo;s terms</a></li>
+                                <li><a href="#u-01" data-jump="u-01"><b>U</b> Under no one&rsquo;s watch</a></li>
+                                <li class="is-current">
+                                    <a href="#n-01" data-jump="n-01"><b>N</b> Nothing but ear</a>
+                                    <ol class="rail-subindex">
+                                        <li><a href="#n-01" data-jump="n-01">I put down the sheet music</a></li>
+                                        <li><a href="#n-02" data-jump="n-02">Turns out I had an ear</a></li>
+                                        <li><a href="#n-03" data-jump="n-03">Now I&rsquo;m doing it on piano</a></li>
+                                    </ol>
+                                </li>
+                                <li><a href="#d-01" data-jump="d-01"><b>D</b> Da Capo</a></li>
+                            </ol>
+                        </nav>
+                        <div class="folio"><span class="bar-label">Aaron Cheung</span><span class="staff-clef staff-clef--bass">&#x1D122;</span><span class="staff-sharp">&#9839;</span></div>
+                    </div>
+
+                    <section id="n-01" class="panel panel--compact">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>N</b>Nothing but ear &mdash; 01</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">01</span>
+                                <h2>I put down the <span class="flare">sheet music</span></h2>
+                            </div>
+                            <p class="essay-deck">I started learning new songs on piano the way I&rsquo;d never been taught: from YouTube, from recordings, from just messing with sounds.</p>
+                            <div class="essay-body">
+                                <p>Once piano was mine again, I started learning music, but not the way the lessons did it. No sheet music. I&rsquo;d pull up tutorials on YouTube, follow along, and figure songs out that way. I&rsquo;d sit and play around with sounds and beats just to hear what happened.</p>
+                                <p>This was the exact opposite of everything I&rsquo;d been trained on. No notation, no assigned repertoire, no breaking a piece into fragments before I knew what it sounded like. I picked songs because I already loved them and already knew how they were supposed to go. I was learning forward from the sound instead of backward from the page.</p>
+                                <p>And for the first time, the music showed up first. I knew the destination before I took a single step toward it, because the destination was a song I&rsquo;d chosen and already had in my head. Everything the O chapter buried, the whole reason I wanted piano as a kid, was suddenly right there at the front again.</p>
+                            </div>
+                            <blockquote class="pull-quote">I was learning forward from the sound instead of backward from the page.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">Is teaching yourself off YouTube actually a method</div>
+                                <p>It&rsquo;s one of the oldest ones, just newly equipped. Lucy Green&rsquo;s research on how popular musicians learn found that most of them acquire their skills informally, outside of any lessons, by choosing music they personally love and copying the recordings by ear rather than working from notation. That&rsquo;s the entire model I&rsquo;d stumbled into. The YouTube tutorials were just my generation&rsquo;s version of dropping the needle and playing along until it clicks.</p>
+                                <cite>Green, L., &ldquo;How Popular Musicians Learn: A Way Ahead for Music Education,&rdquo; Ashgate (2002)</cite>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+
+                    <section id="n-02" class="panel panel--compact">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>N</b>Nothing but ear &mdash; 02</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">02</span>
+                                <h2>Turns out I had an ear</h2>
+                            </div>
+                            <p class="essay-deck">The violin, of all things, showed me my ear was good. Not perfect pitch. Good enough to find a melody by hearing it.</p>
+                            <div class="essay-body">
+                                <p>The discovery didn&rsquo;t come from piano. It came from violin, back for its third and most important appearance.</p>
+                                <p>By now violin was the instrument I was actually engaged with, and playing it, I noticed something: I could find melodies by ear. I&rsquo;d hear a tune and work it out on the strings, one note at a time. Not perfect pitch, nothing that dramatic. But a solid ear, good enough to hear where a melody wanted to go and follow it.</p>
+                                <p>It makes sense that violin is where I found this. It&rsquo;s one note at a time, one line, and every note is something you have to place yourself, no pre-set keys to hide behind. You&rsquo;re constantly listening and adjusting to land the pitch. Piano had let me get away with mechanical playing for years. Violin didn&rsquo;t allow it. It made me listen, and listening is the thing that turned out to matter.</p>
+                            </div>
+                            <blockquote class="pull-quote">Piano let me play mechanically for years. Violin didn&rsquo;t allow it.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">Why violin, specifically, trained the ear</div>
+                                <p>Because of how the instrument works. Relative pitch, the ability to find a note by its relationship to others, is the common, trainable ear skill, as opposed to rare perfect pitch, and one of the classic ways to build it is playing melodies by ear on an instrument that makes you manually place every pitch, like a violin, rather than one with fixed keys. Playing by ear itself is a foundational musicianship skill that research links to improvising, sight-reading, and playing from memory. The instrument I&rsquo;d resented into a filter had quietly been tuning the exact ability I&rsquo;d build everything on.</p>
+                                <cite>Woody, R. H., &ldquo;Playing by Ear: Foundation or Frill?,&rdquo; Music Educators Journal (2012)</cite>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+
+                    <section id="n-03" class="panel panel--compact" data-tone="brightest">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>N</b>Nothing but ear &mdash; 03</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">03</span>
+                                <h2>Now I&rsquo;m doing it on piano</h2>
+                            </div>
+                            <p class="essay-deck">I&rsquo;m teaching my ear to do on the keys what it learned to do on the strings: hear a song I love and rebuild it.</p>
+                            <div class="essay-body">
+                                <p>Once I knew the ear was there, I wanted it on piano too.</p>
+                                <p>So that&rsquo;s what I&rsquo;m doing right now. I put on a song I love, and I try to recreate it on the keys by ear. No tutorial, no sheet music, just listening and hunting for the notes until the thing I&rsquo;m hearing and the thing I&rsquo;m playing line up. It&rsquo;s slow. It&rsquo;s the good kind of slow, the kind I pick.</p>
+                                <p>The irony isn&rsquo;t lost on me. This is practice. It&rsquo;s repetition, trial and error, the same passage over and over until it&rsquo;s right. It is, mechanically, the exact thing I spent years refusing to do. But nobody assigned it, I chose the song, and the whole point is chasing a sound I already love. Same activity, completely different animal. The difference was never the work. It was who the work belonged to.</p>
+                            </div>
+                            <blockquote class="pull-quote">The difference was never the work. It was who the work belonged to.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">Does the self-taught route actually build skill, or just feel nicer</div>
+                                <p>It measurably builds it. Woody and Lehmann tested college musicians on learning melodies by ear and found the ones with informal, self-directed &ldquo;vernacular&rdquo; experience clearly outperformed the formally trained musicians who lacked it. The by-ear route isn&rsquo;t the soft option &mdash; it produces a real, testable ability that classical training alone can miss. The thing I taught myself for fun turns out to be the thing the research says formal lessons often leave out.</p>
+                                <cite>Woody, R. H. &amp; Lehmann, A. C., &ldquo;Student Musicians&rsquo; Ear-Playing Ability as a Function of Vernacular Music Experiences,&rdquo; Journal of Research in Music Education (2010)</cite>
+                            </div>
+                            <div class="motif-note">
+                                <div class="motif-label">Recurring thread &mdash; violin</div>
+                                <p>Appearance 3 of 3. Entered as the lesser evil, returned as the instrument I liked, and lands here as the one that proved my ear. The whole point of violin was that it made me listen. Arc complete.</p>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+                </div>
+
+                <!-- Chapter D — Da Capo -->
+                <div class="chapter">
+                    <div class="chapter-rail">
+                        <div class="masthead"><span class="bar-label">From the Top</span><span class="staff-clef staff-clef--treble">&#x1D11E;</span><span class="staff-sharp">&#9839;</span></div>
+                        <div class="chapter-rail-head">
+                            <span class="chapter-rail-letter">D</span>
+                            <div class="chapter-rail-text">
+                                <p class="term-def"><b>da capo</b> <i>(n.)</i> &mdash; a direction in music to return to the beginning and play it again.</p>
+                                <p class="chapter-rail-caption">i&rsquo;m back where i started: a beginner, wanting a sound i don&rsquo;t know how to make yet. this time i got here on purpose.</p>
+                            </div>
+                        </div>
+                        <nav class="rail-nav" aria-label="Chapters">
+                            <ol class="rail-index">
+                                <li><a href="#s-01" data-jump="s-01"><b>S</b> Secondhand sound</a></li>
+                                <li><a href="#o-01" data-jump="o-01"><b>O</b> On someone else&rsquo;s terms</a></li>
+                                <li><a href="#u-01" data-jump="u-01"><b>U</b> Under no one&rsquo;s watch</a></li>
+                                <li><a href="#n-01" data-jump="n-01"><b>N</b> Nothing but ear</a></li>
+                                <li class="is-current">
+                                    <a href="#d-01" data-jump="d-01"><b>D</b> Da Capo</a>
+                                    <ol class="rail-subindex">
+                                        <li><a href="#d-01" data-jump="d-01">What I&rsquo;d tell the kid on the bench</a></li>
+                                        <li><a href="#d-02" data-jump="d-02">So I&rsquo;m starting over on purpose</a></li>
+                                        <li><a href="#d-coda" data-jump="d-coda">To be continued</a></li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        </nav>
+                        <div class="folio"><span class="bar-label">Aaron Cheung</span><span class="staff-clef staff-clef--bass">&#x1D122;</span><span class="staff-sharp">&#9839;</span></div>
+                    </div>
+
+                    <section id="d-01" class="panel panel--compact">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>D</b>Da Capo &mdash; 01</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">01</span>
+                                <h2>What I&rsquo;d tell the <span class="flare">kid</span> on the bench</h2>
+                            </div>
+                            <p class="essay-deck">I&rsquo;m grateful for the training. I wouldn&rsquo;t have the ear without it. But the wonder came first, and the wonder was the part that mattered.</p>
+                            <div class="essay-body">
+                                <p>If I could go back to the waiting room, to the kid watching his brother and wanting it so badly, I don&rsquo;t think I&rsquo;d warn him. I&rsquo;d just tell him to hold onto the wanting.</p>
+                                <p>Because here&rsquo;s what the whole thing taught me. The structured lessons were worth something. The scales, the theory, the years of drills, they built the foundation I now use to teach myself anything I want. I&rsquo;m not bitter about the training. I&rsquo;m grateful for it. I couldn&rsquo;t do what I do now without it.</p>
+                                <p>But it came at a cost it didn&rsquo;t need to, and the cost was the wonder. For years I had the skills and lost the reason. And it turns out the reason was the important part the entire time. The excitement I felt before I knew a single thing about music, that was the fuel, and everything worked better once I got it back. All the practice in the world doesn&rsquo;t mean much if it burns off the thing that made you want to play.</p>
+                                <p>So that&rsquo;s the lesson, if there is one. The training was good. It just was never worth losing the wonder over.</p>
+                            </div>
+                            <blockquote class="pull-quote">For years I had the skills and lost the reason. The reason was the important part the entire time.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">Was the wonder actually important, or does it just feel nice to say</div>
+                                <p>It&rsquo;s real, and it&rsquo;s measurable. A landmark study found that when people are curious about something, their brains shift into a state that measurably improves learning and memory, driven by a dopamine response that curiosity switches on. Wonder isn&rsquo;t the soft, optional part of learning. It&rsquo;s part of the machinery that makes learning work. The excitement I lost wasn&rsquo;t a mood. It was, neurologically, one of the best tools I had, and the lessons spent it without knowing.</p>
+                                <cite>Gruber, Gelman &amp; Ranganath, &ldquo;States of Curiosity Modulate Hippocampus-Dependent Learning via the Dopaminergic Circuit,&rdquo; Neuron (2014)</cite>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+
+                    <section id="d-02" class="panel panel--compact">
+                        <div class="masthead"></div>
+                        <div class="kicker"><b>D</b>Da Capo &mdash; 02</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <span class="entry-num">02</span>
+                                <h2>So I&rsquo;m starting over on purpose</h2>
+                            </div>
+                            <p class="essay-deck">Guitar next. Then harmonica. Then whatever&rsquo;s after that. Beginner again, except this time the terms are mine and the ear comes with me.</p>
+                            <div class="essay-body">
+                                <p>The story doesn&rsquo;t end at piano. It loops.</p>
+                                <p>I&rsquo;m planning to pick up guitar. Then harmonica. Probably more after that. And the thing is, I&rsquo;ll be a beginner all over again, back to not knowing where the notes are, back to wanting a sound I can&rsquo;t make yet. It&rsquo;s the exact spot I started in as a kid at my brother&rsquo;s lessons.</p>
+                                <p>Except everything&rsquo;s different now. Nobody&rsquo;s making me. I&rsquo;m choosing the instrument, choosing the songs, choosing the pace. And I&rsquo;m not arriving empty-handed &mdash; I&rsquo;m bringing years of training and an ear that can already find a melody. The foundation the lessons built doesn&rsquo;t disappear when I switch instruments. It comes with me. I get to start from scratch and keep everything at the same time.</p>
+                                <p>That&rsquo;s what da capo means. Not &ldquo;the end.&rdquo; It means go back to the beginning and play it again. I&rsquo;m at the beginning again, on purpose, wonder intact, and this time I know exactly how good it can be.</p>
+                            </div>
+                            <blockquote class="pull-quote">I get to start from scratch and keep everything at the same time.</blockquote>
+                            <div class="annot">
+                                <div class="annot-label">Doesn&rsquo;t switching instruments mean starting from zero</div>
+                                <p>Not for the part that matters most. Woody and Lehmann tested musicians on learning melodies by ear and found that by-ear ability is a real, measurable skill, and that the musicians who&rsquo;d built it informally outperformed the ones who hadn&rsquo;t. An ear isn&rsquo;t bolted to a specific instrument. It&rsquo;s the thing I carry to the guitar, and it&rsquo;s the one piece of the old training I&rsquo;m most glad I have.</p>
+                                <cite>Woody, R. H. &amp; Lehmann, A. C., &ldquo;Student Musicians&rsquo; Ear-Playing Ability as a Function of Vernacular Music Experiences,&rdquo; Journal of Research in Music Education (2010)</cite>
+                            </div>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+
+                    <!-- Coda mirrors the cover: same diagonal split and letter cascade, but
+                         colors flipped (cover dark bottom-left / light top-right; coda light
+                         bottom-left / dark top-right). "To be continued" occupies the cover's
+                         .cover-blurb slot; the citation list occupies the cover's TOC slot. -->
+                    <section id="d-coda" class="panel">
+                        <div class="masthead"></div>
+                        <div class="coda-split" aria-hidden="true"></div>
+                        <div class="coda-mark" aria-hidden="true">
+                            <span class="coda-mark-letter is-solid">D</span>
+                            <span class="coda-mark-letter">A</span>
+                            <span class="coda-mark-letter">C</span>
+                            <span class="coda-mark-letter">A</span>
+                            <span class="coda-mark-letter">P</span>
+                            <span class="coda-mark-letter">O</span>
+                        </div>
+                        <div class="coda-blurb">
+                        <div class="kicker"><b>D</b>Da Capo &mdash; Coda</div>
+                        <div class="entry-copy">
+                            <div class="entry-head">
+                                <h2>To be <span class="flare">continued</span></h2>
+                            </div>
+                            <div class="essay-body">
+                                <p>I started this whole thing as a little brother, watching someone else make a sound I wanted, sure it was worth whatever it cost.</p>
+                                <p>I&rsquo;m ending it the same way. Still wanting the sound. Still sure it&rsquo;s worth it. Only now there&rsquo;s nobody&rsquo;s bench to sit beside and wait my turn. The instrument&rsquo;s right there, and it&rsquo;s mine to pick up whenever I&rsquo;m ready.</p>
+                                <p>The wonder made it all the way through. That was the whole point.</p>
+                            </div>
+                            <p class="coda-line">Da capo.</p>
+                        </div>
+                        </div>
+                        <div class="sources">
+                            <div class="sources-label">Sources cited</div>
+                            <ol class="sources-list">
+                                <li><cite><a href="https://doi.org/10.1037/h0030644" target="_blank" rel="noopener noreferrer">Deci, &ldquo;Effects of externally mediated rewards on intrinsic motivation,&rdquo; Journal of Personality and Social Psychology (1971)</a></cite></li>
+                                <li><cite><a href="https://doi.org/10.1037/0033-295X.100.3.363" target="_blank" rel="noopener noreferrer">Ericsson, Krampe &amp; Tesch-R&ouml;mer, &ldquo;The Role of Deliberate Practice in the Acquisition of Expert Performance,&rdquo; Psychological Review (1993)</a></cite></li>
+                                <li><cite><a href="https://doi.org/10.1177/0305735612441736" target="_blank" rel="noopener noreferrer">Evans, McPherson &amp; Davidson, &ldquo;The role of psychological needs in ceasing music and music learning activities,&rdquo; Psychology of Music (2013)</a></cite></li>
+                                <li><cite><a href="https://www.routledge.com/How-Popular-Musicians-Learn-A-Way-Ahead-for-Music-Education/Green/p/book/9780754632269" target="_blank" rel="noopener noreferrer">Green, L., &ldquo;How Popular Musicians Learn: A Way Ahead for Music Education,&rdquo; Ashgate (2002)</a></cite></li>
+                                <li><cite><a href="https://doi.org/10.1016/j.neuron.2014.08.060" target="_blank" rel="noopener noreferrer">Gruber, Gelman &amp; Ranganath, &ldquo;States of Curiosity Modulate Hippocampus-Dependent Learning via the Dopaminergic Circuit,&rdquo; Neuron (2014)</a></cite></li>
+                                <li><cite><a href="https://doi.org/10.1111/nyas.13606" target="_blank" rel="noopener noreferrer">Habibi et al., &ldquo;Music Training and Child Development: A Review of Recent Findings from a Longitudinal Study,&rdquo; Annals of the New York Academy of Sciences (2018)</a></cite></li>
+                                <li><cite><a href="https://doi.org/10.3389/fnins.2014.00351" target="_blank" rel="noopener noreferrer">Kraus et al., &ldquo;Auditory Learning through Active Engagement with Sound: Biological Impact of Community Music Lessons in At-Risk Children,&rdquo; Frontiers in Neuroscience (2014)</a></cite></li>
+                                <li><cite><a href="https://doi.org/10.1111/j.1741-3737.2012.01011.x" target="_blank" rel="noopener noreferrer">McHale, Updegraff &amp; Whiteman, &ldquo;Sibling Relationships and Influences in Childhood and Adolescence,&rdquo; Journal of Marriage and Family (2012)</a></cite> <span class="sources-note">&mdash; first cited in S</span></li>
+                                <li><cite><a href="https://doi.org/10.1037/0033-2909.134.2.270" target="_blank" rel="noopener noreferrer">Patall, Cooper &amp; Robinson, &ldquo;The Effects of Choice on Intrinsic Motivation and Related Outcomes: A Meta-Analysis,&rdquo; Psychological Bulletin (2008)</a></cite></li>
+                                <li><cite><a href="https://doi.org/10.1080/02699931.2024.2408367" target="_blank" rel="noopener noreferrer">Patterson, Lipp &amp; Luck, &ldquo;Examining Conceptual Generalisation after Acquisition, Extinction, and Reinstatement in Evaluative Conditioning,&rdquo; Cognition and Emotion (2024)</a></cite></li>
+                                <li><cite><a href="https://doi.org/10.1177/0027432112459199" target="_blank" rel="noopener noreferrer">Woody, R. H., &ldquo;Playing by Ear: Foundation or Frill?,&rdquo; Music Educators Journal (2012)</a></cite></li>
+                                <li><cite><a href="https://doi.org/10.1177/0022429410370785" target="_blank" rel="noopener noreferrer">Woody, R. H. &amp; Lehmann, A. C., &ldquo;Student Musicians&rsquo; Ear-Playing Ability as a Function of Vernacular Music Experiences,&rdquo; Journal of Research in Music Education (2010)</a></cite></li>
+                            </ol>
+                        </div>
+                        <div class="folio"></div>
+                    </section>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer popup (for theme/font popups — same ID as portfolio/art) -->
+    <div id="footer-popup" hidden></div>
+
+    <div data-include="/partials/footer.html"></div>
+
+    <script>
+        // Initialise partials once theme.js and include-partials.js are ready
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof includePartials === 'function') includePartials();
+        });
+    </script>
+</body>
+
+</html>
