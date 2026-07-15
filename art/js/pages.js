@@ -50,7 +50,7 @@ const PAGES = [
       {
         fname: 'about.txt', code: '0xC011', draggable: true,
         fields: [
-          { label: 'email', value: 'me@aaroncheung.me' },
+          { label: 'email', value: 'contact@aaroncheung.me' },
           { label: 'tools/setup', value: '⚠ system scan: ERROR' },
           { label: 'commissions', value: 'closed', status: 'closed' },
         ],
