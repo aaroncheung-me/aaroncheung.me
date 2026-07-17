@@ -46,10 +46,11 @@
         crossorigin="anonymous">
     <link rel="preload" as="font" href="fonts/fira-mono-v14-latin-700.woff2" type="font/woff2" crossorigin="anonymous">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link id="min-style" rel="stylesheet" type="text/css" href="css/tui.css?v=8">
+    <link id="min-style" rel="stylesheet" type="text/css" href="css/tui.css?v=9">
     <script src="js/overlay-esc.js" defer></script>
     <script src="js/contact_form.js" defer></script>
     <script src="js/theme.js" defer></script>
+    <script src="js/lofi-player.js" defer></script>
     <script src="js/glitch-artifacts.js" defer></script>
     <script src="js/include-partials.js" defer></script>
     <script src="js/render-lists.js" defer></script>
@@ -61,7 +62,10 @@
     <script src="js/mono-fit.js" defer></script>
     <script src="js/ascii-logo.js" defer></script>
     <script src="js/home-tiles.js" defer></script>
-    
+
+    <!-- Private visitor count only, nothing shown on-site -- see analytics/. -->
+    <script data-goatcounter="https://aaroncheung.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
     <title>Aaron Cheung @ Portfolio</title>
 </head>
 
@@ -191,6 +195,13 @@
                                 <div></div>
                             </div>
                             <div class="tile-grid">
+                                <div class="live-tile" id="tile-lofi" tabindex="0" role="button" onclick="setActiveTab(2);goToSection(2,9);render(true)">
+                                    <p class="live-tile-title">[Lofi Generator]</p>
+                                    <div class="live-tile-frame tile-lofi-frame" id="tile-lofi-frame">
+                                        <button id="tile-lofi-play-btn" class="footer-tray-btn tile-lofi-play-btn" onclick="event.stopPropagation();setLofiPlaying(!getLofiPlaying())" aria-label="Play Lofi Generator, plays across the whole site">▶</button>
+                                    </div>
+                                    <p class="live-tile-caption">reacts while it's playing</p>
+                                </div>
                                 <div class="live-tile" id="tile-theme" tabindex="0" role="button" onclick="setActiveTab(3);goToSection(3,0);render(true)">
                                     <p class="live-tile-title">[Theme Switcher]</p>
                                     <div class="live-tile-frame tile-theme-frame">
@@ -202,20 +213,15 @@
                                     </div>
                                     <p class="live-tile-caption">toggle to change the site, live</p>
                                 </div>
-                                <div class="live-tile" id="tile-heatmap" tabindex="0" role="button" onclick="setActiveTab(2);goToSection(2,5);render(true)">
-                                    <p class="live-tile-title">[Cursor Heatmap]</p>
-                                    <div class="live-tile-frame tile-heatmap-boxed" id="tile-heatmap-frame"></div>
-                                    <p class="live-tile-caption">move to reveal</p>
-                                </div>
-                                <div class="live-tile" id="tile-ascii" tabindex="0" role="button" onclick="setActiveTab(2);goToSection(2,7);render(true)">
-                                    <p class="live-tile-title">[ASCII Converter]</p>
-                                    <pre class="live-tile-frame" id="tile-ascii-output"></pre>
-                                    <p class="live-tile-caption">upload an image, get the ascii</p>
-                                </div>
                                 <div class="live-tile" id="tile-jumpy" tabindex="0" role="button" onclick="setActiveTab(2);goToSection(2,4);render(true)">
                                     <p class="live-tile-title">[Jumpy]</p>
                                     <div class="live-tile-frame" id="tile-jumpy-board"></div>
                                     <p class="live-tile-caption">play against it</p>
+                                </div>
+                                <div class="live-tile" id="tile-heatmap" tabindex="0" role="button" onclick="setActiveTab(2);goToSection(2,5);render(true)">
+                                    <p class="live-tile-title">[Cursor Heatmap]</p>
+                                    <div class="live-tile-frame tile-heatmap-boxed" id="tile-heatmap-frame"></div>
+                                    <p class="live-tile-caption">move to reveal</p>
                                 </div>
                             </div>
                         </div>

@@ -187,15 +187,13 @@
     relayout();
   };
 
-  // ── Stacking order — whichever window you touched last stays on top ──────
+  // Stacking order — whichever window you touched last stays on top
   // All windows share one z-index; re-appending the touched window as the
   // last DOM child brings it to front without an ever-growing z-index counter.
 
   function bringToFront(win) {
     win.parentNode.appendChild(win);
   }
-
-  // ── Drag ────────────────────────────────────────────────────────────────
 
   windows.forEach(win => {
     const bar = win.querySelector('.error-window-bar');
@@ -240,7 +238,7 @@
     bar.addEventListener('pointercancel', endDrag);
   });
 
-  // ── Spawn-in ───────────────────────────────────────────────────────────────
+  // Spawn-in
   // Re-triggered on every page open (js/pages.js's showPage(), skipped on
   // gallery) so windows pop in fresh each time.
 
@@ -270,7 +268,7 @@
 
   window.spawnHeroWindows = spawnHeroWindows;
 
-  // ── "Not responding" error toast — theme + font ───────────────────────────
+  // "Not responding" error toast — theme + font
   // The art section's tokens never actually respond to data-theme/data-art-font — this toast is a playful nudge instead of the controls silently no-oping.
 
   const toast = document.getElementById('glitch-hero-toast');

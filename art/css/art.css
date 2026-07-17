@@ -1,4 +1,4 @@
-/* ── Art site custom properties ──────────────────────────────────────────── */
+/* Art site custom properties */
 /* glitch / system-error theme — always dark, ignores the site light toggle  */
 
 :root {
@@ -12,7 +12,7 @@
   --art-radius:    0px;
 }
 
-/* ── Page structure ──────────────────────────────────────────────────────── */
+/* Page structure */
 
 body {
   background: var(--art-bg);
@@ -33,7 +33,7 @@ body {
   to   { opacity: 1; }
 }
 
-/* ── Glitch hero — draggable error-window peephole ───────────────────────── */
+/* Glitch hero — draggable error-window peephole */
 
 .glitch-hero {
   position: relative;
@@ -252,7 +252,7 @@ body {
   animation: none;
 }
 
-/* ── Gallery popups — flood of full-piece "error" windows ────────────────── */
+/* Gallery popups — flood of full-piece "error" windows */
 /* Rendered by js/gallery.js inside .glitch-hero's coordinate space; only populated on the gallery page. */
 
 #gallery-popups {
@@ -395,7 +395,7 @@ body {
   transform: translateY(0);
 }
 
-/* ── Page content popups ──────────────────────────────────────────────────── */
+/* Page content popups */
 /* Rendered by js/pages.js's renderPagePopups() — reuses .error-window chrome, stacked as a static flex column. */
 
 #page-popups {
@@ -492,7 +492,7 @@ body {
   color: var(--art-error);
 }
 
-/* ── Nav ─────────────────────────────────────────────────────────────────── */
+/* Nav */
 /* Rendered entirely by js/pages.js: always 4 boxes, in fixed PAGES order —
    whichever is current renders as the about.txt-style info box
    (.nav-box--active), the other 3 as virus-alert links (.nav-box--alert). */
@@ -588,7 +588,7 @@ body {
   color: var(--art-ink-dim);
 }
 
-/* ── Header (the .nav-box--active info box content) ─────────────────────── */
+/* Header (the .nav-box--active info box content) */
 
 .art-header-body {
   padding: 0.75rem 1rem;
@@ -683,7 +683,7 @@ body {
   100% { transform: translate(0, 0);      clip-path: inset(0 0 0 0); opacity: 0; }
 }
 
-/* ── Lightbox — crash dialog ─────────────────────────────────────────────── */
+/* Lightbox — crash dialog */
 
 #art-lightbox {
   position: fixed;
@@ -804,7 +804,7 @@ body {
   display: none;
 }
 
-/* ── Mobile ──────────────────────────────────────────────────────────────── */
+/* Mobile */
 /* Matches tui.css's own mobile breakpoint (768px) exactly — using a
    different one here would leave a gap where tui's mobile chrome is active
    but these fixes aren't, or vice versa. */
@@ -920,7 +920,7 @@ body {
     display: none;
   }
 
-  /* ── Gallery — swipeable stack ───────────────────────────────────────── */
+  /* Gallery — swipeable stack */
   /* Mobile gets one centered card at a time instead of the scattered flood — see js/gallery.js's buildMobileStack(). */
   .gallery-stack {
     position: absolute;
@@ -972,7 +972,7 @@ body {
   }
 }
 
-/* ── Tablet (in-between) ─────────────────────────────────────────────────── */
+/* Tablet (in-between) */
 /* All 4 windows stay, sized ~70% of desktop; zoom layer disabled (js/glitch-hero.js's isTablet()). */
 @media screen and (min-width: 769px) and (max-width: 1350px) {
   #error-window-1 { width: 25rem; height: 40rem; }

@@ -44,20 +44,34 @@ below.
 index.html, css/, js/, data/, fonts/, partials/   -- main portfolio
 art/                                              -- digital art site
 sound/                                            -- music essay site
-php/                                              -- backend for the live database demo
-python/                                           -- Twitter/X art-posting bot (see its own repo)
+projects/                                         -- embedded live demos (see below)
+```
+
+Each demo tile on the "live demos" section of the site (not to be confused
+with `art/`/`sound/`, which are standalone sites) has its code split into its
+own folder under `projects/`, loaded on demand by `js/tui.js` /
+`js/home-tiles.js`:
+
+```
+projects/database/     -- PHP backend + frontend for the live database demo
+projects/jumpy/        -- bitboard game AI demo
+projects/heatmap/      -- cursor heatmap demo
+projects/ascii-art/    -- image-to-ASCII converter demo
+projects/twitter-bot/  -- Twitter/X art-posting bot (see its own repo)
 ```
 
 ## Running it locally
 
 Serve the repo root with any static file server (`npx serve .`) and most of
-the site works immediately. The database demo (`php/`) additionally needs:
+the site works immediately. The database demo (`projects/database/`)
+additionally needs:
 
 1. A MySQL database, seeded from the schema in
    [`relational_database`](https://github.com/aaroncheung-me/relational_database).
-2. `php/config.example.php` copied to `php/config.php` with real
-   credentials filled in (gitignored, never commit real values), then
-   served through any PHP-capable server.
+2. `projects/database/config.example.php` copied to
+   `projects/database/config.php` with real credentials filled in
+   (gitignored, never commit real values), then served through any
+   PHP-capable server.
 
 ## Related repos
 

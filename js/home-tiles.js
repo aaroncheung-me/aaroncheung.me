@@ -26,7 +26,7 @@ document.addEventListener('mousemove', (e) => {
   lastMouseY = e.clientY;
 });
 
-// ── Jumpy: AI vs AI self-play ────────────────────────────────────────────────
+// Jumpy: AI vs AI self-play
 
 const HOME_JUMPY_MOVE_MS = 800;
 
@@ -83,10 +83,10 @@ function startJumpyTile() {
 }
 
 function initTileJumpy() {
-  loadScriptOnce('js/jumpy-engine.js', startJumpyTile);
+  loadScriptOnce('projects/jumpy/jumpy-engine.js', startJumpyTile);
 }
 
-// ── Cursor Heatmap: the tile itself is the heatmap zone ──────────────────────
+// Cursor Heatmap: the tile itself is the heatmap zone
 
 const HOME_HEATMAP_BLOB_RADIUS = 18;
 const HOME_HEATMAP_MOVE_ALPHA = 16;
@@ -202,50 +202,106 @@ function startHeatmapTile() {
 }
 
 function initTileHeatmap() {
-  loadScriptOnce('js/cursor-heatmap-demo.js', startHeatmapTile);
+  loadScriptOnce('projects/heatmap/cursor-heatmap-demo.js', startHeatmapTile);
 }
 
-// ── ASCII Converter: static render of the logo ────────────────────────────────
+// Lofi Generator: doesn't auto-play (that's the footer toggle's job, and
+// starting audio without a click would both violate autoplay policy and be
+// a rude surprise) -- the tile just reflects whatever LofiSketch is
+// currently doing. Flat line if nothing's playing anywhere on the site,
+// live scope if it is.
 
-const HOME_ASCII_COLS = 300;
-// Darkens the effective brightness so the tile still reads clearly at small sizes
-// (a plain 0-offset render is often too light/sparse to see once shrunk into a tile).
-const HOME_ASCII_BRIGHTNESS_OFFSET = -0.35;
+function startLofiTile() {
+  const frame = document.getElementById('tile-lofi-frame');
+  if (!frame || frame.querySelector('canvas')) return;
 
-function fitTileAsciiWidth(pre) {
-  fitMonospaceFontSize(pre, pre.clientWidth, HOME_ASCII_COLS);
+  const canvas = document.createElement('canvas');
+  frame.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  let width = 0;
+  let height = 0;
+  let animId = null;
+
+  function resize() {
+    const w = frame.clientWidth;
+    const h = frame.clientHeight;
+    if (!w || !h || (w === width && h === height)) return;
+    width = w;
+    height = h;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  new ResizeObserver(resize).observe(frame);
+  resize();
+
+  function siteVar(name, fallback) {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return v || fallback;
+  }
+
+  function drawIdle() {
+    if (!document.body.contains(canvas)) return;
+    ctx.clearRect(0, 0, width, height);
+    ctx.strokeStyle = siteVar('--clr-border', '#8090a8');
+    ctx.globalAlpha = 0.5;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(0, height / 2);
+    ctx.lineTo(width, height / 2);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  function drawPlaying() {
+    const analyser = window.LofiSketch && window.LofiSketch.getAnalyser();
+    if (!analyser || !document.body.contains(canvas) || !window.LofiSketch.isPlaying()) {
+      animId = null;
+      drawIdle();
+      return;
+    }
+    animId = requestAnimationFrame(drawPlaying);
+    const bufferLength = analyser.fftSize;
+    const data = new Uint8Array(bufferLength);
+    analyser.getByteTimeDomainData(data);
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.strokeStyle = siteVar('--clr-orange', '#ec8e2c');
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    const sliceWidth = width / bufferLength;
+    let x = 0;
+    for (let i = 0; i < bufferLength; i++) {
+      const v = data[i] / 128.0;
+      const y = (v * height) / 2;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      x += sliceWidth;
+    }
+    ctx.stroke();
+  }
+
+  function refreshVisual() {
+    const playing = window.LofiSketch && window.LofiSketch.isPlaying();
+    if (playing && !animId) drawPlaying();
+    else if (!playing) { if (animId) cancelAnimationFrame(animId); animId = null; drawIdle(); }
+  }
+
+  refreshVisual();
+  if (window.LofiSketch) window.LofiSketch.onStateChange(refreshVisual);
 }
 
-function startAsciiTile() {
-  const pre = document.getElementById('tile-ascii-output');
-  if (!pre) return;
-
-  const img = new Image();
-  img.onload = () => {
-    if (!document.body.contains(pre)) return;
-
-    fitTileAsciiWidth(pre);
-    pre.textContent = buildAsciiArt(img, HOME_ASCII_COLS, ASCII_ART_PALETTES[0], false, HOME_ASCII_BRIGHTNESS_OFFSET);
-
-    new ResizeObserver(() => {
-      if (!document.body.contains(pre)) return;
-      fitTileAsciiWidth(pre);
-    }).observe(pre);
-  };
-  img.src = 'data/images/logo.png';
+function initTileLofi() {
+  loadScriptOnce('/projects/lofi-sketch/lofi-samples.js', function () {
+    loadScriptOnce('/projects/lofi-sketch/lofi-engine.js', startLofiTile);
+  });
 }
 
-function initTileAscii() {
-  loadScriptOnce('js/ascii-art-demo.js', startAsciiTile);
-}
-
-// ── Lazy-init wiring ──────────────────────────────────────────────────────────
+// Lazy-init wiring
 
 function setupHomeTiles() {
   const tileInits = {
     'tile-jumpy': initTileJumpy,
     'tile-heatmap': initTileHeatmap,
-    'tile-ascii': initTileAscii,
+    'tile-lofi': initTileLofi,
   };
   const initialized = new Set();
 

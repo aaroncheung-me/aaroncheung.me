@@ -1,3 +1,3 @@
-php/db-secret.php
-php/config.php
-python/__pycache__/
+projects/database/db-secret.php
+projects/database/config.php
+projects/twitter-bot/__pycache__/

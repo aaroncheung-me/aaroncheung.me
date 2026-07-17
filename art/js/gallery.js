@@ -83,7 +83,7 @@ function clamp(val, min, max) {
   return Math.max(min, Math.min(max, val));
 }
 
-// ── Keeping clear of the nav ────────────────────────────────────────────
+// Keeping clear of the nav
 // Nav sits above popups (z-index) and would otherwise eat clicks meant for
 // a popup underneath it — measured live so it's correct on any nav layout.
 function navExclusionRects(hero) {
@@ -141,7 +141,7 @@ function randomPosition(w, h, heroW, heroH, marginTop, marginBottom, hardExclusi
   return { left: clamp(Math.random() * maxLeft, 0, maxLeft), top: clamp(marginTop, marginTop, maxTop) };
 }
 
-// ── Build / rebuild the popup flood ──────────────────────────────────────
+// Build / rebuild the popup flood
 
 function buildPopups() {
   const hero = document.getElementById('glitch-hero');
@@ -283,7 +283,6 @@ function buildPopups() {
   }
 }
 
-// ── Mobile — swipeable stack, one piece at a time ───────────────────────────
 // Mobile: one error-window at a time, swiped left/right, instead of the
 // scattered flood. stackIndex persists across resizes, reset only on
 // hideGalleryPopups().
@@ -555,7 +554,7 @@ function wirePopup(popup, hero, marginTop, marginBottom) {
   attachDrag(body, popup, hero, marginTop, marginBottom, { threshold: 8, checkDeny: false, suppressesClick: true });
 }
 
-// ── Show/hide — called by js/pages.js on every page switch ─────────────────
+// Show/hide — called by js/pages.js on every page switch
 // Popups are torn down on the way out and rebuilt from scratch on the way
 // back in, so the spawn-in stagger replays each time the gallery is opened.
 
@@ -574,7 +573,7 @@ window.addEventListener('resize', () => {
   if (hero && hero.classList.contains('gallery-active')) buildPopups();
 });
 
-// ── Lightbox — click any popup's artwork to view it larger ─────────────────
+// Lightbox — click any popup's artwork to view it larger
 
 let lbIndex = -1;
 

@@ -22,7 +22,7 @@
   src: url('../fonts/oswald-v57-latin-700.woff2') format('woff2');
 }
 
-/* ── Music site custom properties ────────────────────────────────────────── */
+/* Music site custom properties */
 /* Ink-on-paper, deliberately no dark/light toggle (see .record below).
    Doesn't use the shared --clr-* tokens from tui.css -- scoped under
    .record so it can't leak into/clash with the shared header & footer. */
@@ -90,7 +90,7 @@ body {
 .record a { color: inherit; }
 .record ::selection { background: var(--accent); color: var(--paper); }
 
-/* ── scroller ──────────────────────────────────────────────────────── */
+/* scroller */
 
 .record .scroller {
   position: relative;
@@ -110,7 +110,7 @@ body {
 .record .scroller::-webkit-scrollbar-thumb { background: var(--ink-faint); }
 .record .scroller::-webkit-scrollbar-track { background: transparent; }
 
-/* ── rail nav ──────────────────────────────────────────────────────── */
+/* rail nav */
 /* Repeats the full chapter list inside every rail rather than a floating
    overlay, so nav reads as part of the current position. margin-top:auto
    pins it under the letter/caption. */
@@ -197,7 +197,7 @@ body {
   .record .rail-subindex { display: none; }
 }
 
-/* ── panel ─────────────────────────────────────────────────────────── */
+/* panel */
 
 .record .panel {
   position: relative;
@@ -384,7 +384,7 @@ body {
   --accent-tint: rgba(255, 77, 63, 0.2);
 }
 
-/* ── shared editorial furniture ───────────────────────────────────────── */
+/* shared editorial furniture */
 
 /* margin-bottom here (not just spacing added lower down the page) --
    every entry panel puts .kicker directly above .entry-copy with no
@@ -450,7 +450,7 @@ body {
   z-index: 3;
 }
 
-/* ── cover / index ─────────────────────────────────────────────────── */
+/* cover / index */
 
 /* clip-path polygon draws the diagonal natively regardless of aspect
    ratio; inset to the content area so its corners meet the header/footer
@@ -639,7 +639,7 @@ body {
   flex: none;
 }
 
-/* ── chapter / sticky rail ─────────────────────────────────────────────
+/* chapter / sticky rail
    Each chapter's giant letter lives in a sticky rail rather than its first
    entry -- it stays stuck for the whole chapter's run of entries, releasing
    once you scroll into the next .chapter. */
@@ -862,7 +862,7 @@ body {
   margin: clamp(14px, 1.7vh, 22px) 0 0;
 }
 
-/* ── coda: wide panel, diagonal mirror of the cover ────────────────────
+/* coda: wide panel, diagonal mirror of the cover
    Same geometry as .cover-split, but the opposite triangle is filled (mirrors the cover). */
 .record .coda-split {
   position: absolute;
@@ -987,7 +987,7 @@ body {
   margin-top: 2px;
 }
 
-/* ── compact follow-on entry (same letter, no new bleed mark) ─────────
+/* compact follow-on entry (same letter, no new bleed mark)
    Follow-on entries under a chapter's letter skip the giant mark; a
    smaller running numeral carries continuity instead. */
 
@@ -1025,7 +1025,7 @@ body {
   html { scroll-behavior: auto; }
 }
 
-/* ── mobile: vertical stack, not a side-scroller ────────────────────────
+/* mobile: vertical stack, not a side-scroller
    Mobile reflows the same markup to a normal top-to-bottom page: chapters
    stack, the sticky rail becomes a compact inline divider, masthead/folio
    bars drop. music.js gates its scroll-rig behind this same breakpoint, so
@@ -1115,7 +1115,7 @@ body {
   .record .entry-num { font-size: clamp(50px, 18vw, 84px); }
   .record .entry-copy h2 { font-size: clamp(32px, 10vw, 48px); }
 
-  /* ── chapter-rail: sticky sidebar -> sticky compact header ──────────
+  /* chapter-rail: sticky sidebar -> sticky compact header
      Still sticky, turned 90deg: letter left, caption right, cutting rail
      height enough to leave room for the nav row. */
   .record .chapter-rail {
@@ -1191,7 +1191,7 @@ body {
 
   .record .rail-index a { text-align: center; }
 
-  /* ── cover: diagonal split + SOUND cascade -> plain vertical hero ──── */
+  /* cover: diagonal split + SOUND cascade -> plain vertical hero */
   .record .cover-split,
   .record .cover-sound {
     display: none;
@@ -1245,7 +1245,7 @@ body {
      sticky chapter-rail's own compact nav instead of from here. */
   .record .sub-index { display: none; }
 
-  /* ── coda: diagonal mirror + DA CAPO cascade -> plain closing block ── */
+  /* coda: diagonal mirror + DA CAPO cascade -> plain closing block */
   .record .coda-split,
   .record .coda-mark {
     display: none;

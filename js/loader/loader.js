@@ -23,7 +23,7 @@ Promise.all([
   includePartials().catch(e => console.error("Partials error:", e)),
   renderAllLists().catch(e => console.error("Lists error:", e))
 ]).then(() => {
-  loadDependency("css/tui.css?v=8", "link");
+  loadDependency("css/tui.css?v=9", "link");
   loadDependency("js/tui.js?v=0.18", "script", function () {
     init();
   });

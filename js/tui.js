@@ -355,7 +355,7 @@ async function displayContent() {
         element.innerHTML = c;
         innerContainerElement.appendChild(element);
 
-        ['js/database.js', 'js/insert_form.js', 'js/delete_form.js'].forEach((src) => {
+        ['projects/database/database.js', 'projects/database/insert_form.js', 'projects/database/delete_form.js'].forEach((src) => {
           if (!document.querySelector(`script[src="${src}"]`)) {
             const script = document.createElement('script');
             script.src = src;
@@ -368,17 +368,17 @@ async function displayContent() {
 
         const loadJumpyDemoScript = function () {
           const demoScript = document.createElement('script');
-          demoScript.src = 'js/jumpy-demo.js';
+          demoScript.src = 'projects/jumpy/jumpy-demo.js';
           demoScript.onload = function () {
             initJumpyDemo();
           };
           document.body.appendChild(demoScript);
         };
 
-        const existingEngineScript = document.querySelector('script[src="js/jumpy-engine.js"]');
+        const existingEngineScript = document.querySelector('script[src="projects/jumpy/jumpy-engine.js"]');
         if (!existingEngineScript) {
           const engineScript = document.createElement('script');
-          engineScript.src = 'js/jumpy-engine.js';
+          engineScript.src = 'projects/jumpy/jumpy-engine.js';
           engineScript.onload = loadJumpyDemoScript;
           document.body.appendChild(engineScript);
         } else if (typeof initJumpyDemo === 'function') {
@@ -397,9 +397,9 @@ async function displayContent() {
         element.innerHTML = c;
         innerContainerElement.appendChild(element);
 
-        if (!document.querySelector('script[src="js/cursor-heatmap-demo.js"]')) {
+        if (!document.querySelector('script[src="projects/heatmap/cursor-heatmap-demo.js"]')) {
           const script = document.createElement('script');
-          script.src = 'js/cursor-heatmap-demo.js';
+          script.src = 'projects/heatmap/cursor-heatmap-demo.js';
           script.onload = function () {
             initCursorHeatmapDemo();
           };
@@ -411,15 +411,54 @@ async function displayContent() {
         element.innerHTML = c;
         innerContainerElement.appendChild(element);
 
-        if (!document.querySelector('script[src="js/ascii-art-demo.js"]')) {
+        if (!document.querySelector('script[src="projects/ascii-art/ascii-art-demo.js"]')) {
           const script = document.createElement('script');
-          script.src = 'js/ascii-art-demo.js';
+          script.src = 'projects/ascii-art/ascii-art-demo.js';
           script.onload = function () {
             initAsciiArtDemo();
           };
           document.body.appendChild(script);
         } else if (typeof initAsciiArtDemo === 'function') {
           setTimeout(initAsciiArtDemo, 0);
+        }
+      } else if (c.includes('lofi-sketch-demo')) {
+        element.innerHTML = c;
+        innerContainerElement.appendChild(element);
+
+        // Samples file first (the embedded piano/drum recordings, large --
+        // this is why it's split from the engine and only ever loaded once),
+        // then the engine, which defines window.LofiSketch and is the only
+        // thing that actually needs to run after this markup exists.
+        const mountLofiSketch = function () {
+          const demoContainer = element.querySelector('#lofi-sketch-demo');
+          if (demoContainer && window.LofiSketch) window.LofiSketch.mount(demoContainer);
+        };
+
+        const loadLofiEngineScript = function () {
+          if (window.LofiSketch) { mountLofiSketch(); return; }
+          const engineScript = document.createElement('script');
+          engineScript.src = '/projects/lofi-sketch/lofi-engine.js';
+          engineScript.onload = mountLofiSketch;
+          document.body.appendChild(engineScript);
+        };
+
+        const existingSamplesScript = document.querySelector('script[src="/projects/lofi-sketch/lofi-samples.js"]');
+        if (!existingSamplesScript) {
+          const samplesScript = document.createElement('script');
+          samplesScript.src = '/projects/lofi-sketch/lofi-samples.js';
+          samplesScript.onload = loadLofiEngineScript;
+          document.body.appendChild(samplesScript);
+        } else if (window.LofiSketch) {
+          // Samples + engine already loaded (revisiting this page, or the
+          // footer toggle/home tile already loaded them) -- just mount the
+          // panel onto the freshly rendered markup, no re-fetch needed.
+          mountLofiSketch();
+        } else if (typeof window.PIANO_SAMPLES_B64 !== 'undefined') {
+          // Samples loaded elsewhere but the engine script wasn't yet.
+          loadLofiEngineScript();
+        } else {
+          // Samples script tag exists but is still loading -- wait for it.
+          existingSamplesScript.addEventListener('load', loadLofiEngineScript);
         }
       } else if (c.includes('site-mirror')) {
         if (IS_EMBEDDED_PREVIEW) {

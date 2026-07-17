@@ -15,7 +15,7 @@ const GOOGLE_FONT_URLS = {
   "space":     "https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap",
 };
 
-// ── Art site palette ──────────────────────────────────────────────────────────
+// Art site palette
 
 function getArtPalette() {
   return document.documentElement.getAttribute("data-art-palette") || "warm";
@@ -31,7 +31,7 @@ function setArtPalette(name) {
   syncThemeButtons();
 }
 
-// ── Art site font ─────────────────────────────────────────────────────────────
+// Art site font
 
 function getArtFont() {
   return document.documentElement.getAttribute("data-art-font") || "caveat";
@@ -114,7 +114,7 @@ function setCrt(val) {
   syncThemeButtons();
 }
 
-// ── Glitch effect on/off + frequency ───────────────────────────────────────
+// Glitch effect on/off + frequency
 // Whether glitch-artifacts.js's flashes are enabled, and the random gap
 // (seconds) between them. Bounds here (0.2-15s) must match the
 // <input type="range"> min/max in data/ui-elements.json's slider markup --
@@ -261,9 +261,11 @@ function syncThemeButtons() {
   if (mobilMotionBtn && mobilMotionBtn.textContent !== mobilMotionSymbol) {
     mobilMotionBtn.textContent = mobilMotionSymbol;
   }
+
+  renderMobileQuickSettings();
 }
 
-// ── Footer popup ─────────────────────────────────────────────────────────────
+// Footer popup
 
 // Add an entry here (and a matching tab in partials/footer.html) when a new
 // minisite goes live. '/' must stay first -- currentSiteTab() falls back to
@@ -405,13 +407,73 @@ function selectFooterPopupOption(type, value) {
   closeFooterPopup();
 }
 
+// Mobile "settings" dropdown -- consolidates CRT/motion/theme/lofi into one
+// button instead of four separate icons (the mobile header has even less
+// room than the desktop footer). Reuses the same #footer-popup element and
+// positioning logic as the other popups, but with its own render: these are
+// independent on/off toggles, not a pick-one-of-several list like palette/
+// font/sites, so clicking a row re-renders in place instead of closing,
+// letting several settings get flipped in one visit.
+function renderMobileQuickSettings() {
+  const popup = document.getElementById('footer-popup');
+  if (!popup || popup.dataset.type !== 'quicksettings') return;
+
+  const crt = getCrt();
+  const motionOn = !getReducedMotion();
+  const dark = getTheme() === 'dark';
+  const lofi = typeof getLofiPlaying === 'function' && getLofiPlaying();
+
+  const row = (active, label, onclick) =>
+    `<button class="popup-option${active ? ' active' : ''}" onclick="${onclick}">` +
+    `<span class="popup-dot">${active ? '●' : ' '}</span>${label}</button>`;
+
+  const html =
+    '<div class="popup-title">display</div>' +
+    row(crt, 'CRT overlay', `setCrt(${!crt})`) +
+    row(motionOn, 'motion', `setReducedMotion(${motionOn})`) +
+    row(dark, 'dark mode', 'toggleTheme()') +
+    row(lofi, 'lofi generator', `setLofiPlaying(${!lofi})`);
+
+  // Guard against a no-op write -- innerHTML always creates new nodes (a
+  // childList mutation) even when the content is identical, and this
+  // function is called from themeButtonObserver (itself a childList+
+  // subtree MutationObserver on document.body, which this popup lives
+  // inside). An unconditional write here retriggers that observer forever
+  // and freezes the tab -- same gotcha syncGlitchRangeUI already guards
+  // against, just missed here on the first pass.
+  if (popup.innerHTML !== html) popup.innerHTML = html;
+}
+
+function toggleMobileQuickSettings(button) {
+  const popup = document.getElementById('footer-popup');
+  if (!popup.hidden && popup.dataset.type === 'quicksettings') { closeFooterPopup(); return; }
+
+  popup.dataset.type = 'quicksettings';
+  renderMobileQuickSettings();
+
+  const headerRect = document.getElementById('mobile-header').getBoundingClientRect();
+  popup.style.left = '';
+  popup.style.right = (window.innerWidth - headerRect.right) + 'px';
+  popup.style.transform = '';
+  popup.style.top = (headerRect.bottom + 4) + 'px';
+  popup.style.bottom = '';
+  popup.removeAttribute('hidden');
+
+  requestAnimationFrame(() => {
+    _popupCloseHandler = (e) => {
+      if (!popup.contains(e.target) && e.target !== button) closeFooterPopup();
+    };
+    document.addEventListener('click', _popupCloseHandler);
+  });
+}
+
 // Preload any non-default saved font so it's ready before the user opens UI Elements
 (function () {
   const saved = localStorage.getItem(FONT_STORAGE_KEY);
   if (saved && saved !== "fira") loadGoogleFont(saved);
 })();
 
-// ── Footer clock (shared across all sites) ───────────────────────────────────
+// Footer clock (shared across all sites)
 
 function initFooterClock() {
   function tick() {
@@ -443,7 +505,7 @@ function initFooterClock() {
 
 initFooterClock();
 
-// ── Site tab navigation ───────────────────────────────────────────────────────
+// Site tab navigation
 
 function siteNavigate(url) {
   if (getReducedMotion()) { window.location.href = url; return; }
@@ -457,7 +519,7 @@ function siteNavigate(url) {
   setTimeout(() => { window.location.href = url; }, 160);
 }
 
-// ── Site tab swap (runs once via MutationObserver when footer loads) ──────────
+// Site tab swap (runs once via MutationObserver when footer loads)
 // Static markup in footer.html assumes the portfolio is current; this only
 // needs to rewrite tabs when you're not. Driven by SITE_TABS, so adding a
 // site there is enough.
@@ -479,7 +541,7 @@ function setupSiteTabs() {
   });
 }
 
-// ── Mobile header site tab (same idea, for the mobile header) ─────────────────
+// Mobile header site tab (same idea, for the mobile header)
 
 let _mobileHeaderSiteTabSetup = false;
 
@@ -499,5 +561,6 @@ const themeButtonObserver = new MutationObserver(() => {
   syncGlitchRangeUI();
   setupSiteTabs();
   setupMobileHeaderSiteTab();
+  if (typeof syncLofiButton === 'function') syncLofiButton();
 });
 themeButtonObserver.observe(document.body, { childList: true, subtree: true });

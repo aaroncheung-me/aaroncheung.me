@@ -359,7 +359,7 @@ function renderNav() {
   });
 }
 
-// ── Mobile nav popup — #nav-toggle (hamburger) shows/hides #nav-list ────────
+// Mobile nav popup — #nav-toggle (hamburger) shows/hides #nav-list
 // On desktop #nav-toggle is display:none via CSS, so these calls are inert.
 
 function closeNavPopup() {

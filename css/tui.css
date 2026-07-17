@@ -44,7 +44,7 @@
   --clr-grid: rgba(87, 96, 106, 0.1);
 }
 
-/* ── Colour Palettes ─────────────────────────────────────────────────────── */
+/* Colour Palettes */
 
 [data-palette="ocean"] {
   --clr-orange:     #1ecece;
@@ -85,13 +85,13 @@
   --clr-blue:       #882010;
 }
 
-/* ── Fonts ───────────────────────────────────────────────────────────────── */
+/* Fonts */
 
 [data-font="jetbrains"] { --font-mono: "JetBrains Mono", monospace; }
 [data-font="ibm-plex"]  { --font-mono: "IBM Plex Mono",  monospace; }
 [data-font="space"]     { --font-mono: "Space Mono",     monospace; }
 
-/* ── CRT Scanline Overlay ────────────────────────────────────────────────── */
+/* CRT Scanline Overlay */
 
 html::after {
   content: '';
@@ -129,7 +129,7 @@ html::after {
   display: block;
 }
 
-/* ── Ambient glitch artifacts (shared by both sites) ──────────────────────── */
+/* Ambient glitch artifacts (shared by both sites) */
 /* mix-blend-mode: difference so artifacts read correctly over any content;
    gated on the CRT toggle (not reduced-motion) since this reads as a signal
    artifact, not motion. */
@@ -169,7 +169,7 @@ html::after {
   100% { opacity: 0;    transform: translateX(0); }
 }
 
-/* ── Cursor Blink ────────────────────────────────────────────────────────── */
+/* Cursor Blink */
 
 @keyframes siteFadeIn {
   from { opacity: 0; }
@@ -382,12 +382,42 @@ svg {
   display: block;
 }
 
-#tile-ascii-output {
-  font-size: 0.35rem;
-  line-height: 0.4rem;
-  white-space: pre;
-  letter-spacing: 0;
-  margin: 0;
+.tile-lofi-frame {
+  position: relative;
+}
+
+#tile-lofi-frame canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tile-lofi-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.4rem;
+  border: 1px solid var(--clr-border);
+  border-radius: 50%;
+  width: 2.4rem;
+  height: 2.4rem;
+  background: var(--clr-primary-bg);
+  opacity: 1;
+  transition: opacity 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.tile-lofi-play-btn:hover {
+  border-color: var(--clr-orange);
+}
+
+/* Hidden (not removed) while playing -- the live scope is the "it's
+   playing" indicator at that point, and keeping the button in the DOM
+   means js/lofi-player.js's syncLofiButton() doesn't need to know whether
+   a tile is currently mounted to update it. */
+.tile-lofi-play-btn.lofi-tile-hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 
@@ -595,7 +625,7 @@ body.at-home #desktop-controls-hint {
   color: var(--clr-orange);
 }
 
-/* ── Footer popup ────────────────────────────────────────────────────────── */
+/* Footer popup */
 
 #footer-popup {
   position: fixed;
@@ -1609,7 +1639,80 @@ div.selected-frame > ::-webkit-scrollbar-thumb {
   accent-color: var(--clr-light-blue);
 }
 
-/* ── Dual-handle range slider (CRT Overlay glitch-frequency demo) ─────────── */
+/* Lofi Sketch (Projects page demo panel -- see projects/lofi-sketch/) */
+
+.lofi-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.lofi-screen {
+  border: 1px solid var(--clr-border);
+  background: var(--clr-primary-bg);
+  padding: 0.4rem;
+}
+
+.lofi-screen canvas {
+  display: block;
+  width: 100%;
+  height: 140px;
+}
+
+.lofi-readout {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.85rem;
+  color: var(--clr-border);
+}
+
+.lofi-state {
+  color: var(--clr-primary-txt);
+  font-weight: 700;
+}
+
+.lofi-toggle[aria-pressed="true"] {
+  border-color: var(--clr-orange);
+  color: var(--clr-orange);
+}
+
+.lofi-mix {
+  display: grid;
+  gap: 0.5rem 1.5rem;
+}
+
+.lofi-mix-row {
+  display: grid;
+  grid-template-columns: 6rem 1fr 3.5ch;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+}
+
+.lofi-mix-row label {
+  color: var(--clr-border);
+  white-space: nowrap;
+}
+
+.lofi-mix-row output {
+  text-align: right;
+  color: var(--clr-primary-txt);
+}
+
+.lofi-mix-row input[type="range"] {
+  width: 100%;
+  accent-color: var(--clr-orange);
+}
+
+@media (min-width: 640px) {
+  .lofi-mix {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Dual-handle range slider (CRT Overlay glitch-frequency demo) */
 /* Two overlapping native range inputs (for free keyboard/screen-reader
    support), sharing one visual track; pointer-events is disabled on each
    input and re-enabled only on its thumb so clicks don't always grab the
