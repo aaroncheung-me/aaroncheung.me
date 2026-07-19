@@ -23,17 +23,10 @@ function getLofiPlaying() {
   return localStorage.getItem(LOFI_PLAYING_KEY) === "true";
 }
 
-function loadScriptOnce_lofi(src, callback) {
-  if (document.querySelector(`script[src="${src}"]`)) { callback(); return; }
-  const script = document.createElement("script");
-  script.src = src;
-  script.onload = callback;
-  document.body.appendChild(script);
-}
-
+// loadScriptOnce is defined in js/theme.js (loaded on every site, ahead of this file).
 function loadLofiSketchAssets(callback) {
-  loadScriptOnce_lofi(LOFI_SAMPLES_SRC, function () {
-    loadScriptOnce_lofi(LOFI_ENGINE_SRC, callback);
+  loadScriptOnce(LOFI_SAMPLES_SRC, function () {
+    loadScriptOnce(LOFI_ENGINE_SRC, callback);
   });
 }
 

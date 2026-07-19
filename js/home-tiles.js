@@ -6,16 +6,7 @@ function isReducedMotion() {
   return document.documentElement.getAttribute('data-reduced-motion') === 'true';
 }
 
-function loadScriptOnce(src, callback) {
-  if (document.querySelector(`script[src="${src}"]`)) {
-    callback();
-    return;
-  }
-  const script = document.createElement('script');
-  script.src = src;
-  script.onload = callback;
-  document.body.appendChild(script);
-}
+// loadScriptOnce is defined in js/theme.js (loaded ahead of this file).
 
 // Tracks last known cursor position so a tile that finishes lazy-loading
 // mid-hover can react immediately instead of waiting for the next mousemove.
@@ -96,8 +87,13 @@ const HOME_HEATMAP_TICK_MS = 100;
 function startHeatmapTile() {
   const frame = document.getElementById('tile-heatmap-frame');
   if (!frame) return;
-  // Guards against ending up with two canvases in this frame if this ever runs twice.
-  if (frame.querySelector('canvas')) return;
+  // A canvas already here is never a live instance to preserve -- it's
+  // either stale markup baked into tui.js's cached HOME_CONTENT_HTML (this
+  // tile's own lazy-load can beat tui.js's slower fetch chain to the punch
+  // on first load, so the snapshot captures an inert canvas with no
+  // listeners/timer attached) or a leftover from an earlier visit. Always
+  // clear and rebuild rather than trusting it, same as js/ascii-logo.js does.
+  frame.querySelectorAll('canvas').forEach((c) => c.remove());
 
   let width = 0;
   let height = 0;
@@ -213,7 +209,10 @@ function initTileHeatmap() {
 
 function startLofiTile() {
   const frame = document.getElementById('tile-lofi-frame');
-  if (!frame || frame.querySelector('canvas')) return;
+  if (!frame) return;
+  // See startHeatmapTile()'s comment -- a pre-existing canvas here can be
+  // stale markup from the same HOME_CONTENT_HTML race, not a live instance.
+  frame.querySelectorAll('canvas').forEach((c) => c.remove());
 
   const canvas = document.createElement('canvas');
   frame.appendChild(canvas);
@@ -290,9 +289,7 @@ function startLofiTile() {
 }
 
 function initTileLofi() {
-  loadScriptOnce('/projects/lofi-sketch/lofi-samples.js', function () {
-    loadScriptOnce('/projects/lofi-sketch/lofi-engine.js', startLofiTile);
-  });
+  loadLofiSketchAssets(startLofiTile);
 }
 
 // Lazy-init wiring

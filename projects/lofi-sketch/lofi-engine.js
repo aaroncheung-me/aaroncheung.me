@@ -177,7 +177,14 @@
     vinylBus: 0.50
   };
 
-  var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Live read of the site's own toggle (data-reduced-motion), not a
+  // one-time OS-preference snapshot -- that attribute already folds in the
+  // OS setting at load (see index.html's inline script) and stays current
+  // if the visitor flips the site's own motion toggle afterward, which a
+  // captured-once matchMedia() value never would.
+  function reducedMotionOn() {
+    return document.documentElement.getAttribute('data-reduced-motion') === 'true';
+  }
 
   // This engine can run with no visible UI at all (the site-wide footer
   // toggle just wants audio, no buttons/sliders) or with a full control
@@ -1928,7 +1935,7 @@
     els.play.classList.add('playing');
     els.stateLabel.textContent = 'PLAYING';
 
-    if (!reducedMotion) startVisualizer();
+    if (!reducedMotionOn()) startVisualizer();
     else drawStaticScope();
 
     notifyStateChange();
@@ -1961,35 +1968,115 @@
     return v || fallback;
   }
 
-  function hexToRgba(hex, alpha) {
+  function hexToRgbArr(hex) {
     var m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex);
-    if (!m) return 'rgba(13, 18, 16, ' + alpha + ')';
-    return 'rgba(' + parseInt(m[1], 16) + ', ' + parseInt(m[2], 16) + ', ' + parseInt(m[3], 16) + ', ' + alpha + ')';
+    return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : [13, 17, 23];
   }
 
+  function rgbaStr(rgb, alpha) {
+    return 'rgba(' + Math.round(rgb[0]) + ', ' + Math.round(rgb[1]) + ', ' + Math.round(rgb[2]) + ', ' + alpha + ')';
+  }
+
+  // Matches .theme-transitioning's 0.3s in css/tui.css -- the rest of the
+  // page crossfades its colors over that same window via a CSS transition,
+  // which can't reach into a <canvas>'s pixels, so this recreates the same
+  // timing by hand for the scope's own colors.
+  var COLOR_FADE_MS = 300;
+
+  // .theme-transitioning's transition uses the "ease" timing function
+  // (slow-fast-slow), not linear -- linear changes at a constant rate all
+  // the way to the last frame, while "ease" decelerates and visually
+  // settles before its nominal duration is up, so matching duration alone
+  // isn't enough to match pace. Newton-Raphson solve for the same
+  // cubic-bezier(0.25, 0.1, 0.25, 1.0) control points "ease" expands to, so
+  // this is the same curve, not an approximation of it.
+  function makeCubicBezierEase(p1x, p1y, p2x, p2y) {
+    function a(x1, x2) { return 1 - 3 * x2 + 3 * x1; }
+    function b(x1, x2) { return 3 * x2 - 6 * x1; }
+    function c(x1) { return 3 * x1; }
+    function bezierX(t) { return ((a(p1x, p2x) * t + b(p1x, p2x)) * t + c(p1x)) * t; }
+    function bezierSlopeX(t) { return 3 * a(p1x, p2x) * t * t + 2 * b(p1x, p2x) * t + c(p1x); }
+    function bezierY(t) { return ((a(p1y, p2y) * t + b(p1y, p2y)) * t + c(p1y)) * t; }
+
+    return function (x) {
+      var t = x;
+      for (var i = 0; i < 4; i++) {
+        var slope = bezierSlopeX(t);
+        if (slope === 0) break;
+        t -= (bezierX(t) - x) / slope;
+      }
+      return bezierY(t);
+    };
+  }
+  var CSS_EASE = makeCubicBezierEase(0.25, 0.1, 0.25, 1.0);
+
+  // Returns a function you call once per redraw to get that CSS custom
+  // property's current color as [r,g,b], gliding smoothly toward it over
+  // COLOR_FADE_MS whenever it changes instead of snapping -- so the scope's
+  // colors move in step with the rest of the page's own fade instead of
+  // hard-cutting against a still-fading UI. Snaps instantly under reduced
+  // motion, same as every other decorative transition on the site.
+  function makeSmoothColor(varName, fallback) {
+    var to = hexToRgbArr(siteVar(varName, fallback));
+    var from = to;
+    var current = to;
+    var start = 0;
+
+    return function () {
+      var target = hexToRgbArr(siteVar(varName, fallback));
+      var changed = target[0] !== to[0] || target[1] !== to[1] || target[2] !== to[2];
+
+      if (reducedMotionOn()) {
+        to = target;
+        current = target;
+        return current;
+      }
+
+      if (changed) {
+        from = current;
+        to = target;
+        start = performance.now();
+      }
+
+      var linearT = Math.min(1, (performance.now() - start) / COLOR_FADE_MS);
+      var t = CSS_EASE(linearT);
+      current = [
+        from[0] + (to[0] - from[0]) * t,
+        from[1] + (to[1] - from[1]) * t,
+        from[2] + (to[2] - from[2]) * t,
+      ];
+      return current;
+    };
+  }
+
+  var bgColor = makeSmoothColor('--clr-primary-bg', '#0d1117');
+  var accentColor = makeSmoothColor('--clr-orange', '#ec8e2c');
+
   function clearScope() {
-    ctx2d.fillStyle = siteVar('--clr-primary-bg', '#0d1117');
+    ctx2d.fillStyle = rgbaStr(bgColor(), 1);
     ctx2d.fillRect(0, 0, els.canvas.width, els.canvas.height);
   }
 
   function startVisualizer() {
-    var bufferLength = engine.analyser.fftSize;
-    var dataArray = new Uint8Array(bufferLength);
-    var accentColor = siteVar('--clr-orange', '#ec8e2c');
-    var accent2Color = siteVar('--clr-blue', '#58a6ff');
-    var trailColor = hexToRgba(siteVar('--clr-primary-bg', '#0d1117'), 0.35);
+    var dataArray = new Uint8Array(engine.analyser.fftSize);
 
     function draw() {
       engine.animId = requestAnimationFrame(draw);
       engine.analyser.getByteTimeDomainData(dataArray);
 
       var w = els.canvas.width, h = els.canvas.height;
-      ctx2d.fillStyle = trailColor;
+      // Opaque, not a translucent trail -- a translucent fill only partly
+      // overwrites the last frame, which would compound with bgColor()'s
+      // own glide and make the background settle slower than the rest of
+      // the page's fade. A hard fill keeps this frame's color exactly where
+      // the glide says it should be.
+      ctx2d.fillStyle = rgbaStr(bgColor(), 1);
       ctx2d.fillRect(0, 0, w, h);
 
       ctx2d.lineWidth = 2;
-      ctx2d.strokeStyle = accentColor;
+      ctx2d.strokeStyle = rgbaStr(accentColor(), 1);
       ctx2d.beginPath();
+      var bufferLength = dataArray.length;
       var sliceWidth = w / bufferLength;
       var x = 0;
       for (var i = 0; i < bufferLength; i++) {
@@ -1999,27 +2086,53 @@
         x += sliceWidth;
       }
       ctx2d.stroke();
-
-      ctx2d.strokeStyle = accent2Color;
-      ctx2d.globalAlpha = 0.35;
-      ctx2d.beginPath();
-      ctx2d.moveTo(0, h / 2);
-      ctx2d.lineTo(w, h / 2);
-      ctx2d.stroke();
-      ctx2d.globalAlpha = 1;
     }
     draw();
   }
 
   function drawStaticScope() {
     clearScope();
-    ctx2d.strokeStyle = siteVar('--clr-orange', '#ec8e2c');
+    ctx2d.strokeStyle = rgbaStr(accentColor(), 1);
     ctx2d.lineWidth = 2;
     ctx2d.beginPath();
     ctx2d.moveTo(0, els.canvas.height / 2);
     ctx2d.lineTo(els.canvas.width, els.canvas.height / 2);
     ctx2d.stroke();
   }
+
+  // The playing+not-reduced-motion path re-reads/fades its colors every
+  // frame (see draw() above) so it's already theme-live on its own. These
+  // other two states only ever draw once, on their own trigger (play/stop,
+  // mount, a slider move) -- a single re-draw here would show the right
+  // final color, but not actually animate the glide the way the page's own
+  // fade does, so this keeps re-firing whichever one currently applies for
+  // as long as the color fade is still in flight. Snaps in one shot under
+  // reduced motion (makeSmoothColor() already skips the glide there, so a
+  // single draw is the whole picture).
+  var themeTransitionId = null;
+  function animateThemeTransition(drawFn) {
+    if (themeTransitionId !== null) cancelAnimationFrame(themeTransitionId);
+    var start = performance.now();
+    (function tick() {
+      drawFn();
+      // Stops itself once the panel unmounts (canvas detached), same check
+      // the other per-frame timers in this file already use, rather than
+      // drawing to an invisible canvas for the rest of the transition window.
+      if (document.body.contains(els.canvas) && !reducedMotionOn() && performance.now() - start < COLOR_FADE_MS + 40) {
+        themeTransitionId = requestAnimationFrame(tick);
+      } else {
+        themeTransitionId = null;
+      }
+    })();
+  }
+
+  new MutationObserver(function () {
+    if (engine.isPlaying) {
+      if (reducedMotionOn()) animateThemeTransition(drawStaticScope);
+    } else {
+      animateThemeTransition(clearScope);
+    }
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-palette'] });
 
   function readyLabel() {
     var first = chordFromIndex(engine.startingChordIndex);
@@ -2101,7 +2214,7 @@
       out.textContent = pct + '%';
     });
 
-    if (engine.isPlaying) { if (!reducedMotion) startVisualizer(); else drawStaticScope(); }
+    if (engine.isPlaying) { if (!reducedMotionOn()) startVisualizer(); else drawStaticScope(); }
     else clearScope();
   }
 

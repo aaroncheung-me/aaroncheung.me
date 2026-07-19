@@ -42,11 +42,14 @@
     <meta name="twitter:description" content="Software engineer with an artist's eye. Play a game AI, watch a live heatmap, or query a real database — all without leaving the page." />
     <meta name="twitter:image" content="https://aaroncheung.me/data/images/og-preview.jpg" />
 
+    <!-- Bold Fira Mono isn't preloaded -- nothing above the fold uses bold
+         weight, so the browser warns it went unused. It still loads
+         normally via css/tui.css's @font-face the first time a heading
+         actually needs it. -->
     <link rel="preload" as="font" href="fonts/fira-mono-v14-latin-regular.woff2" type="font/woff2"
         crossorigin="anonymous">
-    <link rel="preload" as="font" href="fonts/fira-mono-v14-latin-700.woff2" type="font/woff2" crossorigin="anonymous">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link id="min-style" rel="stylesheet" type="text/css" href="css/tui.css?v=9">
+    <link rel="stylesheet" type="text/css" href="css/tui.css?v=9">
     <script src="js/overlay-esc.js" defer></script>
     <script src="js/contact_form.js" defer></script>
     <script src="js/theme.js" defer></script>
@@ -244,17 +247,8 @@
         <div data-include="partials/footer.html"></div>
     </div>
     <div id="footer-popup" hidden></div>
-    <div id="db-lightbox" hidden onclick="dbCloseDiagram()">
-        <div id="db-lightbox-inner" onclick="event.stopPropagation()">
-            <div id="db-lightbox-header">
-                <span id="db-lightbox-label"></span>
-                <button id="db-lightbox-close" onclick="dbCloseDiagram()">✕</button>
-            </div>
-            <div id="db-lightbox-scroll">
-                <img id="db-lightbox-img" src="" alt="database diagram">
-            </div>
-        </div>
-    </div>
+    <!-- Database project diagram viewer, see projects/database/database.js -->
+    <div data-include="partials/db-lightbox.html"></div>
     <p id="desktop-controls-hint" class="controls-hint">↓ Click [ <span class="text-blue">icons</span> ] to adjust toggles</p>
     <p id="mobile-controls-hint" class="controls-hint">Tap [ <span class="text-blue">icons</span> ] to adjust toggles ↑</p>
 </body>

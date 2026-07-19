@@ -473,6 +473,17 @@ function toggleMobileQuickSettings(button) {
   if (saved && saved !== "fira") loadGoogleFont(saved);
 })();
 
+// Shared script loader (site-wide) -- lets js/home-tiles.js and
+// js/lofi-player.js (loaded together on the main portfolio, and separately
+// on art/sound) both lazy-load a <script> without loading the same src twice.
+function loadScriptOnce(src, callback) {
+  if (document.querySelector(`script[src="${src}"]`)) { callback(); return; }
+  const script = document.createElement('script');
+  script.src = src;
+  script.onload = callback;
+  document.body.appendChild(script);
+}
+
 // Footer clock (shared across all sites)
 
 function initFooterClock() {

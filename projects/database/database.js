@@ -17,31 +17,17 @@ function dbCloseDiagram() {
 
 bindEscapeToClose(() => !document.getElementById('db-lightbox')?.hidden, dbCloseDiagram);
 
-async function fetchInterviewers() {
+// Every query button shares this exact shape: hit one action on the same
+// API, show the result via its own display function, or fall back to
+// showError(). Factored out so each fetchX below is just its action name
+// and its display call, not another copy of the same try/catch.
+async function dbFetchAndDisplay(action, onSuccess) {
     try {
-        const response = await fetch('projects/database/api.php?action=interviewers');
+        const response = await fetch(`projects/database/api.php?action=${action}`);
         const result = await response.json();
-        
-        if (result.status === 'success') {
-            displayInterviewers(result.data);
-        } else {
-            document.getElementById('database-results').innerHTML = 
-                '<p>Error: ' + result.message + '</p>';
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('database-results').innerHTML = 
-            '<p>Error fetching data: ' + error.message + '</p>';
-    }
-}
 
-async function fetchSalesJobsJan2011() {
-    try {
-        const response = await fetch('projects/database/api.php?action=sales_jobs_jan_2011');
-        const result = await response.json();
-        
         if (result.status === 'success') {
-            displayJobsList(result.data, 'Sales Jobs Posted in January 2011');
+            onSuccess(result.data);
         } else {
             showError(result.message);
         }
@@ -50,199 +36,64 @@ async function fetchSalesJobsJan2011() {
     }
 }
 
-async function fetchEmployeesNoSupervisees() {
-    try {
-        const response = await fetch('projects/database/api.php?action=employees_no_supervisees');
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            displayEmployeesList(result.data, 'Employees with No Supervisees');
-        } else {
-            showError(result.message);
-        }
-    } catch (error) {
-        showError(error.message);
-    }
+function fetchInterviewers() {
+    return dbFetchAndDisplay('interviewers', displayInterviewers);
 }
 
-async function fetchSitesNoSalesMarch2011() {
-    try {
-        const response = await fetch('projects/database/api.php?action=sites_no_sales_march_2011');
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            displaySitesList(result.data, 'Marketing Sites with No Sales in March 2011');
-        } else {
-            showError(result.message);
-        }
-    } catch (error) {
-        showError(error.message);
-    }
+function fetchSalesJobsJan2011() {
+    return dbFetchAndDisplay('sales_jobs_jan_2011', (data) => displayJobsList(data, 'Sales Jobs Posted in January 2011'));
 }
 
-async function fetchUnfilledJobs() {
-    try {
-        const response = await fetch('projects/database/api.php?action=unfilled_jobs');
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            displayJobsList(result.data, 'Jobs Unfilled After One Month');
-        } else {
-            showError(result.message);
-        }
-    } catch (error) {
-        showError(error.message);
-    }
+function fetchEmployeesNoSupervisees() {
+    return dbFetchAndDisplay('employees_no_supervisees', (data) => displayEmployeesList(data, 'Employees with No Supervisees'));
 }
 
-async function fetchTopSalesmen() {
-    try {
-        const response = await fetch('projects/database/api.php?action=top_salesmen');
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            displaySalesmenList(result.data, 'Top Salesmen (Sold All Premium Products)');
-        } else {
-            showError(result.message);
-        }
-    } catch (error) {
-        showError(error.message);
-    }
+function fetchSitesNoSalesMarch2011() {
+    return dbFetchAndDisplay('sites_no_sales_march_2011', (data) => displaySitesList(data, 'Marketing Sites with No Sales in March 2011'));
 }
 
-async function fetchInactiveDepartments() {
-    try {
-        const response = await fetch('projects/database/api.php?action=inactive_departments');
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            displayDepartmentsList(result.data, 'Departments with No Job Posts in January 2011');
-        } else {
-            showError(result.message);
-        }
-    } catch (error) {
-        showError(error.message);
-    }
+function fetchUnfilledJobs() {
+    return dbFetchAndDisplay('unfilled_jobs', (data) => displayJobsList(data, 'Jobs Unfilled After One Month'));
 }
 
-async function fetchInternalApplicants() {
-    try {
-        const response = await fetch('projects/database/api.php?action=internal_applicants');
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            displayEmployeesListTwo(result.data, 'Internal Applicants for Job #12345');
-        } else {
-            showError(result.message);
-        }
-    } catch (error) {
-        showError(error.message);
-    }
+function fetchTopSalesmen() {
+    return dbFetchAndDisplay('top_salesmen', (data) => displaySalesmenList(data, 'Top Salesmen (Sold All Premium Products)'));
 }
 
-async function fetchBestSellingType() {
-    try {
-        const response = await fetch('projects/database/api.php?action=best_selling_type');
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            displaySingleItem(result.data, 'Best Selling Product Type');
-        } else {
-            showError(result.message);
-        }
-    } catch (error) {
-        showError(error.message);
-    }
+function fetchInactiveDepartments() {
+    return dbFetchAndDisplay('inactive_departments', (data) => displayDepartmentsList(data, 'Departments with No Job Posts in January 2011'));
 }
 
-async function fetchHighestProfitType() {
-    try {
-        const response = await fetch('projects/database/api.php?action=highest_profit_type');
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            displayProfitInfo(result.data, 'Highest Profit Product Type');
-        } else {
-            showError(result.message);
-        }
-    } catch (error) {
-        showError(error.message);
-    }
+function fetchInternalApplicants() {
+    return dbFetchAndDisplay('internal_applicants', (data) => displayEmployeesListTwo(data, 'Internal Applicants for Job #12345'));
 }
 
-async function fetchAllDeptEmployees() {
-    try {
-        const response = await fetch('projects/database/api.php?action=all_dept_employees');
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            displayEmployeesList(result.data, 'Employees Who Worked in All Departments');
-        } else {
-            showError(result.message);
-        }
-    } catch (error) {
-        showError(error.message);
-    }
+function fetchBestSellingType() {
+    return dbFetchAndDisplay('best_selling_type', (data) => displaySingleItem(data, 'Best Selling Product Type'));
 }
 
-async function fetchSelectedInterviewees() {
-    try {
-        const response = await fetch('projects/database/api.php?action=selected_interviewees');
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            displayIntervieweesList(result.data, 'Selected Candidates');
-        } else {
-            showError(result.message);
-        }
-    } catch (error) {
-        showError(error.message);
-    }
+function fetchHighestProfitType() {
+    return dbFetchAndDisplay('highest_profit_type', (data) => displayProfitInfo(data, 'Highest Profit Product Type'));
 }
 
-async function fetchSelectedForAll() {
-    try {
-        const response = await fetch('projects/database/api.php?action=selected_for_all');
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            displayEmployeesListThree(result.data, 'Selected All Applications');
-        } else {
-            showError(result.message);
-        }
-    } catch (error) {
-        showError(error.message);
-    }
+function fetchAllDeptEmployees() {
+    return dbFetchAndDisplay('all_dept_employees', (data) => displayEmployeesList(data, 'Employees Who Worked in All Departments'));
 }
 
-async function fetchHighestSalaryEmployee() {
-    try {
-        const response = await fetch('projects/database/api.php?action=highest_salary_employee');
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            displaySalaryInfo(result.data, 'Highest Paid Employee');
-        } else {
-            showError(result.message);
-        }
-    } catch (error) {
-        showError(error.message);
-    }
+function fetchSelectedInterviewees() {
+    return dbFetchAndDisplay('selected_interviewees', (data) => displayIntervieweesList(data, 'Selected Candidates'));
 }
 
-async function fetchCheapestCupVendor() {
-    try {
-        const response = await fetch('projects/database/api.php?action=cheapest_cup_vendor');
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            displayVendorInfo(result.data, 'Cheapest Cup Vendor (Under 4 lbs)');
-        } else {
-            showError(result.message);
-        }
-    } catch (error) {
-        showError(error.message);
-    }
+function fetchSelectedForAll() {
+    return dbFetchAndDisplay('selected_for_all', (data) => displayEmployeesListThree(data, 'Selected All Applications'));
+}
+
+function fetchHighestSalaryEmployee() {
+    return dbFetchAndDisplay('highest_salary_employee', (data) => displaySalaryInfo(data, 'Highest Paid Employee'));
+}
+
+function fetchCheapestCupVendor() {
+    return dbFetchAndDisplay('cheapest_cup_vendor', (data) => displayVendorInfo(data, 'Cheapest Cup Vendor (Under 4 lbs)'));
 }
 
 function cancelDatabaseForm() {

@@ -1,30 +1,17 @@
-function loadDependency(src, type, onload) {
-  const head = document.head;
-  const minStyle = document.getElementById("min-style");
-  const el = type === "script" ? document.createElement("script") : document.createElement("link");
-  if (type === "script") {
-    el.type = "text/javascript";
-    el.src = src;
-  } else {
-    el.rel = "stylesheet";
-    el.href = src;
-  }
-  if (type === "script" && onload != null) {
-    el.onreadystatechange = onload;
-    el.onload = onload;
-  }
-  head.appendChild(el);
-  if (type === "link") {
-    minStyle?.remove();
-  }
+function loadScript(src, onload) {
+  const script = document.createElement("script");
+  script.type = "text/javascript";
+  script.src = src;
+  script.onreadystatechange = onload;
+  script.onload = onload;
+  document.head.appendChild(script);
 }
 
 Promise.all([
   includePartials().catch(e => console.error("Partials error:", e)),
   renderAllLists().catch(e => console.error("Lists error:", e))
 ]).then(() => {
-  loadDependency("css/tui.css?v=9", "link");
-  loadDependency("js/tui.js?v=0.18", "script", function () {
+  loadScript("js/tui.js?v=0.18", function () {
     init();
   });
 });

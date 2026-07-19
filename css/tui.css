@@ -1664,13 +1664,11 @@ div.selected-frame > ::-webkit-scrollbar-thumb {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  font-size: 0.85rem;
   color: var(--clr-border);
 }
 
 .lofi-state {
   color: var(--clr-primary-txt);
-  font-weight: 700;
 }
 
 .lofi-toggle[aria-pressed="true"] {
