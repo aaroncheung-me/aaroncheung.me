@@ -7,15 +7,15 @@
     },
     {
       "content": [
-        "The fastest way is email: <span class=\"text-pink\">contact@aaroncheung.me</span>.",
-        "The most fun way is the <span class=\"text-pink\">terminal form</span> below. Fill it out like a command prompt, and it lands in the same inbox.",
-        "If you're hiring, my <a href=\"/aaron_cheung_resume.pdf\" target=\"_blank\" class=\"text-pink\">resume</a> is here.",
-        "Source's on <a href=\"https://github.com/aaroncheung-me\" target=\"_blank\" class=\"text-pink\">GitHub</a>, and I'm on <a href=\"https://www.linkedin.com/in/aaron-c-cheung/\" target=\"_blank\" class=\"text-pink\">LinkedIn</a>."
+        "The fastest way is email: <span class=\"text-purple\">contact@aaroncheung.me</span>.",
+        "The most fun way is the <span class=\"text-blue\">terminal form</span> below. Fill it out like a command prompt, and it lands in the same inbox.",
+        "If you're hiring, my <a href=\"/aaron_cheung_resume.pdf\" target=\"_blank\" class=\"text-purple\">resume</a> is here.",
+        "Source's on <a href=\"https://github.com/aaroncheung-me\" target=\"_blank\" class=\"text-purple\">GitHub</a>, and I'm on <a href=\"https://www.linkedin.com/in/aaron-c-cheung/\" target=\"_blank\" class=\"text-purple\">LinkedIn</a>."
       ]
     },
     {
       "content": [
-        "<span class=\"text-orange\">>aaron@portfolio</span>:<span class=\"text-blue\">~</span>$ cd contact form",
+        "<span class=\"text-purple\">>aaron@portfolio</span>:<span class=\"text-purple\">~</span>$ cd contact form",
         "<div id=\"terminal-container\"><div id=\"terminal-output\"></div></div>"
       ]
     }

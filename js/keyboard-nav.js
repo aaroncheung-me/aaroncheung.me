@@ -35,12 +35,12 @@ function triggerEasterEgg() {
   popup.id = "easter-egg-popup";
   popup.innerHTML = `
     <div id="easter-egg-inner">
-      <div class="ee-line"><span class="text-orange">&gt;</span> ACCESS GRANTED</div>
-      <div class="ee-line"><span class="text-orange">&gt;</span> Loading hidden directory...</div>
-      <div class="ee-line"><span class="text-orange">&gt;</span> Art account:
+      <div class="ee-line"><span class="text-purple">&gt;</span> ACCESS GRANTED</div>
+      <div class="ee-line"><span class="text-purple">&gt;</span> Loading hidden directory...</div>
+      <div class="ee-line"><span class="text-purple">&gt;</span> Art account:
         ${EASTER_EGG_URL
-          ? `<a class="text-pink" href="${EASTER_EGG_URL}" target="_blank">${EASTER_EGG_URL}</a>`
-          : `<span class="text-blue">[coming soon]</span>`
+          ? `<a class="text-purple" href="${EASTER_EGG_URL}" target="_blank">${EASTER_EGG_URL}</a>`
+          : `<span class="text-green">[coming soon]</span>`
         }
       </div>
       <div class="ee-close">press any key to dismiss</div>

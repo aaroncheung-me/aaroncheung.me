@@ -185,7 +185,7 @@
             {"label": "this site", "section": 2, "item": 1},
             {"label": "theme switcher", "section": 3, "item": 0}
           ],
-          "notes": "the tui aesthetic, the colour system, the control panel layout — design is how this site found its voice."
+          "notes": "the tui aesthetic, the color system, the control panel layout — design is how this site found its voice."
         },
         {
           "name": "Krita",

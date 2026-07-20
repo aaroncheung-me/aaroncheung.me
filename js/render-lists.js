@@ -111,7 +111,7 @@ function renderAllLists() {
           ? `<span class="company-abbr">${entry.abbr}</span><span class="company-full">${entry.company}</span>`
           : entry.company;
         const header   = `<div class="experience-header"><span class="tree-prefix">${parentPrefix}</span>${entry.name}</div>`;
-        const location = `<div class="experience-location" data-entry-index="${i}"><span class="tree-indent">${childIndent}</span><span class="tree-prefix">└──</span><span class="text-orange">${company}</span></div>`;
+        const location = `<div class="experience-location" data-entry-index="${i}"><span class="tree-indent">${childIndent}</span><span class="tree-prefix">└──</span><span class="text-blue">${company}</span></div>`;
         return header + location;
       }
     ),

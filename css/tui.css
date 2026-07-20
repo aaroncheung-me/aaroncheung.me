@@ -1,4 +1,4 @@
-﻿@font-face {
+@font-face {
   font-display: swap;
   font-family: "Fira Mono";
   font-style: normal;
@@ -30,19 +30,50 @@
   src: url("../fonts/lekton-v21-latin-700.woff2") format("woff2");
 }
 
+@font-face {
+  font-display: swap;
+  font-family: "Ubuntu Mono";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/ubuntu-mono-v19-latin-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Ubuntu Mono";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/ubuntu-mono-v19-latin-700.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Anonymous Pro";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/anonymous-pro-v22-latin-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Anonymous Pro";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/anonymous-pro-v22-latin-700.woff2") format("woff2");
+}
+
 :root {
   --clr-primary-txt: #c9d1d9;
   --clr-primary-bg: #1c1c1e;
   --clr-tertiary-bg: #2c2c2e;
   --clr-secondary-bg: #352a4d;
   --clr-border: #8090a8;
-  --clr-orange: #7ee787;
+  --clr-green: #7ee787;
   --clr-blue: #58a6ff;
-  --clr-pink: #bc8cff;
-  --clr-light-blue: #79c0ff;
+  --clr-purple: #bc8cff;
   --clr-hover-overlay: rgba(255, 255, 255, 0.1);
   --clr-grid: rgba(128, 144, 168, 0.07);
-  --font-mono: "Fira Mono", monospace, sans-serif;
+  --font-mono: "Lekton", monospace, sans-serif;
   --footer-height: 2.8rem;
 }
 
@@ -52,10 +83,9 @@
   --clr-tertiary-bg: #e9ecef;
   --clr-secondary-bg: #e8def8;
   --clr-border: #57606a;
-  --clr-orange: #116329;
+  --clr-green: #0a7d3a;
   --clr-blue: #0969da;
-  --clr-pink: #8250df;
-  --clr-light-blue: #0550ae;
+  --clr-purple: #7a3fd0;
   --clr-hover-overlay: rgba(0, 0, 0, 0.08);
   --clr-grid: rgba(87, 96, 106, 0.1);
 }
@@ -63,50 +93,42 @@
 /* Colour Palettes */
 
 [data-palette="ocean"] {
-  --clr-orange:     #1ecece;
-  --clr-pink:       #a07afc;
-  --clr-light-blue: #5ed8f8;
+  --clr-green:     #1ecece;
+  --clr-purple:       #a07afc;
   --clr-blue:       #4888f8;
 }
 [data-theme="light"][data-palette="ocean"] {
-  --clr-orange:     #0a7878;
-  --clr-pink:       #5533bb;
-  --clr-light-blue: #0360aa;
+  --clr-green:     #0a7878;
+  --clr-purple:       #5533bb;
   --clr-blue:       #1144cc;
 }
 
 [data-palette="forest"] {
-  --clr-orange:     #4ed888;
-  --clr-pink:       #c0de4a;
-  --clr-light-blue: #6ae8a8;
+  --clr-green:     #4ed888;
+  --clr-purple:       #c0de4a;
   --clr-blue:       #3ab870;
 }
 [data-theme="light"][data-palette="forest"] {
-  --clr-orange:     #186a38;
-  --clr-pink:       #5a6800;
-  --clr-light-blue: #0d5c30;
+  --clr-green:     #186a38;
+  --clr-purple:       #5a6800;
   --clr-blue:       #0a4225;
 }
 
 [data-palette="ember"] {
-  --clr-orange:     #f0c040;
-  --clr-pink:       #ff6a80;
-  --clr-light-blue: #ffa040;
+  --clr-green:     #f0c040;
+  --clr-purple:       #ff6a80;
   --clr-blue:       #e06040;
 }
 [data-theme="light"][data-palette="ember"] {
-  --clr-orange:     #7a5800;
-  --clr-pink:       #bb1030;
-  --clr-light-blue: #8a4400;
+  --clr-green:     #7a5800;
+  --clr-purple:       #bb1030;
   --clr-blue:       #882010;
 }
 
 /* Fonts */
 
-[data-font="jetbrains"] { --font-mono: "JetBrains Mono", monospace; }
-[data-font="ibm-plex"]  { --font-mono: "IBM Plex Mono",  monospace; }
-[data-font="space"]     { --font-mono: "Space Mono",     monospace; }
-[data-font="lekton"]    { --font-mono: "Lekton", monospace, sans-serif; }
+[data-font="ubuntu"]        { --font-mono: "Ubuntu Mono", monospace; }
+[data-font="anonymous-pro"] { --font-mono: "Anonymous Pro", monospace; }
 
 /* CRT Scanline Overlay */
 
@@ -201,7 +223,7 @@ html::after {
 
 .cursor-blink::after {
   content: '_';
-  color: var(--clr-light-blue);
+  color: var(--clr-blue);
   animation: cursor-blink 1s step-end infinite;
 }
 
@@ -293,7 +315,7 @@ svg {
 }
 
 .home-hero-meta {
-  color: var(--clr-border);
+  color: var(--clr-primary-txt);
 }
 
 .tile-grid {
@@ -318,7 +340,7 @@ svg {
 .live-tile:focus-visible,
 .live-tile:has(.live-tile-title:hover),
 .live-tile:has(.live-tile-title:focus-visible) {
-  border-color: var(--clr-light-blue);
+  border-color: var(--clr-purple);
   background: var(--clr-hover-overlay);
 }
 
@@ -343,7 +365,7 @@ svg {
 }
 
 .live-tile-caption {
-  color: var(--clr-border);
+  color: var(--clr-primary-txt);
   font-size: 0.8em;
 }
 
@@ -370,7 +392,7 @@ svg {
 }
 
 .tile-theme-icon {
-  color: var(--clr-border);
+  color: var(--clr-primary-txt);
   font-family: var(--font-mono);
 }
 
@@ -428,7 +450,7 @@ svg {
 }
 
 .tile-lofi-play-btn:hover {
-  border-color: var(--clr-orange);
+  border-color: var(--clr-purple);
 }
 
 /* Hidden (not removed) while playing -- the live scope is the "it's
@@ -452,7 +474,7 @@ body.at-home #desktop-controls-hint {
   bottom: calc(var(--footer-height) + 0.35rem);
   right: 1rem;
   font-size: 0.75em;
-  color: var(--clr-border);
+  color: var(--clr-primary-txt);
   background-color: var(--clr-primary-bg);
   padding: 0.15rem 0.3rem;
   z-index: 100;
@@ -588,6 +610,12 @@ body.at-home #desktop-controls-hint {
   flex-shrink: 0;
   flex-grow: 0;
   padding-bottom: 1rem;
+  /* #contact sits outside #nav-scroll-area (it doesn't scroll with the rest
+     of the nav), so it misses the scrollbar-compensation margin/padding
+     that RTL-flipped area applies to its children -- replicated here so its
+     title lines up with the scrollable sections above it. */
+  margin-left: -0.55rem;
+  padding-left: 1rem;
 }
 
 .footer-item {
@@ -599,12 +627,12 @@ body.at-home #desktop-controls-hint {
 }
 
 .footer-brand {
-  color: var(--clr-light-blue);
+  color: var(--clr-blue);
   white-space: nowrap;
 }
 
 .footer-tab {
-  color: var(--clr-light-blue);
+  color: var(--clr-blue);
   white-space: nowrap;
 }
 
@@ -615,7 +643,7 @@ body.at-home #desktop-controls-hint {
   font-size: inherit;
   padding: 0;
   margin-left: 0.4em;
-  color: var(--clr-border);
+  color: var(--clr-purple);
   cursor: pointer;
   white-space: nowrap;
 }
@@ -636,6 +664,26 @@ body.at-home #desktop-controls-hint {
   align-items: center;
   gap: 0.6rem;
   flex-shrink: 0;
+}
+
+#footer-tray-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+#footer-tray-toggle {
+  display: none;
+}
+
+@media screen and (min-width: 769px) and (max-width: 1250px) {
+  #footer-tray-controls {
+    display: none;
+  }
+
+  #footer-tray-toggle {
+    display: inline-flex;
+  }
 }
 
 .footer-tray-btn {
@@ -660,7 +708,7 @@ body.at-home #desktop-controls-hint {
 }
 
 .footer-tray-btn.active {
-  color: var(--clr-orange);
+  color: var(--clr-purple);
 }
 
 /* Footer popup */
@@ -668,17 +716,35 @@ body.at-home #desktop-controls-hint {
 #footer-popup {
   position: fixed;
   background: var(--clr-primary-bg);
-  border: 1px solid var(--clr-orange);
+  border: 1px solid var(--clr-purple);
   z-index: 1000;
   min-width: 9rem;
   font-family: var(--font-mono);
   font-size: 0.85rem;
 }
 
+.footer-popup-links {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 0.6rem;
+}
+
+.footer-popup-divider {
+  border-top: 1px solid var(--clr-border);
+}
+
+.footer-popup-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.6rem;
+}
+
 #footer-popup .popup-title {
   padding: 0.15rem 0.5rem;
   border-bottom: 1px solid var(--clr-border);
-  color: var(--clr-orange);
+  color: var(--clr-purple);
   user-select: none;
 }
 
@@ -702,27 +768,27 @@ body.at-home #desktop-controls-hint {
 }
 
 .popup-option.active {
-  color: var(--clr-orange);
+  color: var(--clr-purple);
 }
 
 .popup-dot {
   display: inline-block;
   width: 1ch;
-  color: var(--clr-orange);
+  color: var(--clr-purple);
 }
 
 #footer-datetime {
-  color: var(--clr-light-blue);
+  color: var(--clr-green);
   white-space: nowrap;
   min-width: 18ch;
 }
 
 .footer-brand {
-  color: var(--clr-light-blue) !important;
+  color: var(--clr-blue) !important;
 }
 
 .footer-link {
-  color: var(--clr-pink);
+  color: var(--clr-purple);
   text-decoration: none;
   cursor: pointer;
   transition: color 0.1s ease;
@@ -829,7 +895,7 @@ body.at-home #desktop-controls-hint {
   justify-content: center;
   width: 70%;
   padding: 0.5rem;
-  border: 0.1px solid var(--clr-light-blue);
+  border: 0.1px solid var(--clr-blue);
 }
 
 .project-image {
@@ -845,7 +911,7 @@ pre {
   font-size: 0.8rem;
   line-height: 1.2rem;
   padding: 0.5rem;
-  border: 0.1px solid var(--clr-light-blue);
+  border: 0.1px solid var(--clr-blue);
   color: var(--clr-primary-txt);
   overflow-x: scroll;
 }
@@ -870,7 +936,7 @@ pre {
   width: 100%;
   gap: 0.4rem;
   transition: color 0.15s ease;
-  color: var(--clr-border);
+  color: var(--clr-blue);
 }
 
 .decorating-text p {
@@ -912,7 +978,7 @@ pre {
   display: none;
 }
 
-@media screen and (min-width: 1600px) {
+@media screen and (min-width: 1300px) {
   .company-abbr { display: none; }
   .company-full { display: inline; }
 }
@@ -945,11 +1011,12 @@ pre {
 
 .skill-category-header.selected-item,
 .ui-element-header.selected-item {
-  color: var(--clr-light-blue);
+  color: var(--clr-purple);
 }
 
 .selected-item .tree-prefix {
-  color: var(--clr-light-blue);
+  color: var(--clr-purple);
+  font-weight: bold;
 }
 
 .skill-item,
@@ -970,7 +1037,10 @@ pre {
 .tree-indent {
   color: var(--clr-border);
   user-select: none;
-  transition: color 0.15s ease;
+  /* No color transition: interpolating from --clr-border (blue-gray) to
+     --clr-purple (red-heavy purple) crosses a visibly blue-dominant hue
+     partway through, since blue rises faster than red along that path.
+     An instant snap avoids the flash entirely. */
 }
 
 .tree-prefix {
@@ -979,17 +1049,20 @@ pre {
 
 .skill-item.category-active .tree-prefix,
 .experience-location.entry-active .tree-prefix {
-  color: var(--clr-light-blue);
+  color: var(--clr-purple);
+  font-weight: bold;
 }
 
 .skill-item.path-to-active .tree-indent,
 .experience-location.path-to-active .tree-indent,
 .ui-element-child.path-to-active .tree-indent {
-  color: var(--clr-light-blue);
+  color: var(--clr-purple);
+  font-weight: bold;
 }
 
 .ui-element-header.child-active .tree-prefix {
-  color: var(--clr-light-blue);
+  color: var(--clr-purple);
+  font-weight: bold;
 }
 
 .project-explain-toggle {
@@ -1016,7 +1089,7 @@ pre {
 .project-explain-toggle:hover .project-explain-arrow,
 .project-explain-toggle:focus-visible .project-explain-arrow,
 .project-explain-toggle[aria-expanded="true"] .project-explain-arrow {
-  color: var(--clr-light-blue);
+  color: var(--clr-purple);
 }
 
 .project-explain-body {
@@ -1033,7 +1106,7 @@ pre {
 }
 
 .skill-category-description {
-  color: var(--clr-border);
+  color: var(--clr-primary-txt);
   margin-top: 0.5rem;
 }
 
@@ -1047,9 +1120,9 @@ pre {
 .skill-tag {
   font-family: var(--font-mono);
   font-size: 1.05rem;
-  border: 1px solid var(--clr-light-blue);
+  border: 1px solid var(--clr-green);
   padding: 0.6rem 1.1rem;
-  color: var(--clr-blue);
+  color: var(--clr-green);
   transition: background-color 0.2s ease;
 }
 
@@ -1068,7 +1141,7 @@ pre {
 }
 
 .skill-pkg-prompt {
-  color: var(--clr-border);
+  color: var(--clr-purple);
 }
 
 .skill-pkg-body {
@@ -1084,7 +1157,7 @@ pre {
 }
 
 .skill-pkg-key {
-  color: var(--clr-border);
+  color: var(--clr-purple);
   white-space: nowrap;
 }
 
@@ -1101,7 +1174,7 @@ pre {
 .skill-pkg-link {
   background: none;
   border: none;
-  color: var(--clr-pink);
+  color: var(--clr-purple);
   cursor: pointer;
   font-family: var(--font-mono);
   font-size: inherit;
@@ -1112,25 +1185,21 @@ pre {
   text-decoration: underline;
 }
 
-.selected-frame .decorating-text {
-  color: var(--clr-light-blue);
-}
-
 .selected-item,
 .selected-item div {
   background-color: var(--clr-secondary-bg);
 }
 
-.text-orange {
-  color: var(--clr-orange);
+.text-green {
+  color: var(--clr-green);
 }
 
 .text-blue {
   color: var(--clr-blue);
 }
 
-.text-pink {
-  color: var(--clr-pink);
+.text-purple {
+  color: var(--clr-purple);
 }
 
 .technologies-row {
@@ -1262,7 +1331,7 @@ pre {
 #command-palette-box {
   width: min(600px, 90vw);
   background-color: var(--clr-primary-bg);
-  border: 1px solid var(--clr-light-blue);
+  border: 1px solid var(--clr-purple);
   font-family: var(--font-mono);
 }
 
@@ -1304,18 +1373,18 @@ pre {
 
 .cp-label mark {
   background: none;
-  color: var(--clr-orange);
+  color: var(--clr-green);
   font-weight: bold;
 }
 
 .cp-hint {
-  color: var(--clr-border);
+  color: var(--clr-primary-txt);
   font-size: 0.8rem;
 }
 
 .cp-empty {
   padding: 0.8rem 1rem;
-  color: var(--clr-border);
+  color: var(--clr-primary-txt);
   font-style: italic;
 }
 
@@ -1330,7 +1399,7 @@ pre {
 }
 
 #easter-egg-inner {
-  border: 1px solid var(--clr-orange);
+  border: 1px solid var(--clr-purple);
   padding: 2rem 2.5rem;
   font-family: var(--font-mono);
   background-color: var(--clr-primary-bg);
@@ -1345,7 +1414,7 @@ pre {
 
 .ee-close {
   margin-top: 1.5rem;
-  color: var(--clr-border);
+  color: var(--clr-primary-txt);
   font-size: 0.8rem;
   font-style: italic;
 }
@@ -1475,7 +1544,7 @@ pre {
   padding: 0.3em 0.6em;
   border-bottom: 1px solid var(--clr-border);
   font-size: 0.8em;
-  color: var(--clr-border);
+  color: var(--clr-blue);
   flex-shrink: 0;
 }
 
@@ -1537,13 +1606,13 @@ pre {
 }
 
 .db-query-desc {
-  color: var(--clr-border);
+  color: var(--clr-primary-txt);
   font-size: 0.85em;
 }
 
 .ui-demo button.active,
 .site-mirror-mode-btn.active {
-  color: var(--clr-light-blue);
+  color: var(--clr-purple);
   background-color: var(--clr-secondary-bg);
 }
 .theme-panel {
@@ -1583,13 +1652,13 @@ pre {
 }
 
 .kb-key {
-  color: var(--clr-light-blue);
+  color: var(--clr-green);
   white-space: nowrap;
   width: 7rem;
 }
 
 .kb-desc {
-  color: var(--clr-border);
+  color: var(--clr-primary-txt);
 }
 
 #jumpy-demo {
@@ -1616,7 +1685,7 @@ pre {
 
 .jumpy-clickable {
   cursor: pointer;
-  border-color: var(--clr-light-blue);
+  border-color: var(--clr-purple);
 }
 
 .jumpy-clickable:hover {
@@ -1630,7 +1699,7 @@ pre {
 #jumpy-think-log {
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  color: var(--clr-border);
+  color: var(--clr-green);
   line-height: 1.4;
   height: 0;
   overflow-y: auto;
@@ -1665,7 +1734,7 @@ pre {
   border: 1px solid var(--clr-border);
   padding: 1rem;
   margin-bottom: 0.8rem;
-  color: var(--clr-border);
+  color: var(--clr-primary-txt);
   font-style: italic;
 }
 #ascii-art-demo {
@@ -1676,11 +1745,11 @@ pre {
 }
 
 #ascii-art-drop {
-  border: 0.1px solid var(--clr-border);
+  border: 0.1px solid var(--clr-purple);
   padding: 0.8rem 1rem;
   text-align: center;
   cursor: pointer;
-  color: var(--clr-border);
+  color: var(--clr-purple);
   font-size: 0.85rem;
   transition: border-color 0.15s, color 0.15s;
 }
@@ -1691,8 +1760,8 @@ pre {
 }
 
 #ascii-art-drop.ascii-drag-over {
-  border-color: var(--clr-light-blue);
-  color: var(--clr-light-blue);
+  border-color: var(--clr-primary-txt);
+  color: var(--clr-primary-txt);
 }
 
 .ascii-controls {
@@ -1704,7 +1773,7 @@ pre {
 }
 
 .ascii-ctrl-label {
-  color: var(--clr-border);
+  color: var(--clr-purple);
   white-space: nowrap;
 }
 
@@ -1716,7 +1785,7 @@ pre {
 
 .ascii-controls input[type='range'] {
   width: 100%;
-  accent-color: var(--clr-light-blue);
+  accent-color: var(--clr-purple);
 }
 
 /* Lofi Sketch (Projects page demo panel -- see projects/lofi-sketch/) */
@@ -1744,7 +1813,7 @@ pre {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  color: var(--clr-border);
+  color: var(--clr-green);
 }
 
 .lofi-state {
@@ -1752,8 +1821,8 @@ pre {
 }
 
 .lofi-toggle[aria-pressed="true"] {
-  border-color: var(--clr-orange);
-  color: var(--clr-orange);
+  border-color: var(--clr-purple);
+  color: var(--clr-purple);
 }
 
 .lofi-mix {
@@ -1770,7 +1839,7 @@ pre {
 }
 
 .lofi-mix-row label {
-  color: var(--clr-border);
+  color: var(--clr-purple);
   white-space: nowrap;
 }
 
@@ -1781,7 +1850,7 @@ pre {
 
 .lofi-mix-row input[type="range"] {
   width: 100%;
-  accent-color: var(--clr-orange);
+  accent-color: var(--clr-purple);
 }
 
 @media (min-width: 640px) {
@@ -1824,7 +1893,7 @@ pre {
   top: 50%;
   height: 2px;
   transform: translateY(-50%);
-  background: var(--clr-light-blue);
+  background: var(--clr-purple);
   pointer-events: none;
 }
 
@@ -1855,7 +1924,7 @@ pre {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--clr-light-blue);
+  background: var(--clr-purple);
   cursor: pointer;
 }
 
@@ -1865,7 +1934,7 @@ pre {
   height: 14px;
   border: none;
   border-radius: 50%;
-  background: var(--clr-light-blue);
+  background: var(--clr-purple);
   cursor: pointer;
 }
 
@@ -1903,7 +1972,7 @@ pre {
 
 #site-mirror-url {
   margin-left: 0.6rem;
-  color: var(--clr-border);
+  color: var(--clr-green);
 }
 
 #site-mirror-frame-wrap {
@@ -1926,7 +1995,7 @@ pre {
 #site-mirror-note {
   border: 1px solid var(--clr-border);
   padding: 1rem;
-  color: var(--clr-border);
+  color: var(--clr-primary-txt);
   font-style: italic;
 }
 #mobile-header {
@@ -1938,7 +2007,7 @@ pre {
   border: none;
   font-family: inherit;
   padding: 0;
-  color: var(--clr-light-blue);
+  color: var(--clr-purple);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1951,7 +2020,7 @@ pre {
 }
 
 #mobile-header-datetime {
-  color: var(--clr-light-blue);
+  color: var(--clr-green);
   white-space: nowrap;
   font-size: 0.8rem;
 }
@@ -2038,7 +2107,7 @@ pre {
     top: 2.8rem;
     right: 0.7rem;
     font-size: 0.75em;
-    color: var(--clr-border);
+    color: var(--clr-primary-txt);
     z-index: 100;
     pointer-events: none;
   }
@@ -2113,7 +2182,7 @@ pre {
   }
 
   #mobile-tabbar .tab.active {
-    color: var(--clr-light-blue);
+    color: var(--clr-purple);
     background-color: var(--clr-secondary-bg);
   }
 
@@ -2125,7 +2194,7 @@ pre {
     display: none;
     background: transparent;
     border: none;
-    color: var(--clr-orange);
+    color: var(--clr-purple);
     font-family: var(--font-mono);
     font-size: 0.9rem;
     cursor: pointer;

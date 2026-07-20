@@ -15,7 +15,7 @@
             document.documentElement.setAttribute("data-palette", savedPalette);
         }
         const savedFont = localStorage.getItem("site-font");
-        if (savedFont && savedFont !== "fira") {
+        if (savedFont && savedFont !== "lekton") {
             document.documentElement.setAttribute("data-font", savedFont);
         }
         var _savedCrt = localStorage.getItem("site-crt");
@@ -42,14 +42,14 @@
     <meta name="twitter:description" content="Software engineer with an artist's eye. Play a game AI, watch a live heatmap, or query a real database — all without leaving the page." />
     <meta name="twitter:image" content="https://aaroncheung.me/data/images/og-preview.jpg" />
 
-    <!-- Bold Fira Mono isn't preloaded -- nothing above the fold uses bold
+    <!-- Bold Lekton isn't preloaded -- nothing above the fold uses bold
          weight, so the browser warns it went unused. It still loads
          normally via css/tui.css's @font-face the first time a heading
          actually needs it. -->
-    <link rel="preload" as="font" href="fonts/fira-mono-v14-latin-regular.woff2" type="font/woff2"
+    <link rel="preload" as="font" href="fonts/lekton-v21-latin-regular.woff2" type="font/woff2"
         crossorigin="anonymous">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="stylesheet" type="text/css" href="css/tui.css?v=45">
+    <link rel="stylesheet" type="text/css" href="css/tui.css?v=52">
     <script src="js/overlay-esc.js" defer></script>
     <script src="js/contact_form.js" defer></script>
     <script src="js/theme.js" defer></script>
@@ -61,7 +61,7 @@
     <script src="js/keyboard-nav.js" defer></script>
     <script src="js/fuzzy-search.js" defer></script>
     <script src="js/command-palette.js" defer></script>
-    <script src="js/loader/loader.js?v=0.23" defer></script>
+    <script src="js/loader/loader.js?v=0.28" defer></script>
     <script src="js/mono-fit.js" defer></script>
     <script src="js/ascii-logo.js" defer></script>
     <script src="js/home-tiles.js" defer></script>
@@ -151,7 +151,7 @@
                             <div></div>
                         </div>
                         <p id="contact-section-paragraph">
-                            A few ways to find me, <span class="text-orange">socials</span> included.
+                            A few ways to find me, <span class="text-green">socials</span> included.
                         </p>
                     </div>
                 </div>
@@ -165,8 +165,8 @@
                         </div>
                         <div class="home-hero">
                             <h1 class="home-hero-name">Hi, I'm <span class="text-blue">Aaron Cheung</span></h1>
-                            <p class="home-hero-tagline">A <span class="text-orange">software engineer</span> with an <span class="text-pink">artist</span>'s eye.</p>
-                            <p class="home-hero-meta"><span class="text-orange">Frontend</span> &amp; <span class="text-orange">Full-stack</span> developer &middot; CS grad, <span class="text-blue">UT Dallas</span> &middot; open to relocating anywhere<span class="cursor-blink"></span></p>
+                            <p class="home-hero-tagline">A <span class="text-green">software engineer</span> with an <span class="text-green">artist</span>'s eye.</p>
+                            <p class="home-hero-meta"><span class="text-green">Frontend</span> &amp; <span class="text-green">Full-stack</span> developer &middot; CS grad, <span class="text-blue">UT Dallas</span> &middot; open to relocating anywhere<span class="cursor-blink"></span></p>
                         </div>
 
                         <div class="home-section">
@@ -235,9 +235,9 @@
                                 <div></div>
                             </div>
                             <p>Most of my work lives right here on this site.</p>
-                            <p>If you're looking to hire, my <a href="/aaron_cheung_resume.pdf" target="_blank" class="text-pink">resume</a> is here.</p>
-                            <p>The best way to reach me is email: <span class="text-pink">contact@aaroncheung.me</span>.</p>
-                            <p>Code lives on <a href="https://github.com/aaroncheung-me" target="_blank" class="text-pink">GitHub</a>, and I'm on <a href="https://www.linkedin.com/in/aaron-c-cheung/" target="_blank" class="text-pink">LinkedIn</a>.</p>
+                            <p>If you're looking to hire, my <a href="/aaron_cheung_resume.pdf" target="_blank" class="text-purple">resume</a> is here.</p>
+                            <p>The best way to reach me is email: <span class="text-purple">contact@aaroncheung.me</span>.</p>
+                            <p>Code lives on <a href="https://github.com/aaroncheung-me" target="_blank" class="text-purple">GitHub</a>, and I'm on <a href="https://www.linkedin.com/in/aaron-c-cheung/" target="_blank" class="text-purple">LinkedIn</a>.</p>
                         </div>
 
                     </div>

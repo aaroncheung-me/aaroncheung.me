@@ -10,14 +10,19 @@
     </div>
     <div class="footer-spacer"></div>
     <div class="footer-item" id="footer-tray">
-        <a class="footer-link" href="/aaron_cheung_resume.pdf" target="_blank">[resume]</a>
-        <a class="footer-link" href="https://github.com/aaroncheung-me" target="_blank">[github]</a>
-        <a class="footer-link" href="https://www.linkedin.com/in/aaron-c-cheung/" target="_blank">[linkedin]</a>
-        <span class="footer-divider">│</span>
-        <button id="footer-lofi-btn" class="footer-tray-btn" onclick="setLofiPlaying(!getLofiPlaying())" aria-label="Toggle Lofi Generator, plays across the whole site">♪</button>
-        <button id="footer-crt-btn"     class="footer-tray-btn" onclick="setCrt(!getCrt())"                 aria-label="Toggle CRT overlay">▦</button>
-        <button id="footer-motion-btn"  class="footer-tray-btn" onclick="setReducedMotion(!getReducedMotion())" aria-label="Toggle reduced motion">▶</button>
-        <button id="footer-theme-btn"   class="footer-tray-btn" onclick="toggleTheme()"                    aria-label="Toggle light/dark theme">☾</button>
+        <div id="footer-tray-controls">
+            <a class="footer-link" href="/aaron_cheung_resume.pdf" target="_blank">[resume]</a>
+            <a class="footer-link" href="https://github.com/aaroncheung-me" target="_blank">[github]</a>
+            <a class="footer-link" href="https://www.linkedin.com/in/aaron-c-cheung/" target="_blank">[linkedin]</a>
+            <span class="footer-divider">│</span>
+            <button id="footer-palette-btn" class="footer-tray-btn" onclick="toggleFooterPopup(this,'palette')" aria-label="Change color palette">◐</button>
+            <button id="footer-font-btn"    class="footer-tray-btn" onclick="toggleFooterPopup(this,'font')"    aria-label="Change font">Aa</button>
+            <button id="footer-lofi-btn" class="footer-tray-btn" onclick="setLofiPlaying(!getLofiPlaying())" aria-label="Toggle Lofi Generator, plays across the whole site">♪</button>
+            <button id="footer-crt-btn"     class="footer-tray-btn" onclick="setCrt(!getCrt())"                 aria-label="Toggle CRT overlay">▦</button>
+            <button id="footer-motion-btn"  class="footer-tray-btn" onclick="setReducedMotion(!getReducedMotion())" aria-label="Toggle reduced motion">▶</button>
+            <button id="footer-theme-btn"   class="footer-tray-btn" onclick="toggleTheme()"                    aria-label="Toggle light/dark theme">☾</button>
+        </div>
+        <button id="footer-tray-toggle" class="footer-tray-btn" onclick="toggleFooterTraySettings(this)" aria-label="More footer options">^</button>
         <span class="footer-divider">│</span>
         <span id="footer-datetime"></span>
     </div>

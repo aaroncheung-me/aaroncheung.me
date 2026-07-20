@@ -52,7 +52,7 @@ function jumpyRender() {
     if (value === JUMPY_WHITE) {
       cell.classList.add("text-blue");
     } else if (value === JUMPY_BLACK) {
-      cell.classList.add("text-orange");
+      cell.classList.add("text-green");
     }
 
     if (movablePieces.includes(i)) {

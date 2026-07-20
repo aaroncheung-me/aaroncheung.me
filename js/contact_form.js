@@ -16,7 +16,7 @@ function initTerminalForm() {
   const firstPromptLine = document.createElement('div');
   firstPromptLine.classList.add('prompt-line');
   firstPromptLine.innerHTML = `
-    <span class="prompt"><span class=\"text-orange\">>aaron@portfolio</span>:<span class=\"text-blue\">~contact form</span>$</span>
+    <span class="prompt"><span class=\"text-purple\">>aaron@portfolio</span>:<span class=\"text-purple\">~contact form</span>$</span>
     <span class="command">name: </span>
     <input type="text" class="terminal-input" id="name-input" placeholder="${fields[0].hint}">
   `;
@@ -43,7 +43,7 @@ function initTerminalForm() {
         formData[fields[currentFieldIndex].name] = value;
 
         const currentLine = this.parentElement;
-        currentLine.innerHTML = `<span class="prompt"><span class=\"text-orange\">>aaron@portfolio</span>:<span class=\"text-blue\">~contact form</span>$</span> <span class="command">${fields[currentFieldIndex].prompt}</span> <span class="user-input">${value}</span>`;
+        currentLine.innerHTML = `<span class="prompt"><span class=\"text-purple\">>aaron@portfolio</span>:<span class=\"text-purple\">~contact form</span>$</span> <span class="command">${fields[currentFieldIndex].prompt}</span> <span class="user-input">${value}</span>`;
         currentLine.classList.remove('prompt-line');
         currentLine.classList.add('previous-line');
 
@@ -53,7 +53,7 @@ function initTerminalForm() {
           const newLine = document.createElement('div');
           newLine.classList.add('prompt-line');
           newLine.innerHTML = `
-            <span class="prompt"><span class=\"text-orange\">>aaron@portfolio</span>:<span class=\"text-blue\">~contact form</span>$</span>
+            <span class="prompt"><span class=\"text-purple\">>aaron@portfolio</span>:<span class=\"text-purple\">~contact form</span>$</span>
             <span class="command">${fields[currentFieldIndex].prompt}</span>
             <input type="text" class="terminal-input" id="${fields[currentFieldIndex].name}-input" placeholder="${fields[currentFieldIndex].hint}">
           `;
@@ -75,7 +75,7 @@ function initTerminalForm() {
   function submitFormToWeb3Forms() {
     const submissionLine = document.createElement('div');
     submissionLine.classList.add('previous-line');
-    submissionLine.innerHTML = `<span class="prompt"><span class=\"text-orange\">>aaron@portfolio</span>:<span class=\"text-blue\">~contact form</span>$</span> <span class="command">Submitting form...</span>`;
+    submissionLine.innerHTML = `<span class="prompt"><span class=\"text-purple\">>aaron@portfolio</span>:<span class=\"text-purple\">~contact form</span>$</span> <span class="command">Submitting form...</span>`;
     terminalOutput.appendChild(submissionLine);
 
     fetch('https://api.web3forms.com/submit', {
@@ -91,16 +91,16 @@ function initTerminalForm() {
       const line = document.createElement('div');
       line.classList.add('previous-line');
       if (data.success) {
-        line.innerHTML = `<span class="prompt"><span class=\"text-orange\">>aaron@portfolio</span>:<span class=\"text-blue\">~contact form</span>$</span> <span class="command">Thank you! Your message has been sent.</span>`;
+        line.innerHTML = `<span class="prompt"><span class=\"text-purple\">>aaron@portfolio</span>:<span class=\"text-purple\">~contact form</span>$</span> <span class="command">Thank you! Your message has been sent.</span>`;
       } else {
-        line.innerHTML = `<span class="prompt"><span class=\"text-orange\">>aaron@portfolio</span>:<span class=\"text-blue\">~contact form</span>$</span> <span class="command">Error: ${data.message || 'Could not send message'}</span>`;
+        line.innerHTML = `<span class="prompt"><span class=\"text-purple\">>aaron@portfolio</span>:<span class=\"text-purple\">~contact form</span>$</span> <span class="command">Error: ${data.message || 'Could not send message'}</span>`;
       }
       terminalOutput.appendChild(line);
     })
     .catch(() => {
       const errorLine = document.createElement('div');
       errorLine.classList.add('previous-line');
-      errorLine.innerHTML = `<span class="prompt"><span class=\"text-orange\">>aaron@portfolio</span>:<span class=\"text-blue\">~contact form</span>$</span> <span class="command">Error: Could not connect to server. Please try again later.</span>`;
+      errorLine.innerHTML = `<span class="prompt"><span class=\"text-purple\">>aaron@portfolio</span>:<span class=\"text-purple\">~contact form</span>$</span> <span class="command">Error: Could not connect to server. Please try again later.</span>`;
       terminalOutput.appendChild(errorLine);
     });
   }

@@ -46,7 +46,7 @@ if (!document.getElementById('customerFormStyles')) {
     styleSheet.id = 'customerFormStyles';
     styleSheet.textContent = `
         .terminal-form {
-            font-family: 'Fira Mono', monospace;
+            font-family: var(--font-mono);
             color: var(--clr-primary-txt);
             margin-top: 20px;
         }
@@ -71,7 +71,7 @@ if (!document.getElementById('customerFormStyles')) {
         .form-group label {
             margin-bottom: 5px;
             font-size: 0.9rem;
-            color: var(--clr-blue);
+            color: var(--clr-purple);
         }
         
         .form-group input,
@@ -80,7 +80,7 @@ if (!document.getElementById('customerFormStyles')) {
             background-color: transparent;
             border: 1px solid var(--clr-primary-txt);
             color: var(--clr-primary-txt);
-            font-family: 'Fira Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.9rem;
             outline: none;
             transition: border-color 0.2s;
@@ -88,7 +88,7 @@ if (!document.getElementById('customerFormStyles')) {
         
         .form-group input:focus,
         .form-group select:focus {
-            border-color: var(--clr-light-blue);
+            border-color: var(--clr-purple);
         }
         
         .form-group input::placeholder {
@@ -108,18 +108,18 @@ if (!document.getElementById('customerFormStyles')) {
             background: transparent;
             color: currentColor;
             cursor: pointer;
-            font-family: 'Fira Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.9rem;
             transition: background-color 0.2s;
         }
         
         .btn-primary {
-            color: var(--clr-light-blue);
-            border-color: var(--clr-light-blue);
+            color: var(--clr-purple);
+            border-color: var(--clr-purple);
         }
-        
+
         .btn-primary:hover {
-            background: rgba(88, 166, 255, 0.1);
+            background: rgba(188, 140, 255, 0.1);
         }
         
         .btn-secondary {
@@ -145,8 +145,8 @@ if (!document.getElementById('customerFormStyles')) {
         }
         
         .form-message.success {
-            border-color: var(--clr-light-blue);
-            color: var(--clr-light-blue);
+            border-color: var(--clr-green);
+            color: var(--clr-green);
         }
         
         .form-message.error {
@@ -155,7 +155,7 @@ if (!document.getElementById('customerFormStyles')) {
         }
         
         .form-message .loading {
-            color: var(--clr-orange);
+            color: var(--clr-green);
         }
         
         @media (max-width: 768px) {

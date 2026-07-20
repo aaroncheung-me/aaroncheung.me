@@ -174,7 +174,7 @@ async function displayContent() {
         const el = document.createElement("div");
         if (d.title != null) {
           const titleElement = document.createElement("h1");
-          titleElement.innerHTML = `<span class="text-pink">${d.title}</span>`;
+          titleElement.innerHTML = `<span class="text-blue">${d.title}</span>`;
           el.appendChild(titleElement);
         }
         if (d.subtitle != null) {
@@ -223,7 +223,7 @@ async function displayContent() {
     const categoryData = data[currentPosition.sectionItemIndex];
 
     const titleElement = document.createElement("h1");
-    titleElement.innerHTML = `<span class="text-pink">${categoryData.category}</span>`;
+    titleElement.innerHTML = `<span class="text-blue">${categoryData.category}</span>`;
     innerContainerElement.appendChild(titleElement);
 
     const descriptionElement = document.createElement("p");
@@ -253,7 +253,7 @@ async function displayContent() {
 
       const skillPkgHeader = document.createElement("p");
       skillPkgHeader.classList.add("skill-pkg-header");
-      skillPkgHeader.innerHTML = `<span class="skill-pkg-prompt">&gt; pkg info</span> <span class="text-orange">${selectedSkill.name.toLowerCase()}</span>`;
+      skillPkgHeader.innerHTML = `<span class="skill-pkg-prompt">&gt; pkg info</span> <span class="text-green">${selectedSkill.name.toLowerCase()}</span>`;
       skillDetailElement.appendChild(skillPkgHeader);
 
       const pkgBody = document.createElement("div");
@@ -307,19 +307,19 @@ async function displayContent() {
     const titleElement = document.createElement("h1");
     titleElement.innerHTML =
       titleText != null
-        ? `<span class="text-pink">${titleText}</span>`
+        ? `<span class="text-blue">${titleText}</span>`
         : null;
 
     const dateElement = document.createElement("h2");
     dateElement.innerHTML =
       sectionData.date != null
-        ? `<span class="text-orange">${sectionData.date}</span>`
+        ? `<span class="text-green">${sectionData.date}</span>`
         : null;
 
     const yearElement = document.createElement("h2");
     yearElement.innerHTML =
       sectionData.year != null
-        ? `[Built in <span class="text-orange">${sectionData.year}</span>]`
+        ? `[Built in <span class="text-green">${sectionData.year}</span>]`
         : null;
 
     const technologiesContainerElement = document.createElement("div");
@@ -752,15 +752,21 @@ function updateExperienceLocationHighlighting(activeEntryIndex) {
 
 // For sections mixing .ui-element-header (depth:0) and .ui-element-child
 // (depth:1) items (see js/render-lists.js's renderTreeSection()).
-// Highlights the selected child's parent header (child-active) and any
-// earlier passed parent groups (path-to-active).
+//
+// path-to-active marks every child row in a group entirely before a
+// boundary: the header's own index when a header is selected (every earlier
+// group lights up), or that child's parent header's index when a child is
+// selected (earlier groups light up, but siblings in its own group don't --
+// one specific leaf is picked, not a point along a sequence).
 function updateTreeHighlighting(sectionName, itemIndex) {
   const section = left_sections.find(s => s.name === sectionName);
   if (!section) return;
   const items = section.items;
 
   const selectedEl = items[itemIndex];
-  if (!selectedEl?.classList.contains("ui-element-child")) return;
+  const isChild = selectedEl?.classList.contains("ui-element-child");
+  const isHeader = selectedEl?.classList.contains("ui-element-header");
+  if (!isChild && !isHeader) return;
 
   let parentIndex = -1;
   for (let i = itemIndex - 1; i >= 0; i--) {
@@ -770,9 +776,10 @@ function updateTreeHighlighting(sectionName, itemIndex) {
     }
   }
 
-  if (parentIndex >= 0) items[parentIndex].classList.add("child-active");
+  const boundary = isChild ? parentIndex : itemIndex;
+  if (isChild && parentIndex >= 0) items[parentIndex].classList.add("child-active");
 
-  for (let i = 0; i < parentIndex; i++) {
+  for (let i = 0; i < boundary; i++) {
     if (items[i].classList.contains("ui-element-child")) {
       items[i].classList.add("path-to-active");
     }

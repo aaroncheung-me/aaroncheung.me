@@ -2050,7 +2050,7 @@
   }
 
   var bgColor = makeSmoothColor('--clr-primary-bg', '#0d1117');
-  var accentColor = makeSmoothColor('--clr-orange', '#ec8e2c');
+  var accentColor = makeSmoothColor('--clr-green', '#7ee787');
 
   function clearScope() {
     ctx2d.fillStyle = rgbaStr(bgColor(), 1);

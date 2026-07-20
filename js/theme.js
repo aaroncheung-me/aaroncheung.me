@@ -9,11 +9,6 @@ const GLITCH_MAX_KEY      = "site-glitch-max";
 const ART_FONT_KEY        = "art-site-font";
 const ART_PALETTE_KEY     = "art-site-palette";
 
-const GOOGLE_FONT_URLS = {
-  "jetbrains": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap",
-  "ibm-plex":  "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap",
-  "space":     "https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap",
-};
 
 // Art site palette
 
@@ -78,24 +73,11 @@ function setPalette(name) {
 }
 
 function getFont() {
-  return document.documentElement.getAttribute("data-font") || "fira";
-}
-
-function loadGoogleFont(name) {
-  const url = GOOGLE_FONT_URLS[name];
-  if (!url) return;
-  const id = `google-font-${name}`;
-  if (document.getElementById(id)) return;
-  const link = document.createElement("link");
-  link.id   = id;
-  link.rel  = "stylesheet";
-  link.href = url;
-  document.head.appendChild(link);
+  return document.documentElement.getAttribute("data-font") || "lekton";
 }
 
 function setFont(name) {
-  loadGoogleFont(name);
-  if (name === "fira") {
+  if (name === "lekton") {
     document.documentElement.removeAttribute("data-font");
   } else {
     document.documentElement.setAttribute("data-font", name);
@@ -217,10 +199,9 @@ function syncThemeButtons() {
   setActiveByData("palette-btn", "ember", palette === "ember");
 
   const font = getFont();
-  setActiveByData("font-btn", "fira", font === "fira");
-  setActiveByData("font-btn", "jetbrains", font === "jetbrains");
-  setActiveByData("font-btn", "ibm-plex", font === "ibm-plex");
-  setActiveByData("font-btn", "space", font === "space");
+  setActiveByData("font-btn", "lekton", font === "lekton");
+  setActiveByData("font-btn", "ubuntu", font === "ubuntu");
+  setActiveByData("font-btn", "anonymous-pro", font === "anonymous-pro");
 
   const crt = getCrt();
   setActiveByData("crt-btn", "on", crt);
@@ -252,7 +233,7 @@ function syncThemeButtons() {
 
   document.getElementById("footer-palette-btn")?.classList.toggle("active",
     _IS_ART_SITE ? getArtPalette() !== "warm" : getPalette() !== "default");
-  document.getElementById("footer-font-btn")?.classList.toggle("active",    getFont()    !== "fira");
+  document.getElementById("footer-font-btn")?.classList.toggle("active",    getFont()    !== "lekton");
   document.getElementById("footer-crt-btn")?.classList.toggle("active",     getCrt());
   document.getElementById("mobile-header-crt-btn")?.classList.toggle("active", getCrt());
 
@@ -263,6 +244,7 @@ function syncThemeButtons() {
   }
 
   renderMobileQuickSettings();
+  renderFooterTraySettings();
 }
 
 // Footer popup
@@ -326,11 +308,9 @@ const FOOTER_POPUP_CONFIGS = {
   } : {
     title: 'font',
     options: [
-      { value: 'fira',      label: 'fira mono'  },
-      { value: 'jetbrains', label: 'jetbrains'  },
-      { value: 'ibm-plex',  label: 'ibm plex'   },
-      { value: 'space',     label: 'space mono' },
-      { value: 'lekton',    label: 'lekton'     },
+      { value: 'lekton',        label: 'lekton'        },
+      { value: 'ubuntu',        label: 'ubuntu mono'   },
+      { value: 'anonymous-pro', label: 'anonymous pro' },
     ],
     get: getFont,
     set: setFont,
@@ -468,11 +448,75 @@ function toggleMobileQuickSettings(button) {
   });
 }
 
-// Preload any non-default saved font so it's ready before the user opens UI Elements
-(function () {
-  const saved = localStorage.getItem(FONT_STORAGE_KEY);
-  if (saved && saved !== "fira") loadGoogleFont(saved);
-})();
+// Desktop footer overflow dropdown -- between the mobile breakpoint and full
+// width, the footer bar doesn't have room for the links and toggle icons
+// inline, so that range collapses them into this button. Reuses the same
+// #footer-popup element as renderMobileQuickSettings, with a links row above
+// a divider and an icons row below.
+function renderFooterTraySettings() {
+  const popup = document.getElementById('footer-popup');
+  if (!popup || popup.dataset.type !== 'traysettings') return;
+
+  const crt = getCrt();
+  const motionOn = !getReducedMotion();
+  const dark = getTheme() === 'dark';
+  const lofi = typeof getLofiPlaying === 'function' && getLofiPlaying();
+  const paletteOn = _IS_ART_SITE ? getArtPalette() !== 'warm' : getPalette() !== 'default';
+  const fontOn = getFont() !== 'lekton';
+
+  // Same classes and onclick calls as the real footer-tray-btn buttons, so
+  // this stays a faithful collapsed copy instead of its own logic to keep in sync.
+  const icon = (active, glyph, onclick, label) =>
+    `<button class="footer-tray-btn${active ? ' active' : ''}" onclick="${onclick}" aria-label="${label}">${glyph}</button>`;
+
+  const link = (label, href) =>
+    `<a class="footer-link" href="${href}" target="_blank">[${label}]</a>`;
+
+  const html =
+    '<div class="footer-popup-links">' +
+    link('resume', '/aaron_cheung_resume.pdf') +
+    link('github', 'https://github.com/aaroncheung-me') +
+    link('linkedin', 'https://www.linkedin.com/in/aaron-c-cheung/') +
+    '</div>' +
+    '<div class="footer-popup-divider"></div>' +
+    '<div class="footer-popup-icons">' +
+    icon(paletteOn, '◐', "toggleFooterPopup(this,'palette')", 'Change color palette') +
+    icon(fontOn, 'Aa', "toggleFooterPopup(this,'font')", 'Change font') +
+    icon(lofi, '♪', `setLofiPlaying(${!lofi})`, 'Toggle Lofi Generator, plays across the whole site') +
+    icon(crt, '▦', `setCrt(${!crt})`, 'Toggle CRT overlay') +
+    icon(motionOn, '▶', `setReducedMotion(${motionOn})`, 'Toggle reduced motion') +
+    icon(dark, '☾', 'toggleTheme()', 'Toggle light/dark theme') +
+    '</div>';
+
+  // Same no-op guard as renderMobileQuickSettings -- this also gets called
+  // from syncThemeButtons, which the shared themeButtonObserver retriggers
+  // on any childList mutation, so an unconditional write here would loop.
+  if (popup.innerHTML !== html) popup.innerHTML = html;
+}
+
+function toggleFooterTraySettings(button) {
+  const popup = document.getElementById('footer-popup');
+  if (!popup.hidden && popup.dataset.type === 'traysettings') { closeFooterPopup(); return; }
+
+  popup.dataset.type = 'traysettings';
+  renderFooterTraySettings();
+
+  const rect = button.getBoundingClientRect();
+  const footerRect = document.getElementById('footer').getBoundingClientRect();
+  popup.style.left = '';
+  popup.style.right = (window.innerWidth - rect.right) + 'px';
+  popup.style.transform = '';
+  popup.style.top = '';
+  popup.style.bottom = (window.innerHeight - footerRect.top + 4) + 'px';
+  popup.removeAttribute('hidden');
+
+  requestAnimationFrame(() => {
+    _popupCloseHandler = (e) => {
+      if (!popup.contains(e.target) && e.target !== button) closeFooterPopup();
+    };
+    document.addEventListener('click', _popupCloseHandler);
+  });
+}
 
 // Shared script loader (site-wide) -- lets js/home-tiles.js and
 // js/lofi-player.js (loaded together on the main portfolio, and separately

@@ -39,7 +39,7 @@ function homeJumpyRender(state, boardEl) {
     const cell = document.createElement('div');
     cell.className = 'tile-jumpy-square';
     if (value === JUMPY_WHITE) cell.classList.add('text-blue');
-    if (value === JUMPY_BLACK) cell.classList.add('text-orange');
+    if (value === JUMPY_BLACK) cell.classList.add('text-green');
     cell.textContent = `[${jumpySquareSymbol(value)}]`.replace('[]', '[ ]');
     boardEl.appendChild(cell);
   }
@@ -264,7 +264,7 @@ function startLofiTile() {
     analyser.getByteTimeDomainData(data);
 
     ctx.clearRect(0, 0, width, height);
-    ctx.strokeStyle = siteVar('--clr-orange', '#ec8e2c');
+    ctx.strokeStyle = siteVar('--clr-green', '#7ee787');
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     const sliceWidth = width / bufferLength;
