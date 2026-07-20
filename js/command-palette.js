@@ -47,6 +47,7 @@ function openCommandPalette() {
   }
 
   overlay.classList.add("cp-visible");
+  overlay.inert = false;
   input.value = "";
   commandPaletteSelectedIndex = 0;
   renderCommandPaletteResults(buildCommandPaletteIndex());
@@ -57,6 +58,7 @@ function closeCommandPalette() {
   commandPaletteOpen = false;
   const overlay = document.getElementById("command-palette-overlay");
   overlay?.classList.remove("cp-visible");
+  if (overlay) overlay.inert = true;
 }
 
 function renderCommandPaletteResults(results) {
@@ -104,6 +106,10 @@ function selectCommandPaletteResult() {
 function initCommandPalette() {
   const overlay = document.createElement("div");
   overlay.id = "command-palette-overlay";
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.setAttribute("aria-label", "Command palette");
+  overlay.inert = true;
   overlay.innerHTML = `
     <div id="command-palette-box">
       <input id="command-palette-input" type="text" placeholder="jump to..." autocomplete="off" spellcheck="false" />

@@ -6,6 +6,8 @@
       "abbr": "Texas A&M",
       "date": "Aug 2020 - Dec 2022",
       "title": "Texas A&M Engineering Coursework (Python, C++, C, Java)",
+      "summary": "Self-taught programming foundations built alongside a Civil Engineering course load: <span class=\"text-orange\">algorithm design</span>, <span class=\"text-orange\">memory management</span>, and <span class=\"text-orange\">object-oriented programming</span> across <span class=\"text-pink\">Python</span>, <span class=\"text-pink\">C++</span>, <span class=\"text-pink\">C</span>, and <span class=\"text-pink\">Java</span>.",
+      "closingQuote": "Every language is a set of trade-offs, and part of the job is knowing when you need low-level control and when you want high-level abstraction.",
       "content": [
         "I started college at <span class=\"text-blue\">Texas A&M</span> in <span class=\"text-orange\">Civil Engineering</span>, and honestly, I picked it because I was lost. I knew I wanted engineering, since I liked building things and I was good at math, but civil was mostly the safe answer. The world will always need roads and bridges, so the jobs would always be there. It seemed like a plan.",
         "The plan started coming apart in the programming courses, which were only there as requirements. The assignment I still remember is coding a <span class=\"text-pink\">chess game</span>. It sounds simple until you're the one deciding everything: how to store the board, how each piece's movement gets encoded, how capturing works, how to keep a knight from jumping off the edge of the world. Every rule I'd taken for granted as a player had to be spelled out from nothing, and every one was its own little puzzle.",
@@ -21,6 +23,8 @@
       "company": "Collin College",
       "date": "Aug 2020 - May 2025",
       "title": "Collin Computer Science Coursework (Python, C++, Java)",
+      "summary": "<span class=\"text-blue\">Associate of Science</span>, <span class=\"text-pink\">Magna Cum Laude</span> — <span class=\"text-orange\">Data Structures</span>, <span class=\"text-orange\">Computer Architecture</span>, and <span class=\"text-orange\">Discrete Mathematics</span>, completed while transferring into a four-year CS program.",
+      "closingQuote": "I'd learned to code by needing code. Collin was where I learned why the tools worked underneath.",
       "content": [
         "<span class=\"text-blue\">Collin College</span> was never supposed to be a chapter of its own. It started as pure practicality: a local college where prerequisites cost a fraction of university tuition, so I enrolled there the same semester I started at <span class=\"text-blue\">A&M</span> and knocked out core classes on the side.",
         "When I left <span class=\"text-blue\">A&M</span> at the end of 2022, Collin changed jobs. It became the bridge. I had a target, <span class=\"text-blue\">UT Dallas</span> for a <span class=\"text-orange\">CS degree</span>, and Collin was where I stacked up the computer science prerequisites to get there: <span class=\"text-orange\">Introduction to Programming</span>, <span class=\"text-orange\">Data Structures</span>, <span class=\"text-orange\">Computer Architecture</span>, <span class=\"text-orange\">Discrete Mathematics</span>. Coming from <span class=\"text-blue\">A&M</span>, I'd learned to code by needing code. <span class=\"text-blue\">Collin</span> was where I learned why the tools worked underneath.",
@@ -34,6 +38,8 @@
       "abbr": "UTDallas",
       "date": "Jan 2023 - Dec 2025",
       "title": "UTD Computer Science Coursework (Python, C++, SQL, Bash)",
+      "summary": "<span class=\"text-blue\">Bachelor of Science</span>, Computer Science — coursework in <span class=\"text-orange\">Automata Theory</span>, <span class=\"text-orange\">UNIX Programming</span>, and <span class=\"text-orange\">Software Engineering</span>, capped by a full-stack capstone with a six-person team.",
+      "closingQuote": "Software Engineering taught me how code survives contact with other people's code.",
       "content": [
         "<span class=\"text-blue\">UT Dallas</span> was what the whole detour had been aiming at: finally studying <span class=\"text-orange\">computer science</span> on purpose instead of around the edges of an engineering degree. I transferred in January 2023 with the fundamentals from <span class=\"text-blue\">Collin</span> and two years of knowing exactly why I wanted to be there.",
         "The coursework is where things got deep. <span class=\"text-orange\">Discrete Math for Computing</span> and <span class=\"text-orange\">Automata Theory</span> rebuilt how I think about computation itself, <span class=\"text-orange\">UNIX Programming</span> made the <span class=\"text-orange\">command line</span> feel like home (which explains a lot about how this site looks), and <span class=\"text-orange\">Software Engineering</span> taught me how code survives contact with other people's code.",
@@ -48,6 +54,8 @@
       "abbr": "Review Mediator",
       "date": "Aug 2025 - Dec 2025",
       "title": "Full-Stack Web Dev (React, Express, Node.js, Supabase)",
+      "summary": "<span class=\"text-blue\">UTD</span> capstone, team of six — <span class=\"text-orange\">role-based dashboards</span> with <span class=\"text-pink\">Clerk</span> auth, JWT-secured <span class=\"text-pink\">Express</span> middleware, and <span class=\"text-pink\">Supabase</span> <span class=\"text-orange\">row-level security policies</span> for a full-stack review platform.",
+      "closingQuote": "I did my rotations through backend and database work, and when they ended, I went back to frontend by choice.",
       "content": [
         "Everything before this entry, I built alone. <span class=\"text-orange\">The Review Mediator</span> was the semester I found out what changes when five other developers are in the same codebase. It's a <span class=\"text-orange\">full-stack review management platform</span> that lets businesses track and dispute their <span class=\"text-pink\">Google</span> and <span class=\"text-pink\">Yelp</span> reviews from one dashboard, built as my <span class=\"text-blue\">UTD</span> capstone with a team of six.",
         "The project was structured in one-week splits, with the team divided across <span class=\"text-orange\">frontend</span>, <span class=\"text-orange\">backend</span>, and <span class=\"text-orange\">database</span>, and everyone rotating so nobody graduated knowing only their corner. I did my rotations through backend and database work, and when they ended, I went back to frontend by choice. By then that shouldn't surprise you. I spent the final stretch working directly with the platform's owner, turning what they wanted their pages to do into features that actually did it.",

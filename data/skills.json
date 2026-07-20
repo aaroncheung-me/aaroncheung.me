@@ -55,15 +55,6 @@
           "notes": "where the bot's decision logic lives."
         },
         {
-          "name": "C++",
-          "status": "coursework-deep",
-          "origin": "a&m, where a chess assignment started all this",
-          "used_in": [
-            {"label": "jumpy", "section": 2, "item": 4}
-          ],
-          "notes": "where i learned what memory actually costs."
-        },
-        {
           "name": "SQL",
           "status": "solid",
           "origin": "utd database coursework",
@@ -73,22 +64,13 @@
           "notes": "designed the schema and wrote the fifteen queries running live in the demo, relational division included."
         },
         {
-          "name": "C",
-          "status": "rusty but willing",
-          "origin": "a&m coursework",
-          "notes": "memory management and systems work. solid enough, distant enough."
-        },
-        {
-          "name": "Java",
-          "status": "rusty but willing",
-          "origin": "coursework, a&m through collin college",
-          "notes": "solid oop foundations. would sharpen fast."
-        },
-        {
-          "name": "Bash",
+          "name": "C++",
           "status": "coursework-deep",
-          "origin": "utd unix programming",
-          "notes": "enough to be useful on the command line and in server scripts."
+          "origin": "a&m, where a chess assignment started all this",
+          "used_in": [
+            {"label": "jumpy", "section": 2, "item": 4}
+          ],
+          "notes": "where i learned what memory actually costs."
         }
       ]
     },
@@ -106,13 +88,13 @@
           "notes": "role-based dashboards, responsive ui, and features built directly with the platform owner."
         },
         {
-          "name": "Tailwind CSS",
+          "name": "Node.js",
           "status": "production-tested",
           "origin": "trm capstone",
           "used_in": [
             {"label": "the review mediator", "section": 1, "item": 3}
           ],
-          "notes": "with flowbite components on top. fast to build with once you stop fighting the classnames."
+          "notes": "the runtime behind trm's backend."
         },
         {
           "name": "Express",
@@ -124,13 +106,13 @@
           "notes": "api routing and jwt middleware — the first lock on trm's security layer."
         },
         {
-          "name": "Node.js",
+          "name": "Tailwind CSS",
           "status": "production-tested",
           "origin": "trm capstone",
           "used_in": [
             {"label": "the review mediator", "section": 1, "item": 3}
           ],
-          "notes": "the runtime behind trm's backend."
+          "notes": "with flowbite components on top. fast to build with once you stop fighting the classnames."
         }
       ]
     },
@@ -138,6 +120,12 @@
       "category": "Tools & Platforms",
       "description": "The tools and platforms I reach for.",
       "skills": [
+        {
+          "name": "Git",
+          "status": "daily driver",
+          "origin": "late start, early regret",
+          "notes": "version control across every project on this site. embarrassingly, i started later than i should have."
+        },
         {
           "name": "Supabase",
           "status": "production-tested",
@@ -175,20 +163,6 @@
           "notes": "browser automation chosen deliberately over the api."
         },
         {
-          "name": "Railway",
-          "status": "production-tested",
-          "origin": "trm capstone",
-          "used_in": [
-            {"label": "the review mediator", "section": 1, "item": 3}
-          ]
-        },
-        {
-          "name": "Git",
-          "status": "daily driver",
-          "origin": "late start, early regret",
-          "notes": "version control across every project on this site. embarrassingly, i started later than i should have."
-        },
-        {
           "name": "Jira",
           "status": "solid",
           "origin": "trm capstone",
@@ -196,12 +170,6 @@
             {"label": "the review mediator", "section": 1, "item": 3}
           ],
           "notes": "sprint tracking and task coordination across the trm team."
-        },
-        {
-          "name": "VSCode",
-          "status": "daily driver",
-          "origin": "switched and never looked back",
-          "notes": "primary editor. everything on this site was written here."
         }
       ]
     },
@@ -220,15 +188,6 @@
           "notes": "the tui aesthetic, the colour system, the control panel layout — design is how this site found its voice."
         },
         {
-          "name": "Figma",
-          "status": "solid",
-          "origin": "trm capstone",
-          "used_in": [
-            {"label": "the review mediator", "section": 1, "item": 3}
-          ],
-          "notes": "wireframing and prototyping before building."
-        },
-        {
           "name": "Krita",
           "status": "daily driver",
           "origin": "digital art, long before the code",
@@ -238,10 +197,13 @@
           "notes": "where this site's logo was drawn before my converter got hold of it."
         },
         {
-          "name": "Photoshop",
-          "status": "rusty but willing",
-          "origin": "digital art",
-          "notes": "image editing and compositing. krita handles the drawing now."
+          "name": "Figma",
+          "status": "solid",
+          "origin": "trm capstone",
+          "used_in": [
+            {"label": "the review mediator", "section": 1, "item": 3}
+          ],
+          "notes": "wireframing and prototyping before building."
         }
       ]
     }

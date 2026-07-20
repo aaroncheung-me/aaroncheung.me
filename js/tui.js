@@ -183,12 +183,24 @@ async function displayContent() {
           subtitleElement.innerHTML = d.subtitle;
           el.appendChild(subtitleElement);
         }
+        if (d.summary != null) {
+          const summaryElement = document.createElement("p");
+          summaryElement.classList.add("entry-summary");
+          summaryElement.innerHTML = d.summary;
+          el.appendChild(summaryElement);
+        }
         d.content.forEach((c) => {
           const ce = document.createElement(c.trim().startsWith("<") ? "div" : "p");
           ce.classList.add("about-paragraph");
           ce.innerHTML = c;
           el.appendChild(ce);
         });
+        if (d.closingQuote != null) {
+          const closingQuoteElement = document.createElement("p");
+          closingQuoteElement.classList.add("entry-quote");
+          closingQuoteElement.innerHTML = d.closingQuote;
+          el.appendChild(closingQuoteElement);
+        }
         innerEl.appendChild(el);
       });
       outerEl.appendChild(innerEl);
@@ -291,10 +303,11 @@ async function displayContent() {
     const sectionData = data[currentPosition.sectionItemIndex];
     const topElement = document.createElement("div");
 
+    const titleText = sectionData.title ?? sectionData.name;
     const titleElement = document.createElement("h1");
     titleElement.innerHTML =
-      sectionData.title != null
-        ? `<span class="text-pink">${sectionData.title}</span>`
+      titleText != null
+        ? `<span class="text-pink">${titleText}</span>`
         : null;
 
     const dateElement = document.createElement("h2");
@@ -314,20 +327,27 @@ async function displayContent() {
     technologiesContainerElement.innerHTML =
       sectionData.technologies?.join(" ") || null;
 
-    if (titleElement.innerHTML != null) {
+    if (titleText != null) {
       topElement.appendChild(titleElement);
     }
 
-    if (dateElement.innerHTML != null) {
+    if (sectionData.date != null) {
       topElement.appendChild(dateElement);
     }
 
-    if (yearElement.innerHTML != null) {
+    if (sectionData.year != null) {
       topElement.appendChild(yearElement);
     }
 
-    if (technologiesContainerElement.innerHTML != null) {
+    if (sectionData.technologies?.length) {
       topElement.appendChild(technologiesContainerElement);
+    }
+
+    if (sectionData.summary != null) {
+      const summaryElement = document.createElement("p");
+      summaryElement.classList.add("entry-summary");
+      summaryElement.innerHTML = sectionData.summary;
+      topElement.appendChild(summaryElement);
     }
 
     const imageElements =
@@ -495,6 +515,13 @@ async function displayContent() {
       }
     });
 
+    if (sectionData.closingQuote != null) {
+      const closingQuoteElement = document.createElement("p");
+      closingQuoteElement.classList.add("entry-quote");
+      closingQuoteElement.innerHTML = sectionData.closingQuote;
+      innerContainerElement.appendChild(closingQuoteElement);
+    }
+
     innerContainerElement.prepend(topElement);
     outerContainerElement.appendChild(innerContainerElement);
 
@@ -657,6 +684,9 @@ async function render(scrollToTop = false, isInitialRender = false) {
 
   if (isMobile()) {
     showMobileDetailView();
+    if (isInitialRender) {
+      setMobileBackButtonVisible(false);
+    }
   }
 }
 

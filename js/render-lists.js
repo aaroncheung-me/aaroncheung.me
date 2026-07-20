@@ -1,17 +1,7 @@
-const SECTION_FLEX_MIN = 2;
-const SECTION_FLEX_MAX = 6;
-
 async function fetchSectionData(jsonFile) {
   const response = await fetch(`data/${jsonFile}.json`);
   const { data } = await response.json();
   return data;
-}
-
-function applyFlexByItemCount(sectionEl, count) {
-  if (!sectionEl) {
-    return;
-  }
-  sectionEl.style.flexGrow = Math.min(SECTION_FLEX_MAX, Math.max(SECTION_FLEX_MIN, count));
 }
 
 async function renderListSection(sectionId, buildItemHtml) {
@@ -23,7 +13,6 @@ async function renderListSection(sectionId, buildItemHtml) {
   const data = await fetchSectionData(sectionId);
   const listEl = sectionEl.getElementsByClassName("ui-list")[0];
   listEl.innerHTML = data.map(buildItemHtml).join("");
-  applyFlexByItemCount(sectionEl, data.length);
 }
 
 // Renders skills as a tree: category headers are real "items" (sharing the
@@ -38,10 +27,8 @@ async function renderSkillsTree() {
   const data = await fetchSectionData("skills");
   const listEl = sectionEl.getElementsByClassName("ui-list")[0];
 
-  let totalSkillCount = 0;
   listEl.innerHTML = data
     .map((category, categoryIndex) => {
-      totalSkillCount += category.skills.length;
       const isLastCategory = categoryIndex === data.length - 1;
       const categoryPrefix = isLastCategory ? "└──" : "├──";
       const header = `<div class="skill-category-header" data-category-index="${categoryIndex}"><span class="tree-prefix">${categoryPrefix}</span>${category.category}</div>`;
@@ -57,8 +44,6 @@ async function renderSkillsTree() {
       return header + skills;
     })
     .join("");
-
-  applyFlexByItemCount(sectionEl, data.length + totalSkillCount);
 }
 
 // Shared by sections whose data mixes depth:0 header entries with depth:1
@@ -96,8 +81,6 @@ async function renderTreeSection(sectionId, buildHeaderHtml, buildChildHtml) {
       return buildChildHtml(entry, prefix, indent);
     }
   }).join("");
-
-  applyFlexByItemCount(sectionEl, data.length);
 }
 
 function renderUiElementsTree() {

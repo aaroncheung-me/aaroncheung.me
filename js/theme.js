@@ -330,6 +330,7 @@ const FOOTER_POPUP_CONFIGS = {
       { value: 'jetbrains', label: 'jetbrains'  },
       { value: 'ibm-plex',  label: 'ibm plex'   },
       { value: 'space',     label: 'space mono' },
+      { value: 'lekton',    label: 'lekton'     },
     ],
     get: getFont,
     set: setFont,

@@ -14,13 +14,29 @@
   src: url("../fonts/fira-mono-v14-latin-700.woff2") format("woff2");
 }
 
+@font-face {
+  font-display: swap;
+  font-family: "Lekton";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/lekton-v21-latin-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Lekton";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/lekton-v21-latin-700.woff2") format("woff2");
+}
+
 :root {
   --clr-primary-txt: #c9d1d9;
-  --clr-primary-bg: #0d1117;
-  --clr-tertiary-bg: #141a24;
-  --clr-secondary-bg: #1e4273;
+  --clr-primary-bg: #1c1c1e;
+  --clr-tertiary-bg: #2c2c2e;
+  --clr-secondary-bg: #352a4d;
   --clr-border: #8090a8;
-  --clr-orange: #ec8e2c;
+  --clr-orange: #7ee787;
   --clr-blue: #58a6ff;
   --clr-pink: #bc8cff;
   --clr-light-blue: #79c0ff;
@@ -34,9 +50,9 @@
   --clr-primary-txt: #1b1f24;
   --clr-primary-bg: #f6f8fa;
   --clr-tertiary-bg: #e9ecef;
-  --clr-secondary-bg: #cfe0f5;
+  --clr-secondary-bg: #e8def8;
   --clr-border: #57606a;
-  --clr-orange: #b35900;
+  --clr-orange: #116329;
   --clr-blue: #0969da;
   --clr-pink: #8250df;
   --clr-light-blue: #0550ae;
@@ -90,6 +106,7 @@
 [data-font="jetbrains"] { --font-mono: "JetBrains Mono", monospace; }
 [data-font="ibm-plex"]  { --font-mono: "IBM Plex Mono",  monospace; }
 [data-font="space"]     { --font-mono: "Space Mono",     monospace; }
+[data-font="lekton"]    { --font-mono: "Lekton", monospace, sans-serif; }
 
 /* CRT Scanline Overlay */
 
@@ -201,7 +218,7 @@ html::after {
 }
 
 h1 {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: bold;
 }
 
@@ -214,31 +231,23 @@ a {
   cursor: pointer;
 }
 
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   font-family: var(--font-mono);
   overflow: hidden;
   padding: 1rem;
   padding-bottom: 0;
   height: 100vh;
+  box-sizing: border-box;
 }
 
 .darkmode {
   background-color: var(--clr-primary-bg);
   color: var(--clr-primary-txt);
-}
-
-*::-webkit-scrollbar {
-  width: 0.4em;
-  background-color: var(--clr-primary-bg);
-  height: 0.2em;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: var(--clr-primary-txt);
-}
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--clr-primary-txt) var(--clr-primary-bg);
 }
 
 svg {
@@ -274,6 +283,8 @@ svg {
 }
 
 .home-hero-name {
+  font-size: 1rem;
+  font-weight: normal;
   margin-bottom: 0.3rem;
 }
 
@@ -304,13 +315,22 @@ svg {
 }
 
 .live-tile:hover,
-.live-tile:focus-visible {
+.live-tile:focus-visible,
+.live-tile:has(.live-tile-title:hover),
+.live-tile:has(.live-tile-title:focus-visible) {
   border-color: var(--clr-light-blue);
   background: var(--clr-hover-overlay);
 }
 
 .live-tile-title {
   font-size: 0.9em;
+  background: none;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
 }
 
 .live-tile-frame {
@@ -433,6 +453,8 @@ body.at-home #desktop-controls-hint {
   right: 1rem;
   font-size: 0.75em;
   color: var(--clr-border);
+  background-color: var(--clr-primary-bg);
+  padding: 0.15rem 0.3rem;
   z-index: 100;
   pointer-events: none;
 }
@@ -459,8 +481,9 @@ body.at-home #desktop-controls-hint {
 #left-section {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 0.3rem;
   width: 23%;
+  max-width: 360px;
   height: 100%;
   min-height: 0;
   border-right: 0.1px solid var(--clr-border);
@@ -483,18 +506,33 @@ body.at-home #desktop-controls-hint {
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-y: hidden;
+  overflow-y: auto;
+  min-height: 0;
   position: relative;
 }
 
+#main-content::-webkit-scrollbar {
+  width: 3px;
+}
+
+#main-content::-webkit-scrollbar-thumb {
+  background-color: var(--clr-border);
+  border-radius: 0;
+}
+
+#main-content::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 #main-content .container-content {
-  overflow-y: auto;
   line-height: 1.5rem;
   gap: 1.5rem;
   padding: 2rem;
   width: calc(100% - 4rem);
-  flex: 1;
-  min-height: 0;
+  max-width: 1200px;
+  flex-shrink: 0;
 }
 
 #footer {
@@ -542,7 +580,7 @@ body.at-home #desktop-controls-hint {
 
 .nav-page-item {
   cursor: pointer;
-  padding: 0.1rem 0.3rem;
+  padding: 0.1rem 0;
 }
 
 #contact {
@@ -717,16 +755,33 @@ body.at-home #desktop-controls-hint {
   display: flex;
   flex-direction: column;
   gap: 0;
-  scrollbar-width: none;
+  /* Mirrored to RTL so the scrollbar lands on the left; content direction
+     is flipped back to normal on the immediate children below. */
+  direction: rtl;
+  margin-left: -0.75rem;
+  padding-left: 1rem;
 }
 
 #nav-scroll-area::-webkit-scrollbar {
+  width: 3px;
+}
+
+#nav-scroll-area::-webkit-scrollbar-thumb {
+  background-color: var(--clr-border);
+  border-radius: 0;
+}
+
+#nav-scroll-area::-webkit-scrollbar-button {
   display: none;
+  width: 0;
+  height: 0;
 }
 
 #nav-scroll-area > .container {
+  direction: ltr;
   height: auto;
   flex-shrink: 0;
+  flex-grow: 0;
 }
 
 @media screen and (min-width: 769px) {
@@ -857,7 +912,7 @@ pre {
   display: none;
 }
 
-@media screen and (min-width: 1450px) {
+@media screen and (min-width: 1600px) {
   .company-abbr { display: none; }
   .company-full { display: inline; }
 }
@@ -1061,14 +1116,6 @@ pre {
   color: var(--clr-light-blue);
 }
 
-.selected-frame .container-content {
-  scrollbar-color: var(--clr-light-blue) var(--clr-primary-bg);
-}
-
-div.selected-frame > ::-webkit-scrollbar-thumb {
-  background-color: var(--clr-light-blue);
-}
-
 .selected-item,
 .selected-item div {
   background-color: var(--clr-secondary-bg);
@@ -1096,6 +1143,39 @@ div.selected-frame > ::-webkit-scrollbar-thumb {
 
 .about-subtitle {
   margin-bottom: 1rem;
+}
+
+.entry-summary {
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--clr-primary-txt);
+  border-top: 0.1px solid var(--clr-border);
+  border-bottom: 0.1px solid var(--clr-border);
+  padding: 0.6rem 0;
+  margin-bottom: 1rem;
+}
+
+/* Closing quote -- a line lifted from the body copy, set after the last
+   paragraph as a quiet parting flourish rather than an interruption
+   mid-narrative (unlike .entry-summary, which leads). */
+.entry-quote {
+  font-style: italic;
+  font-weight: bold;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--clr-primary-txt);
+  border-top: 0.1px solid var(--clr-border);
+  border-bottom: 0.1px solid var(--clr-border);
+  padding: 0.6rem 0;
+  margin-top: 1.5rem;
+}
+
+.entry-quote::before {
+  content: "\201C";
+}
+
+.entry-quote::after {
+  content: "\201D";
 }
 
 .about-paragraph + .about-paragraph {
@@ -1913,6 +1993,7 @@ div.selected-frame > ::-webkit-scrollbar-thumb {
 
   #main-container {
     height: 100%;
+    padding-bottom: 1rem;
   }
 
   #section-container {
@@ -1940,6 +2021,7 @@ div.selected-frame > ::-webkit-scrollbar-thumb {
 
   #main-content {
     font-size: 1rem;
+    overflow-y: visible;
   }
 
   .home-section p {
@@ -1962,7 +2044,10 @@ div.selected-frame > ::-webkit-scrollbar-thumb {
   }
 
   #main-content .container-content {
-    height: 100%;
+    min-height: 100%;
+    overflow: visible;
+    margin-right: 0;
+    padding: 2rem 2rem 8rem 2rem;
   }
 
   .container {
@@ -2082,6 +2167,9 @@ div.selected-frame > ::-webkit-scrollbar-thumb {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
+    direction: ltr;
+    margin-left: 0;
+    padding-left: 0;
   }
 
   #section-container.mobile-list-mode #right-section {
