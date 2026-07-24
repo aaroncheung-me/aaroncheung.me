@@ -362,6 +362,10 @@ svg {
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
+  /* Without this, .tile-heatmap-boxed's 1px border adds on top of the fixed
+     height instead of being absorbed by it, making that one frame 2px
+     taller than its borderless siblings in the widget switcher. */
+  box-sizing: border-box;
 }
 
 .live-tile-caption {
@@ -396,11 +400,39 @@ svg {
   font-family: var(--font-mono);
 }
 
+/* .live-tile-frame's shared flex-center layout suits one centered child
+   (a canvas, an icon row) -- the status widget stacks two left-aligned text
+   lines instead, so it needs block layout, not centering. */
+.nav-widget-status-frame {
+  display: block;
+  padding: 0.3rem 0.4rem;
+  box-sizing: border-box;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.status-branch {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.2rem;
+}
+
+.status-dot {
+  color: var(--clr-green);
+}
+
+.status-commit {
+  color: var(--clr-primary-txt);
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
 .tile-heatmap-boxed {
   border: 1px solid var(--clr-border);
 }
 
-#tile-jumpy-board {
+.tile-jumpy-board {
   display: flex;
   gap: 0.2rem;
   width: 100%;
@@ -420,7 +452,7 @@ svg {
 /* No width/height here on purpose: js/home-tiles.js sets the canvas's CSS
    size in lockstep with its buffer resolution to keep mouse-coordinate math
    from drifting. */
-#tile-heatmap-frame canvas {
+.tile-heatmap-boxed canvas {
   display: block;
 }
 
@@ -428,7 +460,7 @@ svg {
   position: relative;
 }
 
-#tile-lofi-frame canvas {
+.tile-lofi-frame canvas {
   display: block;
   width: 100%;
   height: 100%;
@@ -503,13 +535,98 @@ body.at-home #desktop-controls-hint {
 #left-section {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.6rem;
   width: 23%;
   max-width: 360px;
   height: 100%;
   min-height: 0;
-  border-right: 0.1px solid var(--clr-border);
-  padding-right: 0.8rem;
+}
+
+/* Four stacked panels down the left column: where-you-are breadcrumb, the
+   nav tree, the mini live-demo switcher, and the logo -- same border/sizing
+   treatment so all four read as one consistent set. */
+#nav-location-panel {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.7rem;
+  box-sizing: border-box;
+  border: 0.1px solid var(--clr-border);
+  color: var(--clr-primary-txt);
+  white-space: normal;
+  overflow-wrap: break-word;
+  /* Fixed to a 2-line-tall box (deepest real path, e.g. "portfolio / UI
+     Elements / Theme Switcher / Font", wraps to exactly 2) rather than
+     height:auto -- otherwise this panel grows/shrinks by page depth and
+     shoves the nav tree below it up and down on every navigation. */
+  height: 3.3rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+#nav-location-panel:hover,
+#nav-location-panel:focus-visible {
+  background: var(--clr-hover-overlay);
+}
+
+#nav-location-content {
+  width: 100%;
+  line-height: 1.3;
+}
+
+#nav-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.7rem;
+  box-sizing: border-box;
+  border: 0.1px solid var(--clr-border);
+}
+
+#nav-widget-panel {
+  flex-shrink: 0;
+  padding: 0.5rem 0.7rem;
+  box-sizing: border-box;
+  border: 0.1px solid var(--clr-border);
+}
+
+.nav-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.nav-widget-title {
+  font-size: 0.9em;
+}
+
+.nav-widget-arrow {
+  background: none;
+  border: none;
+  color: var(--clr-primary-txt);
+  font-family: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 0.3rem;
+}
+
+.nav-widget-arrow:hover {
+  color: var(--clr-purple);
+}
+
+/* Fixed to one line (ellipsized if a caption ever runs long) -- letting it
+   wrap freely was exactly the breadcrumb's height-varies-by-content problem
+   in miniature: a longer caption on one widget made the whole panel taller
+   than its siblings when you flipped to it. */
+.nav-widget-caption {
+  margin-top: 0.4rem;
+  margin-bottom: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #right-section {
@@ -578,8 +695,12 @@ body.at-home #desktop-controls-hint {
 #nav-logo {
   flex-shrink: 0;
   flex-grow: 0;
-  padding: 0.75rem 0 0;
+  /* Left/right must match #nav-panel's padding exactly so the logo box's
+     edges line up with the other panels in the column. */
+  padding: 0.75rem 0.7rem 0.5rem;
   cursor: pointer;
+  border: 0.1px solid var(--clr-border);
+  box-sizing: border-box;
 }
 
 #logo-container-nav {
@@ -598,24 +719,6 @@ body.at-home #desktop-controls-hint {
 
 [data-theme="light"] #logo-container-nav img {
   filter: invert(1);
-}
-
-.nav-page-item {
-  cursor: pointer;
-  padding: 0.1rem 0;
-}
-
-#contact {
-  height: auto;
-  flex-shrink: 0;
-  flex-grow: 0;
-  padding-bottom: 1rem;
-  /* #contact sits outside #nav-scroll-area (it doesn't scroll with the rest
-     of the nav), so it misses the scrollbar-compensation margin/padding
-     that RTL-flipped area applies to its children -- replicated here so its
-     title lines up with the scrollable sections above it. */
-  margin-left: -0.55rem;
-  padding-left: 1rem;
 }
 
 .footer-item {
@@ -821,30 +924,21 @@ body.at-home #desktop-controls-hint {
   display: flex;
   flex-direction: column;
   gap: 0;
-  /* Mirrored to RTL so the scrollbar lands on the left; content direction
-     is flipped back to normal on the immediate children below. */
-  direction: rtl;
-  margin-left: -0.75rem;
-  padding-left: 1rem;
+  /* Scrollbar hidden entirely (still scrolls via wheel/trackpad/keyboard,
+     just no visible track/thumb) rather than styled -- a shown/hidden
+     scrollbar was reserving/releasing its own width, shifting every row's
+     text a few px whenever it appeared or disappeared. Hiding it removes
+     that shift instead of just relocating it; the old direction:rtl trick
+     this section used to use (solely to put a visible scrollbar on the
+     left) is gone too, since there's no visible scrollbar left to place. */
+  scrollbar-width: none;
 }
 
 #nav-scroll-area::-webkit-scrollbar {
-  width: 3px;
-}
-
-#nav-scroll-area::-webkit-scrollbar-thumb {
-  background-color: var(--clr-border);
-  border-radius: 0;
-}
-
-#nav-scroll-area::-webkit-scrollbar-button {
   display: none;
-  width: 0;
-  height: 0;
 }
 
-#nav-scroll-area > .container {
-  direction: ltr;
+#nav-scroll-area > .nav-toplevel {
   height: auto;
   flex-shrink: 0;
   flex-grow: 0;
@@ -865,11 +959,6 @@ body.at-home #desktop-controls-hint {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-}
-
-#left-section .container-content {
-  flex-grow: 1;
-  min-height: 0;
 }
 
 .outer-paragraph-container {
@@ -913,7 +1002,7 @@ pre {
   padding: 0.5rem;
   border: 0.1px solid var(--clr-blue);
   color: var(--clr-primary-txt);
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 #logo-ascii {
@@ -963,104 +1052,82 @@ pre {
   opacity: 0.5;
 }
 
-.ui-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-  width: 99%;
-  padding: 0.3rem;
-  overflow-y: auto;
-  overflow-x: hidden;
+/* Unified VS Code-style folder/page nav tree (js/render-lists.js builds the
+   DOM, js/tui.js drives goToPage/setFolderExpanded). Every node is a
+   .nav-node wrapper; folders additionally get .nav-folder-node and a nested
+   .nav-children container that only shows once .expanded is added to the
+   wrapper -- real DOM nesting handles indentation, no manual depth math. */
+
+.nav-toplevel {
+  margin-top: 0.4rem;
 }
 
-
-.company-full {
-  display: none;
-}
-
-@media screen and (min-width: 1300px) {
-  .company-abbr { display: none; }
-  .company-full { display: inline; }
-}
-
-.ui-list div {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  transition: background-color 0.1s ease;
-}
-
-.ui-list div:hover:not(.selected-item):not(.selected-item > div):not(.experience-location) {
-  background-color: var(--clr-tertiary-bg);
-}
-
-#contact:hover {
-  background-color: var(--clr-tertiary-bg);
-  cursor: pointer;
-}
-
-.skill-category-header {
-  margin-top: 0.5rem;
-  transition: color 0.15s ease;
-}
-
-.skill-category-header:first-child {
+.nav-toplevel:first-child {
   margin-top: 0;
 }
 
-.skill-category-header.selected-item,
-.ui-element-header.selected-item {
-  color: var(--clr-purple);
-}
-
-.selected-item .tree-prefix {
-  color: var(--clr-purple);
-  font-weight: bold;
-}
-
-.skill-item,
-.ui-element-child {
-  font-size: 0.92em;
-}
-
-.experience-location {
-  font-size: 0.92em;
+.nav-folder,
+.nav-page {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.1rem 0.3rem;
   cursor: pointer;
+  transition: background-color 0.1s ease;
+  /* These rows are click targets, not text to select -- without this, a
+     double-click or an accidental drag highlights the row's text instead
+     of doing anything useful. */
+  user-select: none;
 }
 
-.experience-location:hover {
+.nav-folder:hover,
+.nav-page:hover:not(.selected-item) {
   background-color: var(--clr-tertiary-bg);
 }
 
-.tree-prefix,
-.tree-indent {
-  color: var(--clr-border);
-  user-select: none;
-  /* No color transition: interpolating from --clr-border (blue-gray) to
-     --clr-purple (red-heavy purple) crosses a visibly blue-dominant hue
-     partway through, since blue rises faster than red along that path.
-     An instant snap avoids the flash entirely. */
+.nav-children {
+  display: none;
+  padding-left: 1.1rem;
 }
 
-.tree-prefix {
-  margin-right: 0.3rem;
+.nav-folder-node.expanded > .nav-children {
+  display: block;
 }
 
-.skill-item.category-active .tree-prefix,
-.experience-location.entry-active .tree-prefix {
-  color: var(--clr-purple);
-  font-weight: bold;
+/* An actual SVG path (see js/render-lists.js), not a CSS-hacked shape --
+   every previous attempt (font glyph, rotated border corner, two rotated
+   strokes, a border-triangle) kept landing on some proportion or centering
+   issue because each was an indirect approximation. Here the ">" is drawn
+   with hand-placed coordinates (M6 4 L10 8 L6 12) that are already
+   symmetric around the 16x16 viewBox's own center, so stroke-width (below)
+   controls thickness with zero effect on size, and rotating the whole
+   element 90° for the expanded state rotates something that was already
+   correctly centered, rather than something relying on a transform's pivot
+   math to become centered. */
+.nav-caret {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1.2em;
+  height: 1.2em;
+  margin: 0 0.15em;
+  fill: none;
+  stroke: var(--clr-border);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.15s ease;
 }
 
-.skill-item.path-to-active .tree-indent,
-.experience-location.path-to-active .tree-indent,
-.ui-element-child.path-to-active .tree-indent {
-  color: var(--clr-purple);
-  font-weight: bold;
+.nav-folder-node.expanded > .nav-folder .nav-caret {
+  transform: rotate(90deg);
 }
 
-.ui-element-header.child-active .tree-prefix {
+/* Solid background bar, not just colored text -- lazygit's real selection
+   convention, and reuses the same active-state background this site already
+   uses for the mobile tabbar's active tab (--clr-secondary-bg). */
+.nav-page.selected-item {
+  background-color: var(--clr-secondary-bg);
   color: var(--clr-purple);
   font-weight: bold;
 }
@@ -1185,6 +1252,48 @@ pre {
   text-decoration: underline;
 }
 
+.skill-pkg-back {
+  margin-top: 0.8rem;
+}
+
+.resume-viewer {
+  border: 1px solid var(--clr-border);
+  overflow: hidden;
+}
+
+.resume-frame {
+  display: block;
+  width: 100%;
+  height: 80vh;
+  border: none;
+}
+
+/* Skills-Tools root overview -- one scannable name+status table per
+   category (see data/skills.json's skill-overview-root), so getting the
+   headline fact about any of the twenty skills never requires a click.
+   Reuses .skill-pkg-link for the name (same purple "this is a link"
+   convention as every other used_in button on the site) inside a plain
+   two-column row rather than .skill-pkg-row's fixed 10em key column, which
+   is sized for short labels like "status:", not skill names. */
+.skills-grid-table {
+  display: flex;
+  flex-direction: column;
+  border-top: 0.1px solid var(--clr-border);
+  margin-bottom: 1.5rem;
+}
+
+.skills-grid-row {
+  display: grid;
+  grid-template-columns: 1fr 10em;
+  align-items: center;
+  padding: 0.35rem 0.4rem;
+  border-bottom: 0.1px solid var(--clr-border);
+}
+
+.skills-grid-status {
+  text-align: right;
+}
+
 .selected-item,
 .selected-item div {
   background-color: var(--clr-secondary-bg);
@@ -1237,6 +1346,81 @@ pre {
   border-bottom: 0.1px solid var(--clr-border);
   padding: 0.6rem 0;
   margin-top: 1.5rem;
+}
+
+/* File Explorer -- a typed-command shell (ls/cd/cat/pwd/help/clear) over the
+   same tree the nav renders (see js/tui.js's renderExplorerPage / NAV_TREE
+   in js/render-lists.js), styled to match the contact page's own
+   .prompt/.command/.terminal-input (css above, ~line 1400) rather than
+   reusing those classes outright -- this terminal's prompt text changes as
+   you `cd` around, where the contact form's never does. */
+.explorer-terminal {
+  display: flex;
+  flex-direction: column;
+}
+
+.explorer-output {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.explorer-line {
+  line-height: 1.4;
+}
+
+.explorer-command-line .prompt {
+  color: var(--clr-purple);
+  margin-right: 0.5rem;
+}
+
+.explorer-command-line .command {
+  color: var(--clr-primary-txt);
+}
+
+.explorer-output-text {
+  white-space: pre-wrap;
+  color: var(--clr-primary-txt);
+  opacity: 0.85;
+}
+
+.explorer-correction {
+  font-style: italic;
+  opacity: 0.65;
+}
+
+.explorer-listing {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 1.6rem;
+}
+
+.explorer-entry-folder {
+  color: var(--clr-purple);
+}
+
+.explorer-input-line {
+  display: flex;
+  align-items: center;
+}
+
+.explorer-input-line .prompt {
+  color: var(--clr-purple);
+  margin-right: 0.5rem;
+  white-space: nowrap;
+}
+
+.explorer-input {
+  background: transparent;
+  border: none;
+  color: var(--clr-primary-txt);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  outline: none;
+  flex: 1;
+  min-width: 50px;
+  caret-color: var(--clr-primary-txt);
 }
 
 .entry-quote::before {
@@ -1428,10 +1612,6 @@ pre {
 }
 
 #mobile-tabbar {
-  display: none;
-}
-
-#mobile-back-button {
   display: none;
 }
 
@@ -1820,16 +2000,6 @@ pre {
   color: var(--clr-primary-txt);
 }
 
-.lofi-toggle[aria-pressed="true"] {
-  border-color: var(--clr-purple);
-  color: var(--clr-purple);
-}
-
-.lofi-mix {
-  display: grid;
-  gap: 0.5rem 1.5rem;
-}
-
 .lofi-mix-row {
   display: grid;
   grid-template-columns: 6rem 1fr 3.5ch;
@@ -1853,10 +2023,106 @@ pre {
   accent-color: var(--clr-purple);
 }
 
-@media (min-width: 640px) {
-  .lofi-mix {
-    grid-template-columns: 1fr 1fr;
-  }
+/* Master volume: the one control visible before opening "Advanced options",
+   so it reads with a bit more weight than the rows it's paired with once
+   that's open. */
+.lofi-master-row label {
+  font-weight: bold;
+  color: var(--clr-primary-txt);
+}
+
+/* Native <details>/<summary> disclosure -- no JS needed for open/close.
+   Marker hidden and replaced with the same ">"/"v" text-swap convention
+   the "[ deeper dive ]" project write-ups already use, for consistency. */
+.lofi-advanced {
+  border-top: 0.1px solid var(--clr-border);
+  padding-top: 0.7rem;
+}
+
+/* A real button, not the ">"/"v" chevron-text pattern the "[ deeper dive ]"
+   link right below this panel already uses -- two lookalike disclosures
+   stacked was the actual problem, not just the wording. "+"/"-" instead
+   reuses this same panel's own older convention (the Rain/Atmosphere/Vinyl
+   toggles used to read "+ Rain"/"- Rain"). */
+.lofi-advanced summary {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  background: transparent;
+  color: currentColor;
+  border: 1px solid currentColor;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  list-style: none;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.lofi-advanced summary:hover {
+  background: var(--clr-hover-overlay);
+}
+
+.lofi-advanced summary::-webkit-details-marker {
+  display: none;
+}
+
+.lofi-advanced summary::before {
+  content: "+ ";
+}
+
+.lofi-advanced[open] summary::before {
+  content: "− ";
+}
+
+.lofi-advanced-group {
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 0.1px solid var(--clr-border);
+}
+
+.lofi-advanced-group:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+/* Each group pairs its own selector row directly above its own volume
+   slider -- previously all three toggles sat in one row up top and every
+   slider (including ones a toggle hadn't turned on yet) sat in one grid far
+   below, with nothing showing which slider belonged to which toggle. */
+.lofi-group-label {
+  color: var(--clr-purple);
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.lofi-option-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+
+.lofi-option-btn {
+  padding: 0.3rem 0.6rem;
+  background: transparent;
+  color: currentColor;
+  border: 1px solid currentColor;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  transition: background-color 0.2s ease;
+}
+
+.lofi-option-btn:hover {
+  background: var(--clr-hover-overlay);
+}
+
+/* Same active-state look as .ui-demo button.active elsewhere on the site
+   (mobile tabbar's active tab, site-mirror mode buttons, ...). */
+.lofi-option-btn.active {
+  color: var(--clr-purple);
+  background-color: var(--clr-secondary-bg);
+  border-color: var(--clr-purple);
 }
 
 /* Dual-handle range slider (CRT Overlay glitch-frequency demo) */
@@ -2033,6 +2299,12 @@ pre {
     padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
     overflow-y: scroll !important;
     overflow-x: hidden;
+    /* overflow-y:scroll above always reserves a scrollbar gutter so page
+       height changes don't shift content sideways -- but reserving it only
+       on the right (the default) is exactly what was making everything
+       look off-center. both-edges reserves the same width on the left too,
+       so content actually centers instead of just being consistent. */
+    scrollbar-gutter: stable both-edges;
   }
 
   .live-tile-site {
@@ -2077,8 +2349,22 @@ pre {
   #right-section {
     width: 100%;
     height: 100%;
-    padding-top: 1rem;
     background-image: none;
+  }
+
+  /* Menu <-> content swap (js/mobile-nav.js's showMobileList/
+     showMobileDetailView). Only the panel being revealed animates in --
+     the one being covered just disappears instantly via the existing
+     display:none rules below, nothing to animate on its way out. */
+  #left-section,
+  #right-section {
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  #left-section.mobile-panel-enter,
+  #right-section.mobile-panel-enter {
+    opacity: 0;
+    transform: translateY(6px);
   }
 
   body {
@@ -2123,18 +2409,10 @@ pre {
     height: fit-content !important;
   }
 
-  .ui-list {
+  .nav-folder,
+  .nav-page {
     font-size: 1rem;
-    gap: 0;
-    width: auto;
-  }
-
-  .ui-list div {
-    padding: 0.5rem;
-  }
-
-  #experience .ui-list div {
-    width: auto;
+    padding: 0.5rem 0.3rem;
   }
 
   #logo-container {
@@ -2158,16 +2436,16 @@ pre {
     justify-content: space-evenly;
     flex-wrap: nowrap;
     gap: 0.1rem;
-    padding: 0.9rem 0.15rem calc(0.9rem + env(safe-area-inset-bottom, 0px));
+    padding: 0.3rem 0.6rem calc(0.3rem + env(safe-area-inset-bottom, 0px));
     background-color: var(--clr-primary-bg);
     border-top: 0.1px solid var(--clr-primary-txt);
     font-family: var(--font-mono);
-    font-size: clamp(0.5rem, 2.6vw, 0.9rem);
+    font-size: 0.9rem;
     z-index: 99;
     overflow-x: hidden;
   }
 
-  #mobile-tabbar .tab {
+  #mobile-menu-button {
     background: transparent;
     border: none;
     color: var(--clr-primary-txt);
@@ -2175,61 +2453,49 @@ pre {
     font-size: inherit;
     padding: 0.7rem 0.15rem;
     min-height: 44px;
-    flex: 0 0 auto;
+    width: 100%;
     cursor: pointer;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     transition: color 0.1s ease, background-color 0.1s ease;
   }
 
-  #mobile-tabbar .tab.active {
+  #section-container.mobile-list-mode #mobile-menu-button {
     color: var(--clr-purple);
     background-color: var(--clr-secondary-bg);
   }
 
-  #mobile-tabbar .tab-sep {
-    color: var(--clr-border);
-  }
-
-  #mobile-back-button {
-    display: none;
-    background: transparent;
-    border: none;
-    color: var(--clr-purple);
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    cursor: pointer;
-    padding: 0.5rem 0;
-  }
-
-  #mobile-back-button.visible {
-    display: block;
-  }
-
-  /* List ↔ detail state, toggled by js/mobile-nav.js */
-  #nav-scroll-area > .container {
+  /* Desktop-only panels -- the breadcrumb box's File Explorer isn't
+     practical on a touch keyboard, and the widget switcher eats space that
+     matters more on a small screen (see js/mobile-nav.js's header comment).
+     #nav-panel (the tree) and #nav-logo are the only #left-section panels
+     mobile shows, via #section-container.mobile-list-mode below -- both are
+     hidden by default same as the rest since #left-section itself is
+     display:none outside list-mode already. */
+  #nav-location-panel,
+  #nav-widget-panel {
     display: none;
   }
 
-  #nav-scroll-area > .container.mobile-active {
-    display: flex !important;
-    height: auto !important;
-    width: 100%;
+  /* Logo reads as the top of the menu, not the bottom -- reordered above
+     the tree via flex order rather than moved in the DOM, so its desktop
+     position (last, above the footer) stays semantically unchanged. */
+  #section-container.mobile-list-mode #nav-logo {
+    order: -1;
   }
 
   #section-container.mobile-list-mode #left-section {
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: none;
     flex: 1;
     min-height: 0;
     padding-top: 1rem;
     padding-right: 0;
     border-right: none;
     height: auto;
-  }
-
-  #section-container.mobile-list-mode #contact {
-    display: none;
   }
 
   #section-container.mobile-list-mode #nav-scroll-area {

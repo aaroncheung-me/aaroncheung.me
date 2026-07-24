@@ -224,11 +224,19 @@ function syncThemeButtons() {
   if (mobileThemeBtn && mobileThemeBtn.textContent !== themeSymbol) {
     mobileThemeBtn.textContent = themeSymbol;
   }
+  const navWidgetThemeBtn = document.getElementById("nav-widget-theme-btn");
+  if (navWidgetThemeBtn && navWidgetThemeBtn.textContent !== themeSymbol) {
+    navWidgetThemeBtn.textContent = themeSymbol;
+  }
 
   const footerMotionBtn = document.getElementById("footer-motion-btn");
   const motionSymbol = getReducedMotion() ? "‖" : "▶";
   if (footerMotionBtn && footerMotionBtn.textContent !== motionSymbol) {
     footerMotionBtn.textContent = motionSymbol;
+  }
+  const navWidgetMotionBtn = document.getElementById("nav-widget-motion-btn");
+  if (navWidgetMotionBtn && navWidgetMotionBtn.textContent !== motionSymbol) {
+    navWidgetMotionBtn.textContent = motionSymbol;
   }
 
   document.getElementById("footer-palette-btn")?.classList.toggle("active",
@@ -236,6 +244,10 @@ function syncThemeButtons() {
   document.getElementById("footer-font-btn")?.classList.toggle("active",    getFont()    !== "lekton");
   document.getElementById("footer-crt-btn")?.classList.toggle("active",     getCrt());
   document.getElementById("mobile-header-crt-btn")?.classList.toggle("active", getCrt());
+  document.getElementById("nav-widget-palette-btn")?.classList.toggle("active",
+    _IS_ART_SITE ? getArtPalette() !== "warm" : getPalette() !== "default");
+  document.getElementById("nav-widget-font-btn")?.classList.toggle("active", getFont() !== "lekton");
+  document.getElementById("nav-widget-crt-btn")?.classList.toggle("active", getCrt());
 
   const mobilMotionBtn = document.getElementById("mobile-header-motion-btn");
   const mobilMotionSymbol = getReducedMotion() ? "‖" : "▶";
@@ -319,10 +331,10 @@ const FOOTER_POPUP_CONFIGS = {
 
 let _popupCloseHandler = null;
 
-function toggleFooterPopup(button, type) {
-  const popup = document.getElementById('footer-popup');
-  if (!popup.hidden && popup.dataset.type === type) { closeFooterPopup(); return; }
-
+// Shared by toggleFooterPopup and toggleNavWidgetPopup -- only the
+// positioning differs between them (footer-bar-relative vs. anchored to
+// whichever button opened it), the option-list content is identical.
+function renderPopupOptions(popup, type) {
   const cfg     = FOOTER_POPUP_CONFIGS[type];
   const current = cfg.get();
 
@@ -336,6 +348,13 @@ function toggleFooterPopup(button, type) {
     ).join('');
 
   popup.dataset.type = type;
+}
+
+function toggleFooterPopup(button, type) {
+  const popup = document.getElementById('footer-popup');
+  if (!popup.hidden && popup.dataset.type === type) { closeFooterPopup(); return; }
+
+  renderPopupOptions(popup, type);
 
   if (type === 'sites') {
     // Anchor to the mobile header's own edges, not the button's -- the
@@ -359,6 +378,34 @@ function toggleFooterPopup(button, type) {
     popup.style.top    = openAbove ? '' : (footerRect.bottom + 4) + 'px';
     popup.style.bottom = openAbove ? (window.innerHeight - footerRect.top + 4) + 'px' : '';
   }
+  popup.removeAttribute('hidden');
+
+  requestAnimationFrame(() => {
+    _popupCloseHandler = (e) => {
+      if (!popup.contains(e.target) && e.target !== button) closeFooterPopup();
+    };
+    document.addEventListener('click', _popupCloseHandler);
+  });
+}
+
+// Same palette/font pickers as the footer tray, opened from the nav
+// sidebar's mini widget switcher (js/nav-widget-panel.js) instead -- that
+// button lives nowhere near the footer bar, so this anchors purely to the
+// button's own position rather than reusing toggleFooterPopup's
+// footer-relative vertical anchoring.
+function toggleNavWidgetPopup(button, type) {
+  const popup = document.getElementById('footer-popup');
+  if (!popup.hidden && popup.dataset.type === type) { closeFooterPopup(); return; }
+
+  renderPopupOptions(popup, type);
+
+  const rect = button.getBoundingClientRect();
+  const openAbove = rect.top > window.innerHeight / 2;
+  popup.style.left      = (rect.left + rect.width / 2) + 'px';
+  popup.style.right     = '';
+  popup.style.transform = 'translateX(-50%)';
+  popup.style.top    = openAbove ? '' : (rect.bottom + 6) + 'px';
+  popup.style.bottom = openAbove ? (window.innerHeight - rect.top + 6) + 'px' : '';
   popup.removeAttribute('hidden');
 
   requestAnimationFrame(() => {
@@ -408,12 +455,25 @@ function renderMobileQuickSettings() {
     `<button class="popup-option${active ? ' active' : ''}" onclick="${onclick}">` +
     `<span class="popup-dot">${active ? '●' : ' '}</span>${label}</button>`;
 
+  // Palette/font are "pick one of several," not on/off, so these open the
+  // same picker toggleNavWidgetPopup already drives from the nav sidebar --
+  // tapping one just swaps #footer-popup's content into that picker instead
+  // of a boolean toggle. This is the only mobile path to them now that the
+  // footer (and its own palette/font icons) is hidden there.
+  const paletteVal = _IS_ART_SITE ? getArtPalette() : getPalette();
+  const fontVal = _IS_ART_SITE ? getArtFont() : getFont();
+  const pickerRow = (label, value, type) =>
+    `<button class="popup-option" onclick="toggleNavWidgetPopup(this,'${type}')">` +
+    `<span class="popup-dot"> </span>${label}: ${value}</button>`;
+
   const html =
     '<div class="popup-title">display</div>' +
     row(crt, 'CRT overlay', `setCrt(${!crt})`) +
     row(motionOn, 'motion', `setReducedMotion(${motionOn})`) +
     row(dark, 'dark mode', 'toggleTheme()') +
-    row(lofi, 'lofi generator', `setLofiPlaying(${!lofi})`);
+    row(lofi, 'lofi generator', `setLofiPlaying(${!lofi})`) +
+    pickerRow('palette', paletteVal, 'palette') +
+    pickerRow('font', fontVal, 'font');
 
   // Guard against a no-op write -- innerHTML always creates new nodes (a
   // childList mutation) even when the content is identical, and this

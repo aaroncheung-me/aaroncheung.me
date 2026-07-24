@@ -281,13 +281,14 @@
     oceanWaveGain: null,
     oceanWindGain: null,
     fireplaceGain: null,
-    // Both default off now -- with Precipitation and Atmosphere independent
-    // toggles, defaulting rain on meant it silently bled into every
-    // Atmosphere listening test (reported as "static" muddying Cityscape/
-    // Forest/Ocean, and as background noise with nothing selected at all).
-    // Starting silent lets whatever the user picks be heard cleanly.
-    precipitation: 'off',
-    atmosphere: 'off',
+    // Rain + Fireplace on by default -- a first-time visitor pressing Play
+    // should hear a full, settled ambience immediately rather than a bare
+    // instrumental loop with every layer sitting at "off" until they find
+    // the advanced controls. (Previously both defaulted off to keep dev
+    // listening tests of one Atmosphere option clean of rain bleeding in --
+    // that's a testing concern, not a first-visit one.)
+    precipitation: 'rain',
+    atmosphere: 'fireplace',
     vinylEnabled: true,
     nextRainTime: null,
     nextCrackleTime: null,
@@ -2196,12 +2197,22 @@
       ? (engine.currentChord.degree + '  ·  ' + engine.currentChord.name + '  ·  ' + engine.tempo + ' BPM')
       : readyLabel();
 
-    els.precip.setAttribute('aria-pressed', String(engine.precipitation !== 'off'));
-    els.precip.textContent = (engine.precipitation === 'off' ? '+ ' : '− ') + PRECIP_LABELS[engine.precipitation];
-    els.atmosphere.setAttribute('aria-pressed', String(engine.atmosphere !== 'off'));
-    els.atmosphere.textContent = (engine.atmosphere === 'off' ? '+ ' : '− ') + ATMOSPHERE_LABELS[engine.atmosphere];
-    els.vinyl.setAttribute('aria-pressed', String(engine.vinylEnabled));
-    els.vinyl.textContent = (engine.vinylEnabled ? '− ' : '+ ') + 'Vinyl';
+    // These three are optional -- a panel markup can skip the single
+    // cycle-button UI these were built for and drive setPrecip/setAtmosphere/
+    // setVinyl from its own discrete controls instead (see js/lofi-player.js's
+    // initLofiPanelControls), in which case these ids just won't exist here.
+    if (els.precip) {
+      els.precip.setAttribute('aria-pressed', String(engine.precipitation !== 'off'));
+      els.precip.textContent = (engine.precipitation === 'off' ? '+ ' : '− ') + PRECIP_LABELS[engine.precipitation];
+    }
+    if (els.atmosphere) {
+      els.atmosphere.setAttribute('aria-pressed', String(engine.atmosphere !== 'off'));
+      els.atmosphere.textContent = (engine.atmosphere === 'off' ? '+ ' : '− ') + ATMOSPHERE_LABELS[engine.atmosphere];
+    }
+    if (els.vinyl) {
+      els.vinyl.setAttribute('aria-pressed', String(engine.vinylEnabled));
+      els.vinyl.textContent = (engine.vinylEnabled ? '− ' : '+ ') + 'Vinyl';
+    }
 
     Object.keys(VOLUME_KEY_MAP).forEach(function (name) {
       var volumeKey = VOLUME_KEY_MAP[name][0];
@@ -2241,24 +2252,32 @@
 
     // Precipitation and Atmosphere each cycle their own independent state --
     // Off -> Rain -> Thunderstorm -> Off for one, Off -> Cityscape -> Forest
-    // -> Ocean -> Fireplace -> Night -> Off for the other. Either can be on,
-    // both can be on together, or both off.
-    els.precip.addEventListener('click', function () {
-      var idx = PRECIP_STATES.indexOf(engine.precipitation);
-      applyPrecip(PRECIP_STATES[(idx + 1) % PRECIP_STATES.length]);
-      syncUIToEngineState();
-    });
+    // -> Ocean -> Fireplace -> Off for the other. Either can be on, both can
+    // be on together, or both off. Optional: a panel can skip this single
+    // cycle-button and drive setPrecip/setAtmosphere/setVinyl from its own
+    // discrete controls instead (see js/lofi-player.js's initLofiPanelControls).
+    if (els.precip) {
+      els.precip.addEventListener('click', function () {
+        var idx = PRECIP_STATES.indexOf(engine.precipitation);
+        applyPrecip(PRECIP_STATES[(idx + 1) % PRECIP_STATES.length]);
+        syncUIToEngineState();
+      });
+    }
 
-    els.atmosphere.addEventListener('click', function () {
-      var idx = ATMOSPHERE_STATES.indexOf(engine.atmosphere);
-      applyAtmosphere(ATMOSPHERE_STATES[(idx + 1) % ATMOSPHERE_STATES.length]);
-      syncUIToEngineState();
-    });
+    if (els.atmosphere) {
+      els.atmosphere.addEventListener('click', function () {
+        var idx = ATMOSPHERE_STATES.indexOf(engine.atmosphere);
+        applyAtmosphere(ATMOSPHERE_STATES[(idx + 1) % ATMOSPHERE_STATES.length]);
+        syncUIToEngineState();
+      });
+    }
 
-    els.vinyl.addEventListener('click', function () {
-      applyVinyl(!engine.vinylEnabled);
-      syncUIToEngineState();
-    });
+    if (els.vinyl) {
+      els.vinyl.addEventListener('click', function () {
+        applyVinyl(!engine.vinylEnabled);
+        syncUIToEngineState();
+      });
+    }
 
     wireVolumeSlider(els.overallVol, els.overallVolOut, 'overallVolume', 'overallGain');
     wireVolumeSlider(els.chordVol, els.chordVolOut, 'chordVolume', 'chordBus');

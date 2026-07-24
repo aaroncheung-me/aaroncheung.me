@@ -121,6 +121,63 @@ function setLofiPlaying(val) {
   }
 }
 
+// Wires the full control panel's discrete Rain/Atmosphere/Vinyl option
+// buttons (data-precip/data-atmosphere/data-vinyl) -- js/tui.js calls this
+// once, right after window.LofiSketch.mount(container), on the Projects
+// page's lofi-sketch-demo. These replace the engine's own single
+// cycle-on-click button UI (still supported, just unused by this markup --
+// see lofi-engine.js's null-guards around els.precip/atmosphere/vinyl),
+// since a hidden "click repeatedly to cycle through 3-6 states" control was
+// exactly what made Rain/Atmosphere confusing: nothing showed what the
+// other options even were, let alone which one was currently active.
+function initLofiPanelControls(container) {
+  if (!container || !window.LofiSketch) return;
+
+  function syncActiveStates() {
+    const state = window.LofiSketch.getState();
+    container.querySelectorAll("[data-precip]").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.precip === state.precipitation);
+    });
+    container.querySelectorAll("[data-atmosphere]").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.atmosphere === state.atmosphere);
+    });
+    container.querySelectorAll("[data-vinyl]").forEach((btn) => {
+      btn.classList.toggle("active", (btn.dataset.vinyl === "on") === state.vinylEnabled);
+    });
+  }
+
+  // Each handler calls syncActiveStates() itself right after the setter,
+  // rather than relying only on the onStateChange subscription below --
+  // setPrecip/setAtmosphere/setVinyl change the actual audio immediately,
+  // but lofi-engine.js's notifyStateChange() (which onStateChange listens
+  // for) only ever fires from startPlayback/stopPlayback. Without this, the
+  // sound changed correctly but these buttons' active state never did.
+  container.querySelectorAll("[data-precip]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      window.LofiSketch.setPrecip(btn.dataset.precip);
+      syncActiveStates();
+    });
+  });
+  container.querySelectorAll("[data-atmosphere]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      window.LofiSketch.setAtmosphere(btn.dataset.atmosphere);
+      syncActiveStates();
+    });
+  });
+  container.querySelectorAll("[data-vinyl]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      window.LofiSketch.setVinyl(btn.dataset.vinyl === "on");
+      syncActiveStates();
+    });
+  });
+
+  // Still useful for the cases notifyStateChange *does* cover -- e.g.
+  // opening this panel after playback was already started elsewhere
+  // (footer toggle, home tile) should show the real current state.
+  window.LofiSketch.onStateChange(syncActiveStates);
+  syncActiveStates();
+}
+
 function syncLofiButton() {
   const playing = getLofiPlaying();
   const footerBtn = document.getElementById("footer-lofi-btn");
@@ -129,6 +186,15 @@ function syncLofiButton() {
   // (the live scope itself becomes the "it's playing" indicator).
   const tileBtn = document.getElementById("tile-lofi-play-btn");
   if (tileBtn) tileBtn.classList.toggle("lofi-tile-hidden", playing);
+  // Nav sidebar widget's button, on the other hand, stays visible and
+  // functions as a real play/pause toggle -- same glyph swap the motion
+  // toggle already uses (‖/▶) rather than disappearing once playing.
+  const navWidgetTileBtn = document.getElementById("nav-widget-lofi-play-btn");
+  if (navWidgetTileBtn) {
+    const symbol = playing ? "‖" : "▶";
+    if (navWidgetTileBtn.textContent !== symbol) navWidgetTileBtn.textContent = symbol;
+    navWidgetTileBtn.setAttribute("aria-label", playing ? "Pause Lofi Generator" : "Play Lofi Generator, plays across the whole site");
+  }
   if (typeof renderMobileQuickSettings === "function") renderMobileQuickSettings();
 }
 

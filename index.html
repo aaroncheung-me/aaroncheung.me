@@ -65,6 +65,8 @@
     <script src="js/mono-fit.js" defer></script>
     <script src="js/ascii-logo.js" defer></script>
     <script src="js/home-tiles.js" defer></script>
+    <script src="js/site-status.js" defer></script>
+    <script src="js/nav-widget-panel.js" defer></script>
 
     <!-- Private visitor count only, nothing shown on-site -- see analytics/. -->
     <script data-goatcounter="https://aaroncheung.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
@@ -81,83 +83,35 @@
         <div data-include="partials/mobile-header.html"></div>
         <div id="section-container">
             <div id="left-section">
-                <div id="nav-logo" tabindex="0" role="button" aria-label="Go to home" onclick="setActiveTab(0);goToSection(0,0);render(true)">
+                <!-- Breadcrumb for whatever page is currently open, e.g.
+                     "portfolio / UI Elements / Theme Switcher / Font" --
+                     populated by js/tui.js's goToPage() into #nav-location-content. -->
+                <div id="nav-location-panel" tabindex="0" role="button" aria-label="Open file explorer" onclick="goToPage('explorer')">
+                    <div id="nav-location-content"></div>
+                </div>
+                <!-- #nav-panel is its own bordered panel; #nav-scroll-area
+                     inside keeps its own RTL scrollbar-on-the-left trick
+                     unaffected by that border. Populated entirely by
+                     js/render-lists.js as one collapsible folder/page tree
+                     (Me, Experience/Education, Coding Projects, UI Elements,
+                     Skills - Tools, Contact Info are all top-level
+                     folders/pages inside this single list -- see js/tui.js). -->
+                <div id="nav-panel">
+                    <div id="nav-scroll-area" tabindex="0" aria-label="Section navigation"></div>
+                </div>
+                <!-- Mini live-demo switcher (Lofi/Theme/Site Status),
+                     populated by js/nav-widget-panel.js into #nav-widget-content
+                     -- reuses the same mount functions as the home page's tiles. -->
+                <div id="nav-widget-panel">
+                    <div id="nav-widget-content"></div>
+                </div>
+                <div id="nav-logo" tabindex="0" role="button" aria-label="Go to home" onclick="goToPage('home')">
                     <div id="logo-container-nav">
                         <img loading="eager" src="data/images/logo.png" alt="Aaron C." decoding="async" width="550" height="165">
                     </div>
                 </div>
-                <div id="nav-scroll-area" tabindex="0" aria-label="Section navigation">
-                    <div class="container" id="me">
-                        <div class="container-content">
-                            <div class="title decorating-text">
-                                <p>Me</p>
-                                <div></div>
-                            </div>
-                            <div class="ui-list">
-                                <div class="nav-page-item"><span class="tree-prefix">├──</span>Home</div>
-                                <div class="nav-page-item"><span class="tree-prefix">└──</span>About</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container" id="experience">
-                        <div class="container-content">
-                            <div id="experience-title" class="title decorating-text">
-                                <p>
-                                    Experience / Education
-                                </p>
-                                <div></div>
-                            </div>
-                            <div class="ui-list"></div>
-                        </div>
-                    </div>
-                    <div class="container" id="projects">
-                        <div class="container-content">
-                            <div class="title decorating-text">
-                                <p>Coding Projects</p>
-                                <div></div>
-                            </div>
-                            <div class="ui-list"></div>
-                        </div>
-                    </div>
-                    <div class="container" id="ui-elements">
-                        <div class="container-content">
-                            <div id="ui-elements-title" class="title decorating-text">
-                                <p>
-                                    UI Elements
-                                </p>
-                                <div></div>
-                            </div>
-                            <div class="ui-list"></div>
-                        </div>
-                    </div>
-                    <div class="container" id="skills">
-                        <div class="container-content">
-                            <div id="skills-title" class="title decorating-text">
-                                <p>
-                                    Skills - Tools
-                                </p>
-                                <div></div>
-                            </div>
-                            <div class="ui-list"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="container" id="contact">
-                    <div class="container-content">
-                        <div class="title decorating-text">
-                            <p>
-                                Contact Info
-                            </p>
-                            <div></div>
-                        </div>
-                        <p id="contact-section-paragraph">
-                            A few ways to find me, <span class="text-green">socials</span> included.
-                        </p>
-                    </div>
-                </div>
             </div>
             <div id="right-section">
-                <button id="mobile-back-button" type="button">&lsaquo; back</button>
                 <div class="container h-fill" id="main-content" tabindex="0" aria-label="Main content">
                     <div class="container-content">
                         <div id="logo-container">
@@ -166,67 +120,7 @@
                         <div class="home-hero">
                             <h1 class="home-hero-name">Hi, I'm <span class="text-blue">Aaron Cheung</span></h1>
                             <p class="home-hero-tagline">A <span class="text-green">software engineer</span> with an <span class="text-green">artist</span>'s eye.</p>
-                            <p class="home-hero-meta"><span class="text-green">Frontend</span> &amp; <span class="text-green">Full-stack</span> developer &middot; CS grad, <span class="text-blue">UT Dallas</span> &middot; open to relocating anywhere<span class="cursor-blink"></span></p>
-                        </div>
-
-                        <div class="home-section">
-                            <div class="title decorating-text">
-                                <p>my other sites</p>
-                                <div></div>
-                            </div>
-                            <div class="tile-grid">
-                                <div class="live-tile live-tile-site" id="tile-art" tabindex="0" role="button" onclick="setActiveTab(2);goToSection(2,2);render(true)">
-                                    <p class="live-tile-title">[Art Portfolio]</p>
-                                    <div class="live-tile-frame tile-site-frame">
-                                        <img src="data/images/home-tile-art.jpg" alt="Art Portfolio homepage preview" loading="lazy">
-                                    </div>
-                                    <p class="live-tile-caption">glitch/error-window art gallery</p>
-                                </div>
-                                <div class="live-tile live-tile-site" id="tile-music" tabindex="0" role="button" onclick="setActiveTab(2);goToSection(2,3);render(true)">
-                                    <p class="live-tile-title">[Music Memoir]</p>
-                                    <div class="live-tile-frame tile-site-frame">
-                                        <img src="data/images/home-tile-music.jpg" alt="Music Memoir homepage preview" loading="lazy">
-                                    </div>
-                                    <p class="live-tile-caption">an essay on music, in chapters</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="home-section">
-                            <div class="title decorating-text">
-                                <p>live demos</p>
-                                <div></div>
-                            </div>
-                            <div class="tile-grid">
-                                <div class="live-tile" id="tile-lofi" onclick="setActiveTab(2);goToSection(2,9);render(true)">
-                                    <button type="button" class="live-tile-title" onclick="event.stopPropagation();setActiveTab(2);goToSection(2,9);render(true)">[Lofi Generator]</button>
-                                    <div class="live-tile-frame tile-lofi-frame" id="tile-lofi-frame">
-                                        <button id="tile-lofi-play-btn" class="footer-tray-btn tile-lofi-play-btn" onclick="event.stopPropagation();setLofiPlaying(!getLofiPlaying())" aria-label="Play Lofi Generator, plays across the whole site">▶</button>
-                                    </div>
-                                    <p class="live-tile-caption">reacts while it's playing</p>
-                                </div>
-                                <div class="live-tile" id="tile-theme" onclick="setActiveTab(3);goToSection(3,0);render(true)">
-                                    <button type="button" class="live-tile-title" onclick="event.stopPropagation();setActiveTab(3);goToSection(3,0);render(true)">[Theme Switcher]</button>
-                                    <div class="live-tile-frame tile-theme-frame">
-                                        <span class="tile-theme-icon" aria-hidden="true">◐</span>
-                                        <span class="tile-theme-icon" aria-hidden="true">Aa</span>
-                                        <button class="footer-tray-btn" onclick="event.stopPropagation();setCrt(!getCrt())" aria-label="Toggle CRT overlay">▦</button>
-                                        <button class="footer-tray-btn" onclick="event.stopPropagation();setReducedMotion(!getReducedMotion())" aria-label="Toggle reduced motion">▶</button>
-                                        <button class="footer-tray-btn" onclick="event.stopPropagation();toggleTheme()" aria-label="Toggle light/dark theme">☾</button>
-                                    </div>
-                                    <p class="live-tile-caption">toggle to change the site, live</p>
-                                </div>
-                                <div class="live-tile" id="tile-jumpy" tabindex="0" role="button" onclick="setActiveTab(2);goToSection(2,4);render(true)">
-                                    <p class="live-tile-title">[Jumpy]</p>
-                                    <div class="live-tile-frame" id="tile-jumpy-board"></div>
-                                    <p class="live-tile-caption">play against it</p>
-                                </div>
-                                <div class="live-tile" id="tile-heatmap" tabindex="0" role="button" onclick="setActiveTab(2);goToSection(2,5);render(true)">
-                                    <p class="live-tile-title">[Cursor Heatmap]</p>
-                                    <div class="live-tile-frame tile-heatmap-boxed" id="tile-heatmap-frame"></div>
-                                    <p class="live-tile-caption">move to reveal</p>
-                                </div>
-                            </div>
+                            <p class="home-hero-meta"><span class="text-green">Frontend</span> &amp; <span class="text-green">Full-stack</span> developer &middot; CS grad, <span class="text-blue">Dallas, Texas</span> &middot; open to relocating anywhere<span class="cursor-blink"></span></p>
                         </div>
 
                         <div class="home-section">
@@ -238,6 +132,66 @@
                             <p>If you're looking to hire, my <a href="/aaron_cheung_resume.pdf" target="_blank" class="text-purple">resume</a> is here.</p>
                             <p>The best way to reach me is email: <span class="text-purple">contact@aaroncheung.me</span>.</p>
                             <p>Code lives on <a href="https://github.com/aaroncheung-me" target="_blank" class="text-purple">GitHub</a>, and I'm on <a href="https://www.linkedin.com/in/aaron-c-cheung/" target="_blank" class="text-purple">LinkedIn</a>.</p>
+                        </div>
+
+                        <div class="home-section">
+                            <div class="title decorating-text">
+                                <p>live demos</p>
+                                <div></div>
+                            </div>
+                            <div class="tile-grid">
+                                <div class="live-tile" id="tile-lofi" onclick="goToPage('proj-lofi')">
+                                    <button type="button" class="live-tile-title" onclick="event.stopPropagation();goToPage('proj-lofi')">[Lofi_Generator]</button>
+                                    <div class="live-tile-frame tile-lofi-frame" id="tile-lofi-frame">
+                                        <button id="tile-lofi-play-btn" class="footer-tray-btn tile-lofi-play-btn" onclick="event.stopPropagation();setLofiPlaying(!getLofiPlaying())" aria-label="Play Lofi Generator, plays across the whole site">▶</button>
+                                    </div>
+                                    <p class="live-tile-caption">reacts while it's playing</p>
+                                </div>
+                                <div class="live-tile" id="tile-theme" onclick="goToPage('ui-overview-theme')">
+                                    <button type="button" class="live-tile-title" onclick="event.stopPropagation();goToPage('ui-overview-theme')">[Theme_Switcher]</button>
+                                    <div class="live-tile-frame tile-theme-frame">
+                                        <span class="tile-theme-icon" aria-hidden="true">◐</span>
+                                        <span class="tile-theme-icon" aria-hidden="true">Aa</span>
+                                        <button class="footer-tray-btn" onclick="event.stopPropagation();setCrt(!getCrt())" aria-label="Toggle CRT overlay">▦</button>
+                                        <button class="footer-tray-btn" onclick="event.stopPropagation();setReducedMotion(!getReducedMotion())" aria-label="Toggle reduced motion">▶</button>
+                                        <button class="footer-tray-btn" onclick="event.stopPropagation();toggleTheme()" aria-label="Toggle light/dark theme">☾</button>
+                                    </div>
+                                    <p class="live-tile-caption">toggle to change the site, live</p>
+                                </div>
+                                <div class="live-tile" id="tile-jumpy" tabindex="0" role="button" onclick="goToPage('proj-jumpy')">
+                                    <p class="live-tile-title">[Jumpy]</p>
+                                    <div class="live-tile-frame tile-jumpy-board" id="tile-jumpy-board"></div>
+                                    <p class="live-tile-caption">play against it</p>
+                                </div>
+                                <div class="live-tile" id="tile-heatmap" tabindex="0" role="button" onclick="goToPage('proj-heatmap')">
+                                    <p class="live-tile-title">[Cursor_Heatmap]</p>
+                                    <div class="live-tile-frame tile-heatmap-boxed" id="tile-heatmap-frame"></div>
+                                    <p class="live-tile-caption">move to reveal</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="home-section">
+                            <div class="title decorating-text">
+                                <p>my other sites</p>
+                                <div></div>
+                            </div>
+                            <div class="tile-grid">
+                                <div class="live-tile live-tile-site" id="tile-art" tabindex="0" role="button" onclick="goToPage('proj-art')">
+                                    <p class="live-tile-title">[Art_Portfolio]</p>
+                                    <div class="live-tile-frame tile-site-frame">
+                                        <img src="data/images/home-tile-art.jpg" alt="Art Portfolio homepage preview" loading="lazy">
+                                    </div>
+                                    <p class="live-tile-caption">glitch/error-window art gallery</p>
+                                </div>
+                                <div class="live-tile live-tile-site" id="tile-music" tabindex="0" role="button" onclick="goToPage('proj-music')">
+                                    <p class="live-tile-title">[Music_Memoir]</p>
+                                    <div class="live-tile-frame tile-site-frame">
+                                        <img src="data/images/home-tile-music.jpg" alt="Music Memoir homepage preview" loading="lazy">
+                                    </div>
+                                    <p class="live-tile-caption">an essay on music, in chapters</p>
+                                </div>
+                            </div>
                         </div>
 
                     </div>

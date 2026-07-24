@@ -50,8 +50,7 @@ function homeJumpyStep(state) {
   jumpyAdvanceState(state, move);
 }
 
-function startJumpyTile() {
-  const boardEl = document.getElementById('tile-jumpy-board');
+function startJumpyTile(boardEl) {
   if (!boardEl) return;
 
   let state = homeJumpyNewState();
@@ -73,8 +72,8 @@ function startJumpyTile() {
   }, HOME_JUMPY_MOVE_MS);
 }
 
-function initTileJumpy() {
-  loadScriptOnce('projects/jumpy/jumpy-engine.js', startJumpyTile);
+function initTileJumpy(boardEl) {
+  loadScriptOnce('projects/jumpy/jumpy-engine.js', () => startJumpyTile(boardEl));
 }
 
 // Cursor Heatmap: the tile itself is the heatmap zone
@@ -84,8 +83,7 @@ const HOME_HEATMAP_MOVE_ALPHA = 16;
 const HOME_HEATMAP_DWELL_ALPHA = 8;
 const HOME_HEATMAP_TICK_MS = 100;
 
-function startHeatmapTile() {
-  const frame = document.getElementById('tile-heatmap-frame');
+function startHeatmapTile(frame) {
   if (!frame) return;
   // A canvas already here is never a live instance to preserve -- it's
   // either stale markup baked into tui.js's cached HOME_CONTENT_HTML (this
@@ -197,8 +195,8 @@ function startHeatmapTile() {
   new ResizeObserver(ensureSize).observe(frame);
 }
 
-function initTileHeatmap() {
-  loadScriptOnce('projects/heatmap/cursor-heatmap-demo.js', startHeatmapTile);
+function initTileHeatmap(frame) {
+  loadScriptOnce('projects/heatmap/cursor-heatmap-demo.js', () => startHeatmapTile(frame));
 }
 
 // Lofi Generator: doesn't auto-play (that's the footer toggle's job, and
@@ -207,8 +205,7 @@ function initTileHeatmap() {
 // currently doing. Flat line if nothing's playing anywhere on the site,
 // live scope if it is.
 
-function startLofiTile() {
-  const frame = document.getElementById('tile-lofi-frame');
+function startLofiTile(frame) {
   if (!frame) return;
   // See startHeatmapTile()'s comment -- a pre-existing canvas here can be
   // stale markup from the same HOME_CONTENT_HTML race, not a live instance.
@@ -288,17 +285,17 @@ function startLofiTile() {
   if (window.LofiSketch) window.LofiSketch.onStateChange(refreshVisual);
 }
 
-function initTileLofi() {
-  loadLofiSketchAssets(startLofiTile);
+function initTileLofi(frame) {
+  loadLofiSketchAssets(() => startLofiTile(frame));
 }
 
 // Lazy-init wiring
 
 function setupHomeTiles() {
   const tileInits = {
-    'tile-jumpy': initTileJumpy,
-    'tile-heatmap': initTileHeatmap,
-    'tile-lofi': initTileLofi,
+    'tile-jumpy': () => initTileJumpy(document.getElementById('tile-jumpy-board')),
+    'tile-heatmap': () => initTileHeatmap(document.getElementById('tile-heatmap-frame')),
+    'tile-lofi': () => initTileLofi(document.getElementById('tile-lofi-frame')),
   };
   const initialized = new Set();
 

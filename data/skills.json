@@ -1,207 +1,338 @@
 {
   "data": [
     {
-      "category": "Languages",
-      "description": "The languages I've coded in, from daily drivers to deep coursework.",
-      "skills": [
+      "type": "page",
+      "id": "skill-overview-root",
+      "name": "index.md",
+      "content": [
+        "Twenty things, one page, no clicking through each one just to see where it stands. Every name below links to its own fuller writeup — origin story, where it's been used, the occasional editorial note — but the status next to it is the whole scannable version.",
+        "<h2>Languages</h2><div class=\"skills-grid-table\"><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-javascript')\">[JavaScript]</button><span class=\"text-green skills-grid-status\">daily driver</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-html')\">[HTML]</button><span class=\"text-green skills-grid-status\">daily driver</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-css')\">[CSS]</button><span class=\"text-green skills-grid-status\">daily driver</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-typescript')\">[TypeScript]</button><span class=\"text-green skills-grid-status\">production-tested</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-python')\">[Python]</button><span class=\"text-green skills-grid-status\">solid</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-sql')\">[SQL]</button><span class=\"text-green skills-grid-status\">solid</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-cpp')\">[C++]</button><span class=\"text-green skills-grid-status\">coursework-deep</span></div></div>",
+        "<h2>Frameworks & Libraries</h2><div class=\"skills-grid-table\"><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-react')\">[React]</button><span class=\"text-green skills-grid-status\">production-tested</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-nodejs')\">[Node.js]</button><span class=\"text-green skills-grid-status\">production-tested</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-express')\">[Express]</button><span class=\"text-green skills-grid-status\">production-tested</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-tailwind')\">[Tailwind CSS]</button><span class=\"text-green skills-grid-status\">production-tested</span></div></div>",
+        "<h2>Tools & Platforms</h2><div class=\"skills-grid-table\"><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-git')\">[Git]</button><span class=\"text-green skills-grid-status\">daily driver</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-supabase')\">[Supabase]</button><span class=\"text-green skills-grid-status\">production-tested</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-clerk')\">[Clerk]</button><span class=\"text-green skills-grid-status\">production-tested</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-mysql')\">[MySQL]</button><span class=\"text-green skills-grid-status\">solid</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-selenium')\">[Selenium]</button><span class=\"text-green skills-grid-status\">solid</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-jira')\">[Jira]</button><span class=\"text-green skills-grid-status\">solid</span></div></div>",
+        "<h2>Design</h2><div class=\"skills-grid-table\"><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-ui-ux')\">[UI/UX Design]</button><span class=\"text-green skills-grid-status\">daily driver</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-krita')\">[Krita]</button><span class=\"text-green skills-grid-status\">daily driver</span></div><div class=\"skills-grid-row\"><button class=\"skill-pkg-link\" onclick=\"goToPage('skill-figma')\">[Figma]</button><span class=\"text-green skills-grid-status\">solid</span></div></div>"
+      ]
+    },
+    {
+      "type": "folder",
+      "id": "languages",
+      "name": "Languages",
+      "children": [
         {
+          "type": "page",
+          "id": "skill-javascript",
           "name": "JavaScript",
           "status": "daily driver",
           "origin": "self-taught, building this website",
           "used_in": [
-            {"label": "this site", "section": 2, "item": 1},
-            {"label": "jumpy", "section": 2, "item": 4},
-            {"label": "cursor heatmap", "section": 2, "item": 5},
-            {"label": "database", "section": 2, "item": 6},
-            {"label": "ascii art", "section": 2, "item": 7}
+            {
+              "label": "this site",
+              "id": "proj-aaroncheungme"
+            },
+            {
+              "label": "jumpy",
+              "id": "proj-jumpy"
+            },
+            {
+              "label": "cursor heatmap",
+              "id": "proj-heatmap"
+            },
+            {
+              "label": "database",
+              "id": "proj-database"
+            },
+            {
+              "label": "ascii art",
+              "id": "proj-ascii"
+            }
           ],
           "notes": "no frameworks between me and it here. every behavior on this site is hand-written js."
         },
         {
+          "type": "page",
+          "id": "skill-html",
           "name": "HTML",
           "status": "daily driver",
           "origin": "self-taught, building this website",
           "used_in": [
-            {"label": "this site", "section": 2, "item": 1}
+            {
+              "label": "this site",
+              "id": "proj-aaroncheungme"
+            }
           ],
           "notes": "written by hand. no templating engines, no generators."
         },
         {
+          "type": "page",
+          "id": "skill-css",
           "name": "CSS",
           "status": "daily driver",
           "origin": "self-taught, building this website",
           "used_in": [
-            {"label": "this site", "section": 2, "item": 1},
-            {"label": "theme switcher", "section": 3, "item": 0}
+            {
+              "label": "this site",
+              "id": "proj-aaroncheungme"
+            },
+            {
+              "label": "theme switcher",
+              "id": "ui-overview-root"
+            }
           ],
           "notes": "the crt overlay, the tui layout, every palette switch — all css."
         },
         {
+          "type": "page",
+          "id": "skill-typescript",
           "name": "TypeScript",
           "status": "production-tested",
           "origin": "trm capstone",
           "used_in": [
-            {"label": "trm", "section": 1, "item": 3}
+            {
+              "label": "trm",
+              "id": "exp-trm"
+            }
           ],
           "notes": "used across trm's frontend codebase. js's upgrade when a team's in the repo."
         },
         {
+          "type": "page",
+          "id": "skill-python",
           "name": "Python",
           "status": "solid",
           "origin": "a&m coursework, then the twitter bot",
           "used_in": [
-            {"label": "twitter bot", "section": 2, "item": 8}
+            {
+              "label": "twitter bot",
+              "id": "proj-twitter"
+            }
           ],
           "notes": "where the bot's decision logic lives."
         },
         {
+          "type": "page",
+          "id": "skill-sql",
           "name": "SQL",
           "status": "solid",
           "origin": "utd database coursework",
           "used_in": [
-            {"label": "database demo", "section": 2, "item": 6}
+            {
+              "label": "database demo",
+              "id": "proj-database"
+            }
           ],
           "notes": "designed the schema and wrote the fifteen queries running live in the demo, relational division included."
         },
         {
+          "type": "page",
+          "id": "skill-cpp",
           "name": "C++",
           "status": "coursework-deep",
           "origin": "a&m, where a chess assignment started all this",
           "used_in": [
-            {"label": "jumpy", "section": 2, "item": 4}
+            {
+              "label": "jumpy",
+              "id": "proj-jumpy"
+            }
           ],
           "notes": "where i learned what memory actually costs."
         }
       ]
     },
     {
-      "category": "Frameworks & Libraries",
-      "description": "What I've built on top of.",
-      "skills": [
+      "type": "folder",
+      "id": "frameworks",
+      "name": "Frameworks & Libraries",
+      "children": [
         {
+          "type": "page",
+          "id": "skill-react",
           "name": "React",
           "status": "production-tested",
           "origin": "trm capstone",
           "used_in": [
-            {"label": "the review mediator", "section": 1, "item": 3}
+            {
+              "label": "the review mediator",
+              "id": "exp-trm"
+            }
           ],
           "notes": "role-based dashboards, responsive ui, and features built directly with the platform owner."
         },
         {
+          "type": "page",
+          "id": "skill-nodejs",
           "name": "Node.js",
           "status": "production-tested",
           "origin": "trm capstone",
           "used_in": [
-            {"label": "the review mediator", "section": 1, "item": 3}
+            {
+              "label": "the review mediator",
+              "id": "exp-trm"
+            }
           ],
           "notes": "the runtime behind trm's backend."
         },
         {
+          "type": "page",
+          "id": "skill-express",
           "name": "Express",
           "status": "production-tested",
           "origin": "trm capstone",
           "used_in": [
-            {"label": "the review mediator", "section": 1, "item": 3}
+            {
+              "label": "the review mediator",
+              "id": "exp-trm"
+            }
           ],
           "notes": "api routing and jwt middleware — the first lock on trm's security layer."
         },
         {
+          "type": "page",
+          "id": "skill-tailwind",
           "name": "Tailwind CSS",
           "status": "production-tested",
           "origin": "trm capstone",
           "used_in": [
-            {"label": "the review mediator", "section": 1, "item": 3}
+            {
+              "label": "the review mediator",
+              "id": "exp-trm"
+            }
           ],
           "notes": "with flowbite components on top. fast to build with once you stop fighting the classnames."
         }
       ]
     },
     {
-      "category": "Tools & Platforms",
-      "description": "The tools and platforms I reach for.",
-      "skills": [
+      "type": "folder",
+      "id": "tools-platforms",
+      "name": "Tools & Platforms",
+      "children": [
         {
+          "type": "page",
+          "id": "skill-git",
           "name": "Git",
           "status": "daily driver",
           "origin": "late start, early regret",
           "notes": "version control across every project on this site. embarrassingly, i started later than i should have."
         },
         {
+          "type": "page",
+          "id": "skill-supabase",
           "name": "Supabase",
           "status": "production-tested",
           "origin": "trm capstone",
           "used_in": [
-            {"label": "the review mediator", "section": 1, "item": 3}
+            {
+              "label": "the review mediator",
+              "id": "exp-trm"
+            }
           ],
           "notes": "row-level security policies — the second lock on trm's security layer."
         },
         {
+          "type": "page",
+          "id": "skill-clerk",
           "name": "Clerk",
           "status": "production-tested",
           "origin": "trm capstone",
           "used_in": [
-            {"label": "the review mediator", "section": 1, "item": 3}
+            {
+              "label": "the review mediator",
+              "id": "exp-trm"
+            }
           ],
           "notes": "role-based auth and dynamic routing — each user lands exactly where their role allows."
         },
         {
+          "type": "page",
+          "id": "skill-mysql",
           "name": "MySQL",
           "status": "solid",
           "origin": "utd database coursework",
           "used_in": [
-            {"label": "database demo", "section": 2, "item": 6}
+            {
+              "label": "database demo",
+              "id": "proj-database"
+            }
           ],
           "notes": "the relational database running live on this site."
         },
         {
+          "type": "page",
+          "id": "skill-selenium",
           "name": "Selenium",
           "status": "solid",
           "origin": "twitter bot automation project",
           "used_in": [
-            {"label": "twitter bot", "section": 2, "item": 8}
+            {
+              "label": "twitter bot",
+              "id": "proj-twitter"
+            }
           ],
           "notes": "browser automation chosen deliberately over the api."
         },
         {
+          "type": "page",
+          "id": "skill-jira",
           "name": "Jira",
           "status": "solid",
           "origin": "trm capstone",
           "used_in": [
-            {"label": "the review mediator", "section": 1, "item": 3}
+            {
+              "label": "the review mediator",
+              "id": "exp-trm"
+            }
           ],
           "notes": "sprint tracking and task coordination across the trm team."
         }
       ]
     },
     {
-      "category": "Design",
-      "description": "Tools for making things look the way I mean them to.",
-      "skills": [
+      "type": "folder",
+      "id": "design",
+      "name": "Design",
+      "children": [
         {
+          "type": "page",
+          "id": "skill-ui-ux",
           "name": "UI/UX Design",
           "status": "daily driver",
           "origin": "this site, iteration after iteration",
           "used_in": [
-            {"label": "this site", "section": 2, "item": 1},
-            {"label": "theme switcher", "section": 3, "item": 0}
+            {
+              "label": "this site",
+              "id": "proj-aaroncheungme"
+            },
+            {
+              "label": "theme switcher",
+              "id": "ui-overview-root"
+            }
           ],
           "notes": "the tui aesthetic, the color system, the control panel layout — design is how this site found its voice."
         },
         {
+          "type": "page",
+          "id": "skill-krita",
           "name": "Krita",
           "status": "daily driver",
           "origin": "digital art, long before the code",
           "used_in": [
-            {"label": "ascii art", "section": 2, "item": 7}
+            {
+              "label": "ascii art",
+              "id": "proj-ascii"
+            }
           ],
           "notes": "where this site's logo was drawn before my converter got hold of it."
         },
         {
+          "type": "page",
+          "id": "skill-figma",
           "name": "Figma",
           "status": "solid",
           "origin": "trm capstone",
           "used_in": [
-            {"label": "the review mediator", "section": 1, "item": 3}
+            {
+              "label": "the review mediator",
+              "id": "exp-trm"
+            }
           ],
           "notes": "wireframing and prototyping before building."
         }

@@ -62,6 +62,10 @@ function triggerEasterEgg() {
   }, 200);
 }
 
+// Number-key section jumps and arrow-key section/item cycling were removed
+// along with the old flat (sectionIndex, itemIndex) nav model -- the plan is
+// to rebuild them against the new folder tree (up/down highlights a row,
+// left/right or Enter opens/closes it) once that's proven out.
 function handleKeyboardNav(event) {
   checkKonami(event.key);
 
@@ -75,42 +79,6 @@ function handleKeyboardNav(event) {
       openCommandPalette();
     }
     return;
-  }
-
-  const num = parseInt(event.key, 10);
-  if (num >= 1 && num <= 6) {
-    event.preventDefault();
-    goToSection(num - 1);
-    render(true);
-    return;
-  }
-
-  if (typeof left_sections === "undefined") {
-    return;
-  }
-
-  const sIdx = currentPosition.sectionIndex;
-  const iIdx = currentPosition.sectionItemIndex;
-  const count = left_sections.length;
-  const itemCount = left_sections[sIdx]?.items.length ?? 0;
-
-  if (event.key === "ArrowLeft") {
-    event.preventDefault();
-    goToSection((sIdx - 1 + count) % count);
-    render(true);
-  } else if (event.key === "ArrowRight") {
-    event.preventDefault();
-    goToSection((sIdx + 1) % count);
-    render(true);
-  }
-  else if (event.key === "ArrowUp" && itemCount > 0) {
-    event.preventDefault();
-    goToSection(sIdx, (iIdx - 1 + itemCount) % itemCount);
-    render(false);
-  } else if (event.key === "ArrowDown" && itemCount > 0) {
-    event.preventDefault();
-    goToSection(sIdx, (iIdx + 1) % itemCount);
-    render(false);
   }
 }
 

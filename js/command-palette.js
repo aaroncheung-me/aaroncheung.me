@@ -4,30 +4,22 @@ let commandPaletteOpen = false;
 let commandPaletteResults = [];
 let commandPaletteSelectedIndex = 0;
 
+const TOP_SECTION_LABELS = {
+  home: "home", experience: "experience & education", projects: "coding projects",
+  "ui-elements": "ui elements", skills: "skills & tools", contact: "contact",
+};
+
 function buildCommandPaletteIndex() {
-  if (typeof left_sections === "undefined") {
+  if (typeof PAGE_REGISTRY === "undefined") {
     return [];
   }
 
   const entries = [];
-  left_sections.forEach((section, sectionIndex) => {
+  PAGE_REGISTRY.forEach(({ node, topSection }, id) => {
     entries.push({
-      label: section.name.replace(/-/g, " "),
-      hint: "section",
-      sectionIndex,
-      itemIndex: 0,
-    });
-
-    section.items.forEach((item, itemIndex) => {
-      const text = item.textContent?.trim().replace(/^\|->?\s*/, "") || "";
-      if (text) {
-        entries.push({
-          label: text,
-          hint: section.name.replace(/-/g, " "),
-          sectionIndex,
-          itemIndex,
-        });
-      }
+      label: node.name ?? node.title,
+      hint: TOP_SECTION_LABELS[topSection] ?? topSection,
+      id,
     });
   });
 
@@ -99,8 +91,7 @@ function selectCommandPaletteResult() {
     return;
   }
   closeCommandPalette();
-  goToSection(entry.sectionIndex, entry.itemIndex);
-  render(true);
+  goToPage(entry.id);
 }
 
 function initCommandPalette() {
