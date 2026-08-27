@@ -1,0 +1,92 @@
+/* Studies site -- site-specific styles only. Everything else (nav tree,
+   breadcrumb, home hero, footer, theme toggles) comes from the shared
+   /css/tui.css, same as css/art.css and css/music.css do for their sites. */
+
+/* Case Study Nav widget: two stacked rows (progress bar + prev/title/next),
+   so it needs .live-tile-frame's centering overridden the same way
+   .nav-widget-status-frame already does on the main site. */
+.studies-widget-casenav-frame,
+.studies-widget-citations-frame,
+.studies-widget-exploring-frame {
+  display: block;
+  padding: 0.3rem 0.4rem;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.studies-casenav-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.studies-casenav-track {
+  flex: 1;
+  height: 4px;
+  background: var(--clr-hover-overlay);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.studies-casenav-fill {
+  height: 100%;
+  background: var(--clr-green);
+}
+
+.studies-casenav-count {
+  font-size: 0.75em;
+  color: var(--clr-primary-txt);
+  white-space: nowrap;
+}
+
+.studies-casenav-current {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.studies-casenav-title {
+  font-size: 0.85em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.studies-casenav-arrow {
+  background: none;
+  border: none;
+  color: var(--clr-primary-txt);
+  font-family: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 0.2rem;
+  flex-shrink: 0;
+}
+
+.studies-casenav-arrow:hover {
+  color: var(--clr-purple);
+}
+
+.studies-citation-text {
+  font-size: 0.85em;
+  margin: 0 0 0.3rem;
+}
+
+.studies-citation-note {
+  font-size: 0.75em;
+  color: var(--clr-primary-txt);
+  margin: 0;
+}
+
+.studies-exploring-text {
+  font-size: 0.85em;
+  margin: 0;
+}
+
+.studies-widget-empty {
+  font-size: 0.8em;
+  color: var(--clr-primary-txt);
+  margin: 0;
+}

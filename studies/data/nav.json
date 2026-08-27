@@ -1,0 +1,32 @@
+{
+  "data": [
+    {
+      "type": "folder",
+      "id": "case-studies",
+      "name": "Case Studies",
+      "children": [
+        {
+          "type": "page",
+          "id": "case-study-example",
+          "title": "[Case Study Title]",
+          "date": "[Timeframe, e.g. Spring 2026]",
+          "technologies": [
+            "<span class=\"text-blue\">[Method / Field 1]   </span>",
+            "<span class=\"text-blue\">[Method / Field 2]   </span>"
+          ],
+          "summary": "[One or two sentences framing the question this case study asks, and why it matters to you.]",
+          "content": [
+            "[Replace this page with a real case study. This is the one example folder/page the scaffold ships with -- everything else in Case Studies you add yourself, the same way: either a page like this one directly under the Case Studies folder, or a new sibling folder here if a case study needs its own sub-pages (data, methodology, findings, etc.).]",
+            "<h2>Problem</h2>",
+            "[What question or problem motivated this work?]",
+            "<h2>Approach</h2>",
+            "[What did you do -- methodology, sources, process?]",
+            "<h2>Findings / Reflection</h2>",
+            "[What did you conclude, and what would you still want to explore?]"
+          ],
+          "closingQuote": "[Optional closing line -- a takeaway, a quote you're citing, or what this taught you.]"
+        }
+      ]
+    }
+  ]
+}

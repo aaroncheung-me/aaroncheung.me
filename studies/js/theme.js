@@ -264,14 +264,11 @@ function syncThemeButtons() {
 // Add an entry here (and a matching tab in partials/footer.html) when a new
 // minisite goes live. '/' must stay first -- currentSiteTab() falls back to
 // it for any unmatched path.
-// '/studies/' entry deliberately left out for now -- that site isn't done
-// yet, so it's kept off the live footer. Re-add
-// { path: '/studies/', label: 'aaroncheung.me/studies/', shortLabel: '/studies/', elId: 'footer-tab-studies', navLabel: 'academic/studies site' }
-// (and the matching button in partials/footer.html) once it's ready to link.
 const SITE_TABS = [
   { path: '/',      label: 'aaroncheung.me/portfolio/', shortLabel: '/portfolio/', elId: 'footer-tab-portfolio', navLabel: 'main portfolio' },
   { path: '/art/',  label: 'aaroncheung.me/art/',       shortLabel: '/art/',       elId: 'footer-tab-art',       navLabel: 'art portfolio' },
   { path: '/sound/', label: 'aaroncheung.me/sound/',     shortLabel: '/sound/',     elId: 'footer-tab-sound',     navLabel: 'sound/music site' },
+  { path: '/studies/', label: 'aaroncheung.me/studies/', shortLabel: '/studies/',  elId: 'footer-tab-studies',  navLabel: 'academic/studies site' },
 ];
 
 function currentSiteTab() {
