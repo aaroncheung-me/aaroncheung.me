@@ -282,11 +282,29 @@ function startLofiTile(frame) {
   }
 
   refreshVisual();
-  if (window.LofiSketch) window.LofiSketch.onStateChange(refreshVisual);
+  if (window.LofiSketch) {
+    window.LofiSketch.onStateChange(refreshVisual);
+  } else {
+    // LofiSketch (and its multi-MB sample data) only loads once playback is
+    // actually started somewhere -- this tile's own play button, the footer
+    // toggle, the nav widget, or the Projects page -- never just from this
+    // tile scrolling into view. Wait for it instead of forcing the load.
+    const waitForEngine = setInterval(() => {
+      if (!document.body.contains(canvas)) { clearInterval(waitForEngine); return; }
+      if (window.LofiSketch) {
+        clearInterval(waitForEngine);
+        window.LofiSketch.onStateChange(refreshVisual);
+        refreshVisual();
+      }
+    }, 1000);
+  }
 }
 
 function initTileLofi(frame) {
-  loadLofiSketchAssets(() => startLofiTile(frame));
+  // Doesn't load the engine itself (see startLofiTile's comment) -- just
+  // builds the canvas and draws the idle line, cheap enough to do the
+  // moment this tile scrolls into view.
+  startLofiTile(frame);
 }
 
 // Lazy-init wiring
