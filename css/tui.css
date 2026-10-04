@@ -400,6 +400,71 @@ svg {
   font-family: var(--font-mono);
 }
 
+/* Inbox Aggregator tile: account chips on top, the merged list below. */
+.tile-inbox-frame {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.tile-inbox-chips {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.3rem;
+}
+
+.tile-inbox-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--clr-primary-txt);
+}
+
+.tile-inbox-chip::before {
+  content: '';
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--acct);
+}
+
+.tile-inbox-chip-ping::before {
+  animation: tile-inbox-ping 0.6s ease-out;
+}
+
+@keyframes tile-inbox-ping {
+  0% { box-shadow: 0 0 0 0 var(--acct); }
+  100% { box-shadow: 0 0 0 0.35rem transparent; }
+}
+
+.tile-inbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  overflow: hidden;
+}
+
+.tile-inbox-row {
+  border-left: 3px solid var(--acct);
+  background: var(--clr-tertiary-bg);
+  padding: 0.15rem 0.4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.tile-inbox-row-new {
+  animation: tile-inbox-drop 0.35s ease-out;
+}
+
+@keyframes tile-inbox-drop {
+  from { opacity: 0; transform: translateY(-0.6rem); }
+  to { opacity: 1; transform: none; }
+}
+
 /* .live-tile-frame's shared flex-center layout suits one centered child
    (a canvas, an icon row) -- the status widget stacks two left-aligned text
    lines instead, so it needs block layout, not centering. */
@@ -1156,6 +1221,17 @@ pre {
 
 .nav-folder-node.expanded > .nav-folder .nav-caret {
   transform: rotate(90deg);
+}
+
+/* An empty caret-sized slot on every page row, like a real file explorer:
+   without it, page names start a caret's width left of folder names at the
+   same depth, so a file inside a folder read as sitting behind it instead.
+   Same width and margins as .nav-caret, so every name at a depth lines up. */
+.nav-page::before {
+  content: "";
+  flex-shrink: 0;
+  width: 1.2em;
+  margin: 0 0.15em;
 }
 
 /* Solid background bar, not just colored text -- lazygit's real selection

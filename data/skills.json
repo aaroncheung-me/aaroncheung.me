@@ -43,6 +43,10 @@
             {
               "label": "ascii art",
               "id": "proj-ascii"
+            },
+            {
+              "label": "inbox aggregator",
+              "id": "proj-inbox"
             }
           ],
           "notes": "no frameworks between me and it here. every behavior on this site is hand-written js."
@@ -117,6 +121,10 @@
             {
               "label": "database demo",
               "id": "proj-database"
+            },
+            {
+              "label": "inbox aggregator",
+              "id": "proj-inbox"
             }
           ],
           "notes": "designed the schema and wrote the fifteen queries running live in the demo, relational division included."
@@ -152,6 +160,10 @@
             {
               "label": "the review mediator",
               "id": "exp-trm"
+            },
+            {
+              "label": "inbox aggregator",
+              "id": "proj-inbox"
             }
           ],
           "notes": "role-based dashboards, responsive ui, and features built directly with the platform owner."
@@ -166,6 +178,10 @@
             {
               "label": "the review mediator",
               "id": "exp-trm"
+            },
+            {
+              "label": "inbox aggregator",
+              "id": "proj-inbox"
             }
           ],
           "notes": "the runtime behind trm's backend."
@@ -180,6 +196,10 @@
             {
               "label": "the review mediator",
               "id": "exp-trm"
+            },
+            {
+              "label": "inbox aggregator",
+              "id": "proj-inbox"
             }
           ],
           "notes": "api routing and jwt middleware — the first lock on trm's security layer."
@@ -223,6 +243,10 @@
             {
               "label": "the review mediator",
               "id": "exp-trm"
+            },
+            {
+              "label": "inbox aggregator",
+              "id": "proj-inbox"
             }
           ],
           "notes": "row-level security policies — the second lock on trm's security layer."

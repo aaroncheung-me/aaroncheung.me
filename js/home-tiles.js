@@ -307,6 +307,12 @@ function initTileLofi(frame) {
   startLofiTile(frame);
 }
 
+// Inbox Aggregator: the animation lives in projects/inbox-aggregator/inbox-tile.js
+
+function initTileInbox(frame) {
+  loadScriptOnce('projects/inbox-aggregator/inbox-tile.js', () => startInboxTile(frame));
+}
+
 // Lazy-init wiring
 
 function setupHomeTiles() {
@@ -314,6 +320,7 @@ function setupHomeTiles() {
     'tile-jumpy': () => initTileJumpy(document.getElementById('tile-jumpy-board')),
     'tile-heatmap': () => initTileHeatmap(document.getElementById('tile-heatmap-frame')),
     'tile-lofi': () => initTileLofi(document.getElementById('tile-lofi-frame')),
+    'tile-inbox': () => initTileInbox(document.getElementById('tile-inbox-frame')),
   };
   const initialized = new Set();
 

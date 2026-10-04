@@ -182,6 +182,27 @@
         "<span class=\"text-blue\">Procedural Audio Generation   </span>",
         "<span class=\"text-blue\">Canvas API   </span>"
       ]
+    },
+    {
+      "type": "page",
+      "id": "proj-inbox",
+      "name": "Inbox Aggregator",
+      "year": 2026,
+      "content": [
+        "<span class=\"text-blue\">Inbox Aggregator</span> puts every email account I have into one inbox, with notes, reminders, an <span class=\"text-green\">AI assistant</span> that reads my email and shows exactly where its answers came from, and throwaway addresses that delete themselves when they expire. It's a full product, not a demo: a <span class=\"text-blue\">React</span> app, an <span class=\"text-blue\">Express</span> server and a <span class=\"text-blue\">Postgres</span> database, installed on my laptop and my phone, and I use it every day.",
+        "My real inbox obviously can't go on a portfolio, so here's a <span class=\"text-green\">live, real</span> copy of the app running on a made-up person's mail instead. Open emails, ask the assistant \"How are my job applications going?\", write a reply and undo it. Nothing you do leaves this page, and a reload starts it fresh. Full <a href=\"https://github.com/aaroncheung-me/inbox-aggregator\" target=\"_blank\" class=\"text-purple\">source on GitHub</a>.",
+        "<div id='site-mirror' data-mirror-src='https://demo.inbox.aaroncheung.me/'><div id='site-mirror-chrome'><span class='site-mirror-dot'></span><span class='site-mirror-dot'></span><span class='site-mirror-dot'></span><span id='site-mirror-url'>demo.inbox.aaroncheung.me</span></div><div id='site-mirror-frame-wrap'><iframe id='site-mirror-iframe' title='Live demo of Inbox Aggregator'></iframe></div><div class='ui-demo'><button class='site-mirror-mode-btn active' data-mode='desktop' onclick=\"siteMirrorSetMode('desktop')\">desktop view</button><button class='site-mirror-mode-btn' data-mode='mobile' onclick=\"siteMirrorSetMode('mobile')\">mobile view</button></div></div>",
+        "<div class=\"project-explain\"><div class=\"project-explain-toggle\" role=\"button\" tabindex=\"0\" aria-expanded=\"false\" onclick=\"toggleProjectExplain(this)\" onkeydown=\"if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleProjectExplain(this)}\"><span class=\"project-explain-arrow\">&gt;</span><span class=\"project-explain-label\">[ deeper dive ]</span></div><div class=\"project-explain-body\"><p>The browser only ever signs in. Every piece of data goes through my own server, which checks who's asking on every request, and the server is the only thing allowed to touch the database.</p><pre>React app (Vercel)  ->  Express server (Render)  ->  Postgres + pgvector (Supabase)\n                                                ->  Gmail API, IMAP / SMTP\n                                                ->  Claude, OpenAI embeddings</pre><p>Every email provider plugs in through a <span class=\"text-purple\">connector</span> that hands back the same message shape, so the rest of the app never knows whether an email came from Gmail or a plain IMAP mailbox. Syncing is incremental: Gmail through its <span class=\"text-blue\">History API</span>, IMAP by remembering the last message it saw in each folder, so a sync only fetches what's new.</p><p>Search runs two ways at once: <span class=\"text-blue\">Postgres full-text search</span> for exact words and <span class=\"text-blue\">pgvector</span> similarity for meaning, merged with <span class=\"text-green\">reciprocal rank fusion</span>, then nudged toward personal and transactional mail and away from marketing. The assistant is a capped <span class=\"text-blue\">Claude</span> tool loop (search, read an email, read an attachment, search notes, write a note, draft a reply) streamed to the app as it works, and every citation is checked against what it actually read, so it can't cite an email it made up.</p><p>Undo send and Send later share one outbox table, and a single conditional update (waiting to sending) is the claim on an email, so even a restarted server catching up on overdue mail can never send anything twice. Mailbox credentials are encrypted (<span class=\"text-green\">AES-256-GCM</span>) before they're stored, every email's HTML is sanitized and shown in a sandboxed frame with a strict content security policy, and the \"connect a mailbox\" form refuses servers on private networks, so it can't be used to probe the network the server runs on.</p><p>The demo above was its own small puzzle. The app makes every server call through <span class=\"text-purple\">one file</span>, so a demo build swaps that file for an in-memory fake that answers exactly the way the server would, down to the same data shapes. The real app's code is otherwise untouched, and the real server's address isn't even in the demo's bundle.</p></div></div>"
+      ],
+      "technologies": [
+        "<span class=\"text-blue\">React   </span>",
+        "<span class=\"text-blue\">Node.js   </span>",
+        "<span class=\"text-blue\">Express   </span>",
+        "<span class=\"text-blue\">PostgreSQL   </span>",
+        "<span class=\"text-blue\">pgvector   </span>",
+        "<span class=\"text-blue\">Claude API   </span>",
+        "<span class=\"text-blue\">Gmail API   </span>"
+      ]
     }
   ]
 }
