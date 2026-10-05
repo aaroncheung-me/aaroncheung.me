@@ -10,7 +10,10 @@ const MAIN_CONTENT_SECTION = document
   .getElementById("main-content")
   ?.getElementsByClassName("container-content")[0];
 
-const HOME_CONTENT_HTML = MAIN_CONTENT_SECTION?.innerHTML ?? "";
+// Captured in initStudiesRouter(), not here -- has to wait until
+// renderWorkCards() (js/studies-cards.js) has filled in the "the work" grid,
+// since that grid starts empty in index.html's static markup.
+let HOME_CONTENT_HTML = "";
 
 let currentPageId = null;
 let activeScrambleInterval = null;
@@ -96,6 +99,15 @@ function applyTextScramble() {
 
 function setFolderExpanded(folderWrapperEl, expanded) {
   folderWrapperEl.classList.toggle("expanded", expanded);
+  folderWrapperEl.querySelector(":scope > .nav-folder")?.setAttribute("aria-expanded", String(expanded));
+}
+
+// Case-study names can hold entities ("Light &amp; Dark"); the breadcrumb is
+// set with textContent, so decode them first.
+function decodeEntities(html) {
+  const el = document.createElement("span");
+  el.innerHTML = html;
+  return el.textContent;
 }
 
 function expandAncestors(rowEl) {
@@ -118,7 +130,7 @@ function renderBreadcrumb(rowEl, pageLabel) {
     folderNode = folderNode.parentElement?.closest(".nav-folder-node") ?? null;
   }
   segments.unshift("studies");
-  segments.push(toNavLabel(pageLabel));
+  segments.push(toNavLabel(decodeEntities(pageLabel)));
 
   content.textContent = segments.join(" / ");
 }
@@ -134,6 +146,8 @@ async function goToPage(id, { skipRender = false } = {}) {
 
   const row = document.querySelector(`.nav-page[data-page-id="${id}"]`);
   row?.classList.add("selected-item");
+  document.querySelector('.nav-page[aria-current="page"]')?.removeAttribute("aria-current");
+  row?.setAttribute("aria-current", "page");
   if (row) {
     expandAncestors(row);
     renderBreadcrumb(row, node.name ?? node.title);
@@ -159,6 +173,9 @@ async function displayPage(node) {
 
   if (node.id === "home") {
     MAIN_CONTENT_SECTION.innerHTML = HOME_CONTENT_HTML;
+    // innerHTML restores the cards' markup but not their click listeners,
+    // so rebuild them -- otherwise the tiles go dead after the first visit.
+    if (typeof renderWorkCards === "function") renderWorkCards();
     return;
   }
 
@@ -248,8 +265,14 @@ function renderContactPage(node) {
 
 // Shared shape for every case-study (or other) leaf page: title-or-name,
 // optional date/technologies/summary, a content array, optional images and
-// closing quote. No embedded-demo markers -- if a future case study needs a
-// live JS widget, add a marker branch here the same way tui.js does.
+// closing quote. The summary renders as the js/studies-cards.js card (title
+// + summary + closing quote, same one used in the home page's "the work"
+// grid) for each project's primary case-study page, and as a plain
+// .entry-summary paragraph for every other generic page (Process Notes,
+// Research Index, diagram/figure sub-pages). One embedded-demo marker: a
+// content block containing the lofi-sketch-demo panel gets the live Lofi
+// Generator mounted onto it (see mountLofiDemo below). Add any future live
+// JS widget as another marker branch the same way tui.js does.
 function renderGenericPage(node) {
   const outerContainerElement = document.createElement("div");
   outerContainerElement.classList.add("outer-paragraph-container");
@@ -273,7 +296,12 @@ function renderGenericPage(node) {
   if (node.date != null) topElement.appendChild(dateElement);
   if (node.technologies?.length) topElement.appendChild(technologiesContainerElement);
 
-  if (node.summary != null) {
+  const isPrimaryCaseStudy = typeof collectPrimaryCaseStudies === "function"
+    && collectPrimaryCaseStudies().some((p) => p.id === node.id);
+
+  if (node.summary != null && isPrimaryCaseStudy) {
+    topElement.appendChild(buildCaseStudyCard(node, { linkable: false }));
+  } else if (node.summary != null) {
     const summaryElement = document.createElement("p");
     summaryElement.classList.add("entry-summary");
     summaryElement.innerHTML = node.summary;
@@ -301,6 +329,7 @@ function renderGenericPage(node) {
     const element = document.createElement("div");
     element.innerHTML = c.replaceAll("\n", "<br>");
     innerContainerElement.appendChild(element);
+    if (c.includes("lofi-sketch-demo")) mountLofiDemo(element.querySelector("#lofi-sketch-demo"));
 
     if (i < imageElements.length) {
       const imageContainerElement = document.createElement("div");
@@ -322,6 +351,23 @@ function renderGenericPage(node) {
   MAIN_CONTENT_SECTION.appendChild(outerContainerElement);
 }
 
+// Same mount the main site's Projects page does (js/tui.js), but through
+// js/lofi-player.js's loadLofiSketchAssets() so the samples/engine scripts
+// are shared with the footer toggle and sidebar widget, never loaded twice.
+// Loading the engine doesn't start audio -- that still waits for a click.
+// Subscribing here (not just in lofiEnsureStarted) is what keeps the footer
+// toggle and sidebar widget in sync when the panel's own Play button is the
+// one that starts playback.
+function mountLofiDemo(container) {
+  if (!container || typeof loadLofiSketchAssets !== "function") return;
+  loadLofiSketchAssets(() => {
+    if (!document.body.contains(container) || !window.LofiSketch) return;
+    if (typeof subscribeLofiStateChanges === "function") subscribeLofiStateChanges();
+    window.LofiSketch.mount(container);
+    if (typeof initLofiPanelControls === "function") initLofiPanelControls(container);
+  });
+}
+
 function applyDefaultExpandedFolders() {
   document.querySelectorAll("#nav-scroll-area .nav-folder-node").forEach((el) => {
     if (DEFAULT_EXPANDED_FOLDERS.has(el.dataset.nodeId)) setFolderExpanded(el, true);
@@ -329,6 +375,9 @@ function applyDefaultExpandedFolders() {
 }
 
 async function initStudiesRouter() {
+  if (typeof renderWorkCards === "function") renderWorkCards();
+  HOME_CONTENT_HTML = MAIN_CONTENT_SECTION?.innerHTML ?? "";
+
   applyDefaultExpandedFolders();
   initMobileNav();
   await goToPage("home", { skipRender: true });

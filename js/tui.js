@@ -855,6 +855,10 @@ function renderGenericPage(node) {
       const mountLofiSketch = function () {
         const demoContainer = element.querySelector('#lofi-sketch-demo');
         if (demoContainer && window.LofiSketch) {
+          // Keeps the footer toggle and nav widget in sync when this
+          // panel's own Play button is what starts playback (otherwise
+          // only lofiEnsureStarted() ever subscribes).
+          if (typeof subscribeLofiStateChanges === 'function') subscribeLofiStateChanges();
           window.LofiSketch.mount(demoContainer);
           if (typeof initLofiPanelControls === 'function') initLofiPanelControls(demoContainer);
         }

@@ -1,106 +1,94 @@
-# studies/ -- scaffold notes
+# studies/
 
-Academic/admissions portfolio, meant to live at `aaroncheung.me/studies/`
-alongside the main portfolio, `art/`, and `sound/`. This is a **scaffold**:
-the mechanics (nav, routing, theming, widget bar) are real and working, but
-most of the *content* is a bracketed placeholder for you to replace.
+Academic/admissions portfolio at `aaroncheung.me/studies/`, alongside the
+main portfolio, `art/`, and `sound/`. Where the main portfolio is framed for
+recruiters, this one is framed for admissions readers: case studies with
+the reasoning behind the work, plus an About page on the life outside it.
 
-## What's a placeholder vs. real
+## Files
 
-Search for `[` in these files -- everything bracketed is a stand-in:
+| Path | What it is |
+| --- | --- |
+| `index.html` | Page shell + the static home page (hero, "find me", "the work" grid) |
+| `css/studies.css` | Studies-only styles: widget, case-study cards, case-study content blocks |
+| `js/studies-boot.js` | Startup: loads partials and the nav tree, then starts the router |
+| `js/studies-render.js` | Builds the left nav tree from `data/nav.json` + `data/case-studies/`; defines the Resume page and `NON_CASE_STUDY_IDS` |
+| `js/studies-router.js` | `goToPage()`, breadcrumb, text scramble, and the page renderers (home/about/contact get their own, everything else uses `renderGenericPage`) |
+| `js/studies-cards.js` | Case-study summary cards (home grid + top of each case study) and the home hero's case-study count |
+| `js/studies-widgets.js` | Sidebar widget rotator: Case Study Nav and the Lofi Generator |
+| `data/nav.json` | The order case studies appear in (a list of ids) |
+| `data/case-studies/<id>.json` | One case study each: its folder, pages, and sub-folders |
+| `data/about.json`, `data/contact.json` | About and Contact page content |
+| `data/documents/` | Original PDFs linked from the case studies |
+| `data/images/<project>/` | Figures (SVG) and screenshots (WebP), one folder per case study |
+| `data/images/og-preview.jpg` | Link-preview image (1200x630) for shared links, same style as the main site's |
 
-- `index.html` -- home hero tagline/meta line
-- `data/about.json` -- second block ("[Why This Field]") is fully blank;
-  the first block ("Outside the Classroom") is your real music/art/
-  woodworking bio, lightly trimmed of SWE-portfolio-specific references
-- `data/contact.json` -- one bracketed phrase in the first line
-- `data/nav.json` -- the one example Case Studies page is entirely a
-  template (title, technologies, summary, content, closing quote all
-  bracketed)
-- `data/citations.json`, `data/currently-exploring.json` -- fully placeholder
+## Shared with the main site
 
-## Architecture (what's kept vs. dropped from the main site)
+Like `art/` and `sound/`, this site loads the repo's shared files by
+root-absolute path: `/css/tui.css`, `/js/{theme,overlay-esc,lofi-player,
+glitch-artifacts,include-partials,mobile-nav,home-tiles}.js`,
+`/partials/{mobile-tabbar,mobile-header,footer}.html`, `/favicon.svg`,
+`/fonts/`, and `/data/images/logo*.png`. So:
 
-Same shell as the main portfolio -- a real folder-tree nav on the left,
-breadcrumb above it, content pane on the right -- built from scratch as a
-smaller, purpose-built clone rather than reusing `js/tui.js`/`render-lists.js`
-directly (those are ~1000 lines wired to skills/experience/explorer/live-demo
-features this site doesn't have).
+- It has to be served from the repo root (`localhost/studies/`), not as its
+  own web root.
+- Theme, palette, font, CRT, motion, and lofi on/off are shared with every
+  other site through the same `localStorage` keys.
+- The `/studies/` footer tab lives in `/js/theme.js`'s `SITE_TABS` and
+  `/partials/footer.html`.
+- The Resume page shows `/aaron_cheung_resume.pdf`, the same file as the
+  main site.
 
-**Kept:**
-- Theme system: dark/light, 4 palettes, 3 fonts, CRT overlay + glitch
-  flashes, reduced motion -- via `js/theme.js` (a local copy, see below),
-  same `localStorage` keys as the main portfolio and `sound/` (so switching
-  persists across all three when deployed together on the real domain)
-- Footer cross-site tabs (Portfolio/Art/Sound/Studies) -- the shared
-  `partials/footer.html` and `js/theme.js`'s `SITE_TABS` were both edited in
-  the main repo to add the `/studies/` entry before being copied in here
-- Mobile hamburger/tabbar nav (`js/mobile-nav.js`, generic chrome, needed no
-  changes)
-- The text-scramble reveal on page load, ambient CRT glitch flashes
-- Static ASCII-style logo image (`data/images/logo_home.png`) on the home
-  page
+**Cache busting:** `.htaccess` caches CSS/JS for 30 days. Whenever a CSS or
+JS file changes, bump its `?v=` in `index.html`.
 
-**Dropped:**
-- Command palette (Ctrl+K), keyboard nav, and the typed-command File
-  Explorer -- the breadcrumb box is a plain, non-clickable display now
-- The animated ASCII-scramble logo effect (`js/ascii-logo.js`) -- home page
-  just shows the static PNG
-- Home page live-demo tiles (Lofi/Jumpy/Heatmap) and the "my other sites"
-  tile grid -- home is just an intro now
-- The terminal-style contact form (`js/contact_form.js`) -- Contact is plain
-  text/links
-- Skills package-info renderer, Experience timeline, everything specific to
-  those sections -- there's one generic page renderer now
-  (`renderGenericPage` in `js/studies-router.js`)
+## Adding or editing a case study
 
-## Adding case studies later
+Each case study is its own file, `data/case-studies/<id>.json`, holding one
+folder node (`type: "folder"`, `id`, `name`, `children: [...]`). To add one,
+create the file and add its id to `data/nav.json`, where the list order is
+the nav order. Inside the folder:
 
-Edit `data/nav.json`. Either pattern works with zero code changes:
-- Add another page under the existing `"case-studies"` folder
-- Or add a whole new folder (its own sub-pages) or a bare top-level page
-  object to the top-level `data` array, no folder at all
+- a page whose id ends in `-case-study`: this is the "primary" page. It gets
+  the summary card (from its `summary` and `closingQuote` fields) and
+  appears in the home page's "the work" grid
+- optional supporting pages beside it (Process Notes, Research Index)
+- optional sub-folders (Diagrams, Visual Reference), one page per figure
 
-The sidebar's **Case Study Nav** widget (`js/studies-widgets.js`) auto-
-discovers every page in the tree except `home`/`about`/`contact`, in
-document order -- it doesn't key off the `case-studies` id specifically, so
-either pattern above shows up in the reading-progress indicator
-automatically.
+The home grid, the hero's "N case studies" count, and the Case Study Nav
+widget all read this tree, so a new folder shows up everywhere with no code
+changes. The widget's reading-progress steps through each project's direct
+child pages only; sub-folder pages are skipped on purpose.
 
-## This folder is fully self-contained
+Page fields: `id`, `name` (nav label; HTML entities like `&amp;` are fine),
+`title`, `date`, `technologies[]`, `summary`, `content[]`, `closingQuote`.
+`content[]` entries are raw HTML. Use the patterns in `css/studies.css`:
+`case-study-figure` (+ `-wide` for screenshots), `case-study-note`,
+`case-study-worknote`, `case-study-pdf-link`, `case-study-table`.
+Give every `<img>` its `width`/`height` (the image's real pixel size) so the
+page doesn't jump while it loads, and save screenshots as WebP.
 
-Every path `index.html` references is relative to `studies/` itself --
-nothing points outside this folder. That's on purpose: copy the whole
-`studies/` folder anywhere (a separate project, a new VS Code window, a
-zip) and it renders and behaves identically, with no server config and no
-sibling folders required. Verified by serving `studies/` alone as its own
-web root (not the repo root) and exercising nav/routing/widgets/theme
-toggles end to end.
+Folders start collapsed. To open one by default, add its id to
+`DEFAULT_EXPANDED_FOLDERS` in `js/studies-render.js`.
 
-What that means concretely -- `studies/` carries **its own frozen copies**
-of everything the main site normally shares from the repo root:
+## Live Lofi Generator demo
 
-- `css/tui.css` (copy of `/css/tui.css`)
-- `js/theme.js`, `overlay-esc.js`, `lofi-player.js`, `glitch-artifacts.js`,
-  `include-partials.js`, `mobile-nav.js` (copies of the same-named files
-  under `/js/`)
-- `partials/mobile-tabbar.html`, `mobile-header.html`, `footer.html`
-  (copies of `/partials/`)
-- `favicon.svg`, all 8 font `.woff2` files, `data/images/logo.png` and
-  `logo_home.png` (copies)
+The Lofi Generator case study embeds the same full control panel as the
+main site's Projects page. Any `content[]` entry containing the
+`lofi-sketch-demo` markup gets mounted by `mountLofiDemo()` in
+`js/studies-router.js`. The sidebar widget uses the main site's
+`initTileLofi()` (`/js/home-tiles.js`). The panel, the widget, and the footer
+`♪` toggle all stay in sync.
 
-Everything already under `studies/` proper (`css/studies.css`,
-`js/studies-*.js`, `data/*.json`) was already self-contained.
+## Differences from the main portfolio
 
-**The tradeoff, same one the art/sound standalone-export workflow always
-had:** these are frozen snapshots, not live links. If the main site's
-`css/tui.css` or `js/theme.js` etc. change later, `studies/`'s copies won't
-pick that up automatically -- you'd need to manually re-copy and diff
-before overwriting, in case `studies/`'s copy has since diverged
-(it currently hasn't). Two small things in the frozen copies only work
-right when this site is actually deployed alongside the rest at
-`aaroncheung.me`: the footer's site-tab buttons (`siteNavigate('/art/')`
-etc.) navigate to root-absolute paths that won't exist on a standalone dev
-server, and the footer's `[resume]` link points at `/aaron_cheung_resume.pdf`
-which isn't copied here. Neither affects this site's own layout or
-functionality -- they're just dead links until it's deployed for real.
+Same shell (nav tree, breadcrumb, content pane), but built as a smaller
+clone rather than reusing `js/tui.js`/`js/render-lists.js`, which are wired
+to skills/experience/explorer features this site doesn't have.
+
+Not carried over: the Ctrl+K command palette and the typed-command File
+Explorer (the breadcrumb is display-only), the animated ASCII logo (home
+shows the static PNG), the home live-demo tiles, and the terminal-style
+contact form. Nav rows are still keyboard-operable: Tab between them,
+Enter/Space to open.

@@ -1,0 +1,155 @@
+{
+  "type": "folder",
+  "id": "sound-memoir",
+  "name": "From the Top: SOUND",
+  "children": [
+    {
+      "type": "page",
+      "id": "sound-case-study",
+      "name": "Case Study",
+      "title": "From the Top: SOUND",
+      "date": "Idea &amp; research over several months &middot; written and designed in a 2-week sprint",
+      "technologies": [
+        "<span class=\"text-blue\">Horizontal-scroll editorial</span>",
+        "<span class=\"text-blue\">5 chapters</span>",
+        "<span class=\"text-blue\">12 cited sources</span>"
+      ],
+      "summary": "From the Top: SOUND is a five-chapter memoir on musical autonomy, structured around an acronym that also names its subject, and paired chapter by chapter with twelve academic sources. I wrote it first and designed around the finished text afterward, going through four failed visual directions before landing on a black-and-cream system that encodes the memoir's own thesis: black spreads for imposed choices, cream spreads for chosen ones. The whole thing is built from typography and CSS alone, with no images, and reads as a horizontal, magazine-style scroll on desktop that rebuilds into a vertical stack on mobile. It's live, complete, and holds together as both a written and designed work.",
+      "content": [
+        "<p class=\"case-study-pdf-link\">[<a href=\"https://aaroncheung.me/sound/\" target=\"_blank\" rel=\"noopener\">visit the live site</a>] &nbsp; [<a href=\"data/documents/SOUND_Case_Study.pdf\" target=\"_blank\" rel=\"noopener\">view original PDF</a>]</p>",
+        "<h2>Where It Started</h2>",
+        "The idea didn't start as a memoir. It started with research on childhood music development, and reading it, I kept thinking about my own case: given everything I'd been through with music &mdash; quitting, resenting it, refusing to practice out of pure spite &mdash; the fact that I still loved music at all seemed like it shouldn't have happened. I wasn't writing about a feeling first and finding research to back it up. I was reacting to research that made my own life look statistically unlikely, and trying to write my way into understanding why.",
+        "From there, the process became iterative: I'd write about a period of my life, then look for research that explained what happened, or explained why it was unexpected. Sometimes it confirmed what I already suspected; in a few places it complicated things, and I kept those moments in rather than smoothing them over, since the friction was more honest than a clean match would have been.",
+        "<h2>Structuring the Memoir: SOUND</h2>",
+        "The acronym came after the writing, not before. Once the memoir existed, I needed a way to divide it into something readable rather than one continuous account, and SOUND &mdash; Secondhand Sound, On Someone Else's Terms, Under No One's Watch, Nothing but Ear, Da Capo &mdash; gave me five movements that also happen to spell out the subject of the piece. Each letter marks a different relationship to music: watching someone else make it, having it imposed on me, getting it back under no supervision, learning to hear instead of read, and finally choosing to start over on purpose.",
+        "The closing chapter, Da Capo, is doing double duty on purpose: it's a real musical direction, meaning return to the beginning and play it again, and it's structurally what the chapter does, the memoir ends with me a beginner again, by choice this time, picking up new instruments the same way I started with piano as a kid. The title functions both as metaphor and instruction: the final chapter returns the reader and writer to the beginning. The site's title, \"From the Top,\" carries the same instruction: return to the beginning and begin again.",
+        "<figure class=\"case-study-figure case-study-figure-wide\"><img src=\"data/images/sound/sound-desktop-nav-and-s01.webp\" alt=\"Screenshot of the SOUND site desktop layout: a left panel with the large diagonal SOUND letters as navigation, a center panel listing all five chapters and their beats, and a right panel showing chapter S, beat 01, 'He went first,' in the light cream color treatment with a red pull-quote and a research sidebar.\" loading=\"lazy\" decoding=\"async\" width=\"2469\" height=\"1317\"><figcaption>The SOUND acronym as both title and navigation</figcaption></figure>",
+        "<h2>A Structural Device: The Violin Thread</h2>",
+        "One thing I built deliberately rather than let happen naturally: the violin storyline is tracked explicitly across the piece as a recurring thread, with its own labeled callouts &mdash; \"Appearance 1 of 3,\" \"2 of 3,\" \"3 of 3\" &mdash; noting what the thread had done and what to watch for next. Violin enters in chapter O as a secondary instrument I resented less than piano but still avoided practicing. It reappears in U once piano stopped being mandatory, now the one place my engagement was visibly changing even though nothing about its own terms had changed. It resolves in N, where violin turns out to be the instrument that revealed I had a real ear at all, the discovery that eventually let me start playing piano by ear too.",
+        "I made that thread visible in the interface itself rather than leaving it for an attentive reader to notice on their own. It's a small piece of information design sitting inside a personal essay: telling the reader explicitly that a pattern is being tracked, and where it's headed, without giving away the ending.",
+        "<h2>Designing Around a Finished Text</h2>",
+        "The visual system came entirely after the writing was locked, as its own separate design phase, and it went through four major visual iterations before landing anywhere close to what's live now. The inspiration going in was straightforward: bold magazine-style blocks of black and white with red as an accent, big lettering, high contrast.",
+        "What wasn't straightforward was translating that into something that worked on screen. Each iteration failed for a specific, identifiable reason:",
+        "<ol><li><strong>First version:</strong> the SOUND letters rendered huge, in red, taking up roughly three-quarters of the page, with story text layered on top, the way a print magazine spread works. It looked right in a mockup and fell apart in a browser: what reads as bold in print reads as overwhelming on a screen someone is trying to read.</li><li><strong>Second version:</strong> I kept the oversized letters but made the page parallax-scrolling, so the letters shifted out of the way as the reader scrolled. This solved the overwhelm problem and created a new one: the movement was distracting, pulling attention away from the words instead of framing them.</li><li><strong>Third version:</strong> I flattened the letters and hollowed them out, outline only, to quiet them down. This solved the distraction problem but overcorrected &mdash; the result looked like a poster advertising the essay rather than an interface for reading it.</li><li><strong>Fourth pass:</strong> within the block-based black-and-white direction that eventually stuck, I added intricate linework, fine detail layered into the bold shapes. Up close, it looked good. Zoomed out, at reading scale, it just read as clutter, and I pulled it back out.</li></ol>",
+        "What survived across every iteration was the instinct that bold black-and-white blocking with red accents was the right foundation. What each failed version taught me was a specific way that foundation could go wrong once it actually had to hold a few thousand words of first-person writing: too much presence, too much motion, too much self-announcement, too much detail. The final system is less a single insight than the sum of four things I ruled out. I don't have saved artifacts from the earlier versions, only memory of them, so the record above is descriptive rather than illustrated.",
+        "<p class=\"entry-quote\">The final system is less a single insight than the sum of four things I ruled out.</p>",
+        "<h2>The Real Structural Decision: Black, Cream, and Control</h2>",
+        "The design problem that actually needed solving once the visual noise cleared was simpler: the memoir was, as written, walls of text, five chapters of first-person narrative with research sidebars, a lot of reading with little to signal where you are.",
+        "The solution came from going back to the content itself rather than adding more visual decoration. Each chapter of my life described in SOUND falls into one of two states: periods where a choice was made for me, and periods where I was making the choice myself. That's not the same axis as happy versus sad, some of the chapters where I had control were still difficult. It's specifically about who was holding the decision.",
+        "I mapped that distinction directly onto the page: chapters defined by imposed choices render as high-contrast black spreads, chapters defined by my own agency render as light, cream-colored spreads. The alternation as you scroll through the piece isn't just visual pacing, though it does that too, it's the memoir's actual thesis rendered as a structural rule you experience physically, scrolling from a dark spread into a light one at the exact moment the narrative shifts from something happening to me into something I chose.",
+        "<figure class=\"case-study-figure case-study-figure-wide\"><img src=\"data/images/sound/sound-desktop-light-dark-contrast.webp\" alt=\"Screenshot comparing two adjacent spreads: a dark, high-contrast black spread for S-02, an imposed-choice chapter, next to a light, cream-colored spread for S-03, a chosen-choice chapter, demonstrating the site's black/cream thesis encoding.\" loading=\"lazy\" decoding=\"async\" width=\"2466\" height=\"1315\"><figcaption>Black spreads for imposed choices, cream spreads for chosen ones, shown in direct comparison</figcaption></figure>",
+        "<h2>Other Systems Worth Naming</h2>",
+        "A few smaller decisions work together to reinforce the same idea, that this is a piece about music, built like one:",
+        "<ul><li>The site scrolls horizontally, spread by spread, rather than the vertical infinite-scroll most web content defaults to. Reading it feels closer to turning pages in a score or a print magazine than browsing a normal page.</li><li>None of this is built from images. The huge letters, the diagonal splits, every visual element on the page is pure typography and CSS &mdash; no canvas, no illustration, no rasterized assets. The magazine feel comes entirely from type.</li><li>The chapter-letter rail that stays pinned beside the text as you scroll isn't static, it tracks scroll position live and inverts its own light/dark tone to match whichever entry is currently alongside it, so the control/no-control system stays synced to the reading position rather than being fixed per chapter.</li><li>Header and footer are styled as music staff lines with actual notation dots, extending the metaphor into interface chrome rather than only content.</li><li>Drop caps, oversized outlined section letters, and bold italic pull-quotes create a consistent editorial rhythm across all five chapters.</li></ul>",
+        "<h2>Adapting to Mobile: When the Metaphor Doesn't Travel</h2>",
+        "The horizontal, spread-based reading experience is central to the desktop design, but it doesn't work on a phone: side-scrolling assumes a wide viewport and a mouse or trackpad, neither of which describes a screen operated with a thumb. Rather than force the desktop metaphor into a space it doesn't fit, I rebuilt the layout for mobile as a vertical, stacked read, keeping the rest of the visual system, the SOUND letter navigation, the black and cream chapter alternation, the red accent color, the drop caps and pull-quotes, intact.",
+        "The chapter letters that anchor each desktop spread carry over as section markers in the vertical flow, and the black/cream logic still tracks control versus imposed choice exactly as it does on desktop, just as a vertical sequence of blocks instead of a horizontal one. The content, hierarchy, and thesis didn't change; the reading mechanic did, because keeping the original one would have meant a broken experience rather than a faithfully translated one.",
+        "<figure class=\"case-study-figure\"><img src=\"data/images/sound/sound-mobile-s01.webp\" alt=\"Screenshot of chapter S, beat 01, 'He went first,' on mobile, showing the same drop cap, pull-quote, and research sidebar as the desktop version in a single-column vertical layout.\" loading=\"lazy\" decoding=\"async\" width=\"381\" height=\"835\"><figcaption>The same chapter, restacked for a vertical, thumb-driven read</figcaption></figure>",
+        "<h2>Outcome</h2>",
+        "The finished piece is live, complete, and holds together as both a written and designed work: roughly 5,000 words across 17 spreads and five chapters. All five chapters carry the SOUND thesis through to the closing chapter: imposed practice can produce skill while draining the wonder that made you want to play in the first place, while autonomy is what lets the desire to play survive. Twelve academic sources are cited throughout, each doing real argumentative work rather than sitting as decoration; several, particularly the research on forced versus chosen motivation, directly shape the essay's central claim rather than just supporting a point already made in the text. The final result is less a webpage containing an essay and more an editorial environment where typography, interaction, and narrative structure reinforce the same idea.",
+        "<p class=\"entry-quote\">The final result is less a webpage containing an essay and more an editorial environment where typography, interaction, and narrative structure reinforce the same idea.</p>",
+        "<h2>Reflection</h2>",
+        "The design process took about as long as the writing did, roughly a week each, after months of the idea and the reading sitting with me before I sat down to actually build anything. The writing and design phases required roughly equal time, which surprised me going in: the writing came fast once I sat down to do it, and the visual system took the same amount of time to fail its way to something right. That felt backwards going in: writing about my own life should have been the harder part, but it wasn't. Knowing what the piece was already trying to say made writing it mostly a matter of getting out of my own way. Designing around a finished, meaningful text required its own kind of judgment, knowing when bold was working and when it had tipped into loud, and I didn't have as much intuition for that going in as I expected.",
+        "If I did this again, I'd try to shorten the distance between the magazine-mockup version and the final block system. Three of the four discarded versions were really the same lesson in different forms: big, attention-grabbing typography competes with long-form reading no matter how you dress it up."
+      ],
+      "closingQuote": "The lesson wasn't that bold typography was wrong. It was that every design decision has to answer to the content it serves."
+    },
+    {
+      "type": "page",
+      "id": "sound-research-index",
+      "title": "Research Index",
+      "summary": "Every chapter's claim, mapped to the source that grounds or complicates it.",
+      "content": [
+        "<p class=\"case-study-note\">Compiled from the Sources Cited list published on the live site. Reorganized here by chapter so the research methodology &mdash; finding a source for each narrative beat rather than citing broadly &mdash; is legible on its own, rather than requiring a reader to cross-reference twelve footnotes against five chapters manually.</p>",
+        "<p class=\"case-study-pdf-link\">[<a href=\"data/documents/SOUND_Research_Index.pdf\" target=\"_blank\" rel=\"noopener\">view original PDF</a>]</p>",
+        "<h3>S &mdash; Secondhand Sound</h3>",
+        "<table class=\"case-study-table\"><tr><th>Beat</th><th>Source</th><th>What it does for the claim</th></tr><tr><td>01, He went first</td><td>McHale, Updegraff &amp; Whiteman, <em>Journal of Marriage and Family</em> (2012)</td><td>Grounds the sibling-imitation claim: younger children model older siblings more than peers.</td></tr><tr><td>02, I just tagged along</td><td>Kraus et al., <em>Frontiers in Neuroscience</em> (2014)</td><td>Explains why passive exposure while waiting still produced measurable auditory priming.</td></tr><tr><td>03, I wanted it so bad</td><td>Habibi et al., <em>Annals of the NY Academy of Sciences</em> (2018)</td><td>Validates that starting young at the age he pushed for has a real developmental effect.</td></tr></table>",
+        "<h3>O &mdash; On Someone Else's Terms</h3>",
+        "<table class=\"case-study-table\"><tr><th>Beat</th><th>Source</th><th>What it does for the claim</th></tr><tr><td>01, The regret was fast</td><td>Ericsson, Krampe &amp; Tesch-R&ouml;mer, <em>Psychological Review</em> (1993)</td><td>Establishes that deliberate practice, not talent, is what piano actually demanded.</td></tr><tr><td>02, How I fought back</td><td>Evans, McPherson &amp; Davidson, <em>Psychology of Music</em> (2013)</td><td>Reframes the refusal to practice as a predictable response to externally imposed control.</td></tr><tr><td>03, Taking pieces apart until they died</td><td>Ericsson, Krampe &amp; Tesch-R&ouml;mer, <em>Psychological Review</em> (1993), reused</td><td>Complicates rather than confirms: the method was correct, but correctness cost the wonder.</td></tr><tr><td>04, The violin, sort of</td><td>Patterson, Lipp &amp; Luck, <em>Cognition and Emotion</em> (2024)</td><td>Explains how a bad association with piano generalized to violin via evaluative conditioning.</td></tr></table>",
+        "<h3>U &mdash; Under No One's Watch</h3>",
+        "<table class=\"case-study-table\"><tr><th>Beat</th><th>Source</th><th>What it does for the claim</th></tr><tr><td>01, They finally let me quit</td><td>Deci, <em>Journal of Personality and Social Psychology</em> (1971)</td><td>Sets the expectation the chapter then defies: removing pressure usually doesn't restore interest.</td></tr><tr><td>02, But the piano stayed</td><td>Patall, Cooper &amp; Robinson, <em>Psychological Bulletin</em> (2008)</td><td>Identifies choice specifically, not just absence of pressure, as what changed motivation.</td></tr><tr><td>03, I still flinched</td><td>Deci, <em>Journal of Personality and Social Psychology</em> (1971), reused</td><td>Explains the delay: removing coercion clears space for wanting, it doesn't restore it automatically.</td></tr><tr><td>04, Violin, minus the shadow</td><td>Patterson, Lipp &amp; Luck, <em>Cognition and Emotion</em> (2024), reused</td><td>Notes the asymmetry: a bad association spreads easily, but doesn't lift on its own the same way.</td></tr></table>",
+        "<h3>N &mdash; Nothing but Ear</h3>",
+        "<table class=\"case-study-table\"><tr><th>Beat</th><th>Source</th><th>What it does for the claim</th></tr><tr><td>01, I put down the sheet music</td><td>Green, <em>How Popular Musicians Learn</em>, Ashgate (2002)</td><td>Places the YouTube, by-ear approach inside an established informal-learning tradition.</td></tr><tr><td>02, Turns out I had an ear</td><td>Woody, <em>Music Educators Journal</em> (2012)</td><td>Explains why violin specifically, an instrument with no fixed keys, trained relative pitch.</td></tr><tr><td>03, Now I'm doing it on piano</td><td>Woody &amp; Lehmann, <em>Journal of Research in Music Education</em> (2010)</td><td>Shows self-taught, by-ear musicians measurably outperform formally trained peers on this skill.</td></tr></table>",
+        "<h3>D &mdash; Da Capo</h3>",
+        "<table class=\"case-study-table\"><tr><th>Beat</th><th>Source</th><th>What it does for the claim</th></tr><tr><td>01, What I'd tell the kid on the bench</td><td>Gruber, Gelman &amp; Ranganath, <em>Neuron</em> (2014)</td><td>Grounds \"wonder\" as neurologically real, not sentiment: curiosity measurably improves learning.</td></tr><tr><td>02, So I'm starting over on purpose</td><td>Woody &amp; Lehmann, <em>Journal of Research in Music Education</em> (2010), reused</td><td>Confirms the ear transfers across instruments, closing the loop on what carries into guitar next.</td></tr></table>",
+        "Three sources are cited twice, each reuse pairing the same finding with a different narrative moment rather than repeating an argument already made. Full citations with DOIs are available in the case study and on the live site."
+      ]
+    },
+    {
+      "type": "folder",
+      "id": "sound-visual-reference",
+      "name": "Visual Reference",
+      "children": [
+        {
+          "type": "page",
+          "id": "sound-visual-nav-opening",
+          "name": "Nav &amp; Opening",
+          "title": "Navigation &amp; Opening Chapter",
+          "summary": "The SOUND acronym functioning as both title and navigation, with the drop cap and typographic system established at the entry point.",
+          "content": [
+            "<figure class=\"case-study-figure case-study-figure-wide\"><img src=\"data/images/sound/sound-desktop-nav-and-s01.webp\" alt=\"Screenshot of the SOUND site desktop layout: a left panel with the large diagonal SOUND letters as navigation, a center panel listing all five chapters and their beats, and a right panel showing chapter S, beat 01, 'He went first,' in the light cream color treatment with a red pull-quote and a research sidebar.\" loading=\"lazy\" decoding=\"async\" width=\"2469\" height=\"1317\"><figcaption>Right panel: S-01, &quot;He went first,&quot; the light &quot;control&quot; treatment</figcaption></figure>",
+            "<p>From <a onclick=\"goToPage('sound-case-study')\" class=\"text-purple\">the case study</a>: Structuring the Memoir: SOUND.</p>"
+          ]
+        },
+        {
+          "type": "page",
+          "id": "sound-visual-light-dark",
+          "name": "Light &amp; Dark",
+          "title": "Light and Dark Chapters, Direct Contrast",
+          "summary": "Left panel (dark) is S-02, an imposed-choice chapter. Right panel (light) is S-03, a chosen-choice chapter.",
+          "content": [
+            "<figure class=\"case-study-figure case-study-figure-wide\"><img src=\"data/images/sound/sound-desktop-light-dark-contrast.webp\" alt=\"Screenshot comparing two adjacent spreads: a dark, high-contrast black spread for S-02, an imposed-choice chapter, next to a light, cream-colored spread for S-03, a chosen-choice chapter, demonstrating the site's black/cream thesis encoding.\" loading=\"lazy\" decoding=\"async\" width=\"2466\" height=\"1315\"><figcaption>The black/cream logic visible in direct comparison rather than described</figcaption></figure>",
+            "<p>From <a onclick=\"goToPage('sound-case-study')\" class=\"text-purple\">the case study</a>: The Real Structural Decision: Black, Cream, and Control.</p>"
+          ]
+        },
+        {
+          "type": "page",
+          "id": "sound-visual-closing",
+          "name": "Closing Spread",
+          "title": "Closing Spread",
+          "summary": "The Sources Cited list and the &quot;Da capo.&quot; closing line, paired with the diagonal magazine-inspired treatment of the D/A/C/A/P/O lettering.",
+          "content": [
+            "<figure class=\"case-study-figure case-study-figure-wide\"><img src=\"data/images/sound/sound-desktop-closing-sources.webp\" alt=\"Screenshot of the memoir's closing spread: the final Da Capo chapter text on a cream background next to a black panel with the Sources Cited list and large diagonal red-outlined D-A-C-A-P-O lettering.\" loading=\"lazy\" decoding=\"async\" width=\"2468\" height=\"1315\"><figcaption>The most direct visual echo of the project's original print inspiration</figcaption></figure>",
+            "<p>From <a onclick=\"goToPage('sound-research-index')\" class=\"text-purple\">the Research Index</a>: the full Sources Cited list.</p>"
+          ]
+        },
+        {
+          "type": "page",
+          "id": "sound-visual-mobile-nav",
+          "name": "Mobile: Nav",
+          "title": "Desktop to Mobile: Navigation",
+          "summary": "Same navigation, restacked for a vertical, thumb-driven read.",
+          "content": [
+            "<figure class=\"case-study-figure case-study-figure-wide\"><img src=\"data/images/sound/sound-desktop-nav-and-s01.webp\" alt=\"Screenshot of the SOUND site desktop layout: a left panel with the large diagonal SOUND letters as navigation, a center panel listing all five chapters and their beats, and a right panel showing chapter S, beat 01, 'He went first.'\" loading=\"lazy\" decoding=\"async\" width=\"2469\" height=\"1317\"><figcaption>Desktop: nav + S-01</figcaption></figure>",
+            "<figure class=\"case-study-figure\"><img src=\"data/images/sound/sound-mobile-nav.webp\" alt=\"Screenshot of the SOUND site on mobile: the SOUND title, an intro line, and the five chapter letters listed vertically as navigation, restacked for a narrow viewport.\" loading=\"lazy\" decoding=\"async\" width=\"385\" height=\"832\"><figcaption>Mobile: nav, restacked</figcaption></figure>",
+            "<p>From <a onclick=\"goToPage('sound-case-study')\" class=\"text-purple\">the case study</a>: Adapting to Mobile.</p>"
+          ]
+        },
+        {
+          "type": "page",
+          "id": "sound-visual-mobile-s01",
+          "name": "Mobile: Chapter S-01",
+          "title": "Desktop to Mobile: Chapter S-01",
+          "summary": "&quot;He went first&quot; on both breakpoints &mdash; identical content and hierarchy, different reading mechanic.",
+          "content": [
+            "<figure class=\"case-study-figure case-study-figure-wide\"><img src=\"data/images/sound/sound-desktop-nav-and-s01.webp\" alt=\"Screenshot of the SOUND site desktop layout showing chapter S, beat 01, 'He went first,' alongside the acronym navigation.\" loading=\"lazy\" decoding=\"async\" width=\"2469\" height=\"1317\"><figcaption>Desktop: S-01, &quot;He went first&quot;</figcaption></figure>",
+            "<figure class=\"case-study-figure\"><img src=\"data/images/sound/sound-mobile-s01.webp\" alt=\"Screenshot of chapter S, beat 01, 'He went first,' on mobile, showing the same drop cap, pull-quote, and research sidebar as the desktop version in a single-column vertical layout.\" loading=\"lazy\" decoding=\"async\" width=\"381\" height=\"835\"><figcaption>Mobile: same chapter</figcaption></figure>",
+            "<p>From <a onclick=\"goToPage('sound-case-study')\" class=\"text-purple\">the case study</a>: Adapting to Mobile.</p>"
+          ]
+        },
+        {
+          "type": "page",
+          "id": "sound-visual-mobile-closing",
+          "name": "Mobile: Closing",
+          "title": "Desktop to Mobile: Closing &amp; Sources",
+          "summary": "The closing spread and sources list, translated to a vertical scroll without losing the visual system.",
+          "content": [
+            "<figure class=\"case-study-figure case-study-figure-wide\"><img src=\"data/images/sound/sound-desktop-closing-sources.webp\" alt=\"Screenshot of the memoir's closing spread: the final Da Capo chapter text next to a black panel with the Sources Cited list and large diagonal red-outlined D-A-C-A-P-O lettering.\" loading=\"lazy\" decoding=\"async\" width=\"2468\" height=\"1315\"><figcaption>Desktop: closing + sources</figcaption></figure>",
+            "<figure class=\"case-study-figure\"><img src=\"data/images/sound/sound-mobile-closing.webp\" alt=\"Screenshot of the closing Da Capo spread on mobile, showing the 'To be continued' text and the Sources Cited list stacked vertically.\" loading=\"lazy\" decoding=\"async\" width=\"386\" height=\"840\"><figcaption>Mobile: same spread</figcaption></figure>",
+            "<p>From <a onclick=\"goToPage('sound-case-study')\" class=\"text-purple\">the case study</a>: Adapting to Mobile.</p>"
+          ]
+        }
+      ]
+    }
+  ]
+}

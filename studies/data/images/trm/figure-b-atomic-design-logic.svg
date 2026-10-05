@@ -1,0 +1,69 @@
+<svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="fb1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="480" fill="#ffffff"/>
+  <text x="30" y="34" fill="#111" font-size="16" font-weight="bold">Figure B: Atomic Design, the Question I Actually Had</text>
+  <line x1="30" y1="46" x2="970" y2="46" stroke="#ccc" stroke-width="1"/>
+  <text x="30" y="66" fill="#666" font-size="10.5" font-style="italic">"why do some organisms skip molecules and go straight to atoms?"</text>
+
+  <text x="180" y="106" text-anchor="middle" fill="#c0392b" font-size="11.5" font-weight="bold">what I assumed:</text>
+  <g font-size="10.5" fill="#111">
+    <rect x="80" y="126" width="200" height="30" rx="3" fill="#fff" stroke="#333" stroke-width="1"/>
+    <text x="180" y="146" text-anchor="middle">Atoms</text>
+    <line x1="180" y1="156" x2="180" y2="168" stroke="#333" stroke-width="1.2" marker-end="url(#fb1)"/>
+
+    <rect x="80" y="170" width="200" height="30" rx="3" fill="#fff" stroke="#333" stroke-width="1"/>
+    <text x="180" y="190" text-anchor="middle">Molecules</text>
+    <line x1="180" y1="200" x2="180" y2="212" stroke="#333" stroke-width="1.2" marker-end="url(#fb1)"/>
+
+    <rect x="80" y="214" width="200" height="30" rx="3" fill="#fff" stroke="#333" stroke-width="1"/>
+    <text x="180" y="234" text-anchor="middle">Organisms</text>
+    <line x1="180" y1="244" x2="180" y2="256" stroke="#333" stroke-width="1.2" marker-end="url(#fb1)"/>
+
+    <rect x="80" y="258" width="200" height="30" rx="3" fill="#fff" stroke="#333" stroke-width="1"/>
+    <text x="180" y="278" text-anchor="middle">Templates</text>
+    <line x1="180" y1="288" x2="180" y2="300" stroke="#333" stroke-width="1.2" marker-end="url(#fb1)"/>
+
+    <rect x="80" y="302" width="200" height="30" rx="3" fill="#fff" stroke="#333" stroke-width="1"/>
+    <text x="180" y="322" text-anchor="middle">Pages</text>
+  </g>
+  <text x="180" y="356" text-anchor="middle" fill="#888" font-size="9.5">every level, every time,</text>
+  <text x="180" y="370" text-anchor="middle" fill="#888" font-size="9.5">no exceptions</text>
+
+  <line x1="380" y1="96" x2="380" y2="400" stroke="#ddd" stroke-width="1"/>
+
+  <text x="700" y="106" text-anchor="middle" fill="#27803e" font-size="11.5" font-weight="bold">what's actually true:</text>
+
+  <rect x="470" y="136" width="150" height="34" rx="3" fill="#fff" stroke="#333" stroke-width="1"/>
+  <text x="545" y="158" text-anchor="middle" fill="#111" font-size="10.5">Atoms</text>
+
+  <rect x="650" y="136" width="150" height="34" rx="3" fill="#fff" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="725" y="158" text-anchor="middle" fill="#666" font-size="10.5">Molecules</text>
+  <text x="800" y="158" fill="#999" font-size="9">(only if reused)</text>
+
+  <path d="M545,170 L545,216" stroke="#27803e" stroke-width="1.3" marker-end="url(#fb1)"/>
+  <path d="M725,170 L620,216" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="600" y="191" fill="#999" font-size="9">skipped when the</text>
+  <text x="600" y="203" fill="#999" font-size="9">grouping isn't reused</text>
+
+  <rect x="470" y="218" width="330" height="34" rx="3" fill="#fff" stroke="#111" stroke-width="1.3"/>
+  <text x="635" y="240" text-anchor="middle" fill="#111" font-size="10.5">Organism (a page section)</text>
+
+  <path d="M635,252 L635,296" stroke="#27803e" stroke-width="1.3" marker-end="url(#fb1)"/>
+
+  <rect x="470" y="298" width="150" height="34" rx="3" fill="#fff" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="545" y="320" text-anchor="middle" fill="#666" font-size="10.5">Template</text>
+  <text x="650" y="320" fill="#999" font-size="9">(only if layout is unique enough to earn one)</text>
+
+  <path d="M545,332 L545,366" stroke="#27803e" stroke-width="1.3" stroke-dasharray="2,2"/>
+  <path d="M635,252 L635,366" stroke="#27803e" stroke-width="1.3" stroke-dasharray="2,2" marker-end="url(#fb1)"/>
+
+  <rect x="470" y="368" width="330" height="34" rx="3" fill="#fff" stroke="#333" stroke-width="1"/>
+  <text x="635" y="390" text-anchor="middle" fill="#111" font-size="10.5">Page</text>
+
+  <text x="635" y="436" text-anchor="middle" fill="#333" font-size="11">The tiers are a vocabulary for reuse, not a required pipeline.</text>
+  <text x="635" y="454" text-anchor="middle" fill="#333" font-size="11">Skip a level when that level's composition doesn't exist anywhere else.</text>
+</svg>

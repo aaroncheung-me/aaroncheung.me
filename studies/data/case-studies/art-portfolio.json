@@ -1,0 +1,98 @@
+{
+  "type": "folder",
+  "id": "art-portfolio",
+  "name": "A Screen Falling Apart",
+  "children": [
+    {
+      "type": "page",
+      "id": "art-case-study",
+      "name": "Case Study",
+      "title": "A Screen Falling Apart",
+      "date": "Built in roughly one month &middot; 23 pieces, digital illustration (Krita)",
+      "technologies": [
+        "<span class=\"text-blue\">Vanilla HTML</span>",
+        "<span class=\"text-blue\">CSS</span>",
+        "<span class=\"text-blue\">JavaScript (no frameworks)</span>"
+      ],
+      "summary": "A Screen Falling Apart is a digital art portfolio disguised as a corrupted operating system, where every piece of art lives inside a draggable, error-dialog-styled window. Under the hood, each window isn't its own image: it's a clipped, jittered viewport onto one full hidden image sitting behind the scene, so dragging a window exposes a different slice of the same corrupted file. The gallery page floods the screen with these windows using rejection-sampled placement instead of pure randomness, keeping the nav protected while letting the artwork spill and overlap. It's a small, deliberate metaphor made structural: presenting work completely outside the metrics-and-algorithm channel it used to travel through.",
+      "content": [
+        "<p class=\"case-study-pdf-link\">[<a href=\"https://aaroncheung.me/art/\" target=\"_blank\" rel=\"noopener\">visit the live site</a>] &nbsp; [<a href=\"data/documents/Art_Portfolio_Case_Study.pdf\" target=\"_blank\" rel=\"noopener\">view original PDF</a>]</p>",
+        "<h2>What This Actually Started As</h2>",
+        "This wasn't conceived as a design project. It started as a straightforward need: a place to put my art, disconnected from any platform's algorithm or audience. It only became something worth writing a case study about in hindsight, once I'd built enough other sites around it that treating my own work this way started to feel natural. I want to be upfront about that rather than pretend I set out from day one to build an elaborate interactive system, because the honest starting point actually matters to what this piece is arguing.",
+        "Before this site existed, I was making art for an audience, posting on a schedule, drawing toward what performed well. At some point I stopped enjoying it and started drawing whatever I actually wanted; this portfolio is what came out the other side of that. It's the same underlying idea that shows up in my <a onclick=\"goToPage('sound-case-study')\" class=\"text-purple\">SOUND memoir</a> &mdash; imposed output versus chosen output &mdash; showing up again here in an entirely different medium. It's a real throughline in how I work.",
+        "<h2>The Concept: Broken, Beautiful, and Deliberately Off-Channel</h2>",
+        "The site presents itself as an operating system that's quietly failing. Every piece of art lives inside a draggable window styled like an OS error dialog &mdash; \"threat detected,\" \"scan complete, infected files found, do not open\" &mdash; and the whole interface behaves like something a virus has gotten into: windows won't actually close, the background glitches and flickers as you interact with it, file names carry real corruption conventions like <code>juniper.png~</code> and <code>juniper.png.bak</code>.",
+        "Two ideas pulled me toward this concept specifically, and neither is about personal aesthetics alone. First, glitches themselves: something that reads as broken can still produce a real, specific kind of beauty in the right context, and that idea feels like it says something true about people generally, not just about me. Second, and less obviously, the idea of malware and viruses as a category: what interests me isn't the damage, it's the range of reasons they exist at all, some genuinely malicious, others built purely to spread information through channels that bypass whatever the mainstream, expected route would have been. That second idea is the one that actually connects back to the audience-versus-autonomy thread running through my other work. A virus is, among other things, a way of moving something through a system without going through that system's front door. That's close to what this whole portfolio is doing, presenting art completely outside the metrics-and-algorithm channel it used to travel through.",
+        "<p class=\"entry-quote\">A virus is a way of moving something through a system without going through the front door. That's close to what this portfolio does with the work itself.</p>",
+        "<figure class=\"case-study-figure case-study-figure-wide\"><img src=\"data/images/art/art-desktop-hero-juniper.webp\" alt=\"Screenshot of the art portfolio's desktop hero: a large illustration of a horned figure with pale hair and moth-like wings, cropped and revealed through several overlapping draggable windows with error-dialog styling, including a whoami.exe panel showing the artist's name, role, and medium, and a stack of navigation windows on the right labeled home.exe, gallery.exe, about.exe, and commissions.exe, each flagged as a detected threat.\" loading=\"lazy\" decoding=\"async\" width=\"1449\" height=\"1313\"><figcaption>The peephole hero, live</figcaption></figure>",
+        "<h2>The Visual System</h2>",
+        "Unlike my other projects, where the visual design came after a finished piece of writing, this aesthetic was built for this site specifically, from the beginning, while all I knew going in was that it needed to be an art portfolio. The final system settled around three rules: a restricted palette, hard-edged geometry with no gradients, and one dominant background shape per piece controlling the composition's flow. Those specific constraints came out of iterating through different colors and shapes rather than being decided in one sitting. What stayed constant throughout was the instinct toward restriction itself: fewer choices, applied consistently, producing a different result every time despite following the same rules piece to piece.",
+        "<h2>Built From Scratch: The Peephole System</h2>",
+        "The technical core of the site isn't just visual theming, it's a real interaction system, and it's worth describing precisely because the implementation is where the malware concept actually becomes structural rather than just decorative.",
+        "Each error-window isn't its own image. One full copy of a piece of art sits behind the whole scene, and every window is a clipped viewport, a peephole, cropped and positioned over a slice of that single hidden image. Dragging a window around doesn't move a picture, it exposes a different part of the one picture that was already there. On top of that, each window is deliberately jittered a few pixels out of alignment with the others, on purpose, so the windows read as slightly misaligned reads of the same corrupted file rather than a clean, seamless crop. That's the corruption metaphor implemented at the pixel level, not just asserted through error-message copy.",
+        "The gallery page runs a related but distinct system: instead of one hidden image behind a few peepholes, it's a flood of error-windows, one per piece, scattered randomly across the screen on every page load. Placement isn't pure <code>Math.random()</code>, it uses rejection sampling, generating candidate positions and discarding ones that fail specific constraints, up to several dozen attempts before falling back to a looser rule rather than ever failing outright. The nav is a hard exclusion no popup may ever cover. Other popups' title bars are a soft exclusion, best avoided but allowed to fail under crowding, since the artwork itself is meant to overlap and pile up, that's the intended look, but a title bar has to stay independently draggable, so I protected those specifically while letting the art spill over freely.",
+        "<figure class=\"case-study-figure case-study-figure-wide\"><img src=\"data/images/art/art-desktop-gallery-flood.webp\" alt=\"Screenshot of the gallery page: two dozen error-window thumbnails of different illustrations scattered and overlapping across a dark grid background, alongside an about.txt window describing the collection's visual constraints and a stack of navigation windows on the right.\" loading=\"lazy\" decoding=\"async\" width=\"1453\" height=\"1306\"><figcaption>The gallery flood: rejection-sampled placement, nav as hard exclusion</figcaption></figure>",
+        "One detail worth being precise about: the full two-layer reveal, an ambient copy plus a hidden zoomed copy sliced open through each window, only exists at desktop width. Tablet keeps the peephole windows but shows just the single ambient layer beneath them, no hidden zoom to reveal. That's not an oversight, it's a real design decision, more explained in the responsive section below.",
+        "The about.txt panel is the one deliberate exception to full randomness: it's centered on purpose rather than scattered, because a random position could land it in an easy-to-miss corner among two dozen other windows, and it's the one panel a visitor actually needs to find. It only falls back to a random position if centering would overlap the nav.",
+        "A conventional gallery would have shown the artwork more efficiently. That was never the point. The interface itself is part of the piece, a broken system that forces the viewer to go looking for what it's hiding instead of handing it over.",
+        "<p class=\"entry-quote\">The interface itself is part of the piece, a broken system that forces the viewer to go looking for what it's hiding instead of handing it over.</p>",
+        "<h2>Designing for Different Screens, Not One Flexible Layout</h2>",
+        "The scattered-flood gallery works on a wide desktop screen and falls apart on a phone, too many overlapping windows in too little space reads as unreadable clutter rather than intentional chaos. Rather than force one layout to serve every width, the site runs three distinct tiers rather than two. Tablet keeps the same windows and ambient artwork as desktop, simplified for a narrower, often portrait viewport where a second overlapping copy would mostly just compete for space rather than add anything. Mobile goes further and changes the interaction model outright: the gallery becomes a swipeable, one-piece-at-a-time card stack instead of a scattered field, since a phone screen can't support the same density a desktop can. The visual chrome, the error-window styling, the file names, the in-character copy, stays completely consistent across all three. What changes tier to tier is how much of the underlying system a given width can actually support without becoming clutter instead of atmosphere.",
+        "<h2>Small Details That Took Real Attention</h2>",
+        "A few things in the implementation exist purely to keep the concept from breaking under real use, the kind of decision that's invisible when it works and obvious the moment it doesn't:",
+        "<ul><li>Image dimensions are preloaded and cached before a popup is placed, so a window never visibly jumps or resizes once its image finishes loading.</li><li>Dragging a window and clicking to open its lightbox view are disambiguated by a movement threshold, so a real drag never accidentally also triggers the zoom, and a real click never accidentally starts a drag.</li><li>The close button on every window doesn't just fail silently, it shakes &mdash; a small, deliberately in-character refusal rather than a dead button, reinforcing that this system genuinely won't let you make the error go away.</li><li>The whole popup system checks for a reduced-motion preference and skips the spawn animation entirely for anyone who's set that &mdash; the aesthetic doesn't get to override an actual accessibility setting.</li></ul>",
+        "<h2>Outcome</h2>",
+        "The site is live at aaroncheung.me/art, holding 23 finished pieces, all illustration and digital painting done in Krita. I've stepped back from drawing for the last few months to focus on job searching and the coding work that produced TRM, SOUND, and this case study itself, so the current set is essentially settled for now rather than actively growing. I expect to add to it once drawing is back in regular rotation, but there's no near-term timeline for that.",
+        "<h2>Reflection</h2>",
+        "What I keep noticing, writing this after the fact, is that this project didn't start as an argument about anything. It started as wanting a place for my art that wasn't tied to a platform. The malware framing, the peephole system, the deliberate misalignment between windows, all of that came from just building the thing I actually wanted to look at, not from setting out to make a statement about algorithms or authenticity. The statement showed up anyway, because it turns out the impulse behind this site was the same impulse behind stepping back from posting on a schedule in the first place."
+      ],
+      "closingQuote": "I didn't plan for these projects to rhyme with each other. They just do, because they're all downstream of the same decision to stop building things for an audience I couldn't see and start building things I actually wanted to exist."
+    },
+    {
+      "type": "folder",
+      "id": "art-visual-reference",
+      "name": "Visual Reference",
+      "children": [
+        {
+          "type": "page",
+          "id": "art-visual-hero-juniper",
+          "name": "Hero: juniper.png",
+          "title": "Hero, &quot;juniper.png&quot;",
+          "summary": "Desktop reveals slices of a hidden, zoomed second copy of the art through each window; tablet shows only the single ambient layer beneath the windows, no zoom reveal.",
+          "content": [
+            "<figure class=\"case-study-figure case-study-figure-wide\"><img src=\"data/images/art/art-desktop-hero-juniper.webp\" alt=\"Screenshot of the art portfolio's desktop hero: a large illustration of a horned figure with pale hair and moth-like wings, cropped and revealed through several overlapping draggable windows with error-dialog styling, including a whoami.exe panel and a stack of navigation windows on the right, each flagged as a detected threat.\" loading=\"lazy\" decoding=\"async\" width=\"1449\" height=\"1313\"><figcaption>Desktop</figcaption></figure>",
+            "<figure class=\"case-study-figure\"><img src=\"data/images/art/art-tablet-hero-juniper.webp\" alt=\"The same juniper.png hero page at tablet width, showing the peephole windows over the ambient artwork layer without the desktop's hidden zoomed second layer.\" loading=\"lazy\" decoding=\"async\" width=\"960\" height=\"1152\"><figcaption>Tablet</figcaption></figure>",
+            "<figure class=\"case-study-figure\"><img src=\"data/images/art/art-mobile-hero-juniper.webp\" alt=\"The same juniper.png hero page on mobile, showing the peephole windows restacked vertically over the ambient artwork layer, with a whoami.exe panel and a HOME.exe navigation window below.\" loading=\"lazy\" decoding=\"async\" width=\"379\" height=\"831\"><figcaption>Mobile</figcaption></figure>",
+            "<p>From <a onclick=\"goToPage('art-case-study')\" class=\"text-purple\">the case study</a>: Designing for Different Screens, Not One Flexible Layout.</p>"
+          ]
+        },
+        {
+          "type": "page",
+          "id": "art-visual-gallery",
+          "name": "Gallery: Flood vs. Stack",
+          "title": "Gallery: Flood vs. Swipeable Stack",
+          "summary": "The same about.txt content appears as one card among a scattered flood on desktop and tablet alike, and as a single centered swipeable card on mobile &mdash; a different interaction model, not just a resized layout.",
+          "content": [
+            "<figure class=\"case-study-figure case-study-figure-wide\"><img src=\"data/images/art/art-desktop-gallery-flood.webp\" alt=\"Screenshot of the gallery page: two dozen error-window thumbnails of different illustrations scattered and overlapping across a dark grid background, alongside an about.txt window describing the collection's visual constraints and a stack of navigation windows on the right.\" loading=\"lazy\" decoding=\"async\" width=\"1453\" height=\"1306\"><figcaption>Desktop</figcaption></figure>",
+            "<figure class=\"case-study-figure\"><img src=\"data/images/art/art-tablet-gallery-flood.webp\" alt=\"The gallery flood page at tablet width, showing the same scattered error-window thumbnails and about.txt panel restacked for a narrower viewport.\" loading=\"lazy\" decoding=\"async\" width=\"964\" height=\"1150\"><figcaption>Tablet</figcaption></figure>",
+            "<figure class=\"case-study-figure\"><img src=\"data/images/art/art-mobile-gallery-stack.webp\" alt=\"The gallery on mobile, showing the about.txt card centered and labeled 1 of 24, with an empty grid below where swiped-through pieces would appear and a GALLERY.exe navigation window at the bottom.\" loading=\"lazy\" decoding=\"async\" width=\"377\" height=\"833\"><figcaption>Mobile</figcaption></figure>",
+            "<p>From <a onclick=\"goToPage('art-case-study')\" class=\"text-purple\">the case study</a>: Built From Scratch: The Peephole System.</p>"
+          ]
+        },
+        {
+          "type": "page",
+          "id": "art-visual-hero-gura",
+          "name": "Hero: gura &amp; Commissions",
+          "title": "Hero, &quot;gawr gura.png&quot; &amp; Commissions",
+          "summary": "A second hero page, showing the system holds up across different content. The in-character commissions copy carries through identically at every width.",
+          "content": [
+            "<figure class=\"case-study-figure case-study-figure-wide\"><img src=\"data/images/art/art-desktop-hero-gura-commissions.webp\" alt=\"Screenshot of a second hero page featuring an illustration of a shark-themed character, shown through overlapping peephole windows, with a pricing.dat window showing null pricing data and a commissions.exe window displaying a fatal error message reading commissions are closed.\" loading=\"lazy\" decoding=\"async\" width=\"1451\" height=\"1303\"><figcaption>Desktop</figcaption></figure>",
+            "<figure class=\"case-study-figure\"><img src=\"data/images/art/art-tablet-hero-gura-commissions.webp\" alt=\"The gawr gura hero and commissions page at tablet width, showing the same pricing and commissions-closed windows restacked for a narrower viewport.\" loading=\"lazy\" decoding=\"async\" width=\"964\" height=\"1149\"><figcaption>Tablet</figcaption></figure>",
+            "<figure class=\"case-study-figure\"><img src=\"data/images/art/art-mobile-hero-gura-commissions.webp\" alt=\"The gawr gura hero and commissions page on mobile, showing the peephole windows restacked vertically with the pricing.dat and commissions.exe error windows below.\" loading=\"lazy\" decoding=\"async\" width=\"381\" height=\"837\"><figcaption>Mobile</figcaption></figure>",
+            "<p>From <a onclick=\"goToPage('art-case-study')\" class=\"text-purple\">the case study</a>: Built From Scratch: The Peephole System.</p>"
+          ]
+        }
+      ]
+    }
+  ]
+}
