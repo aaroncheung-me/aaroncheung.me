@@ -5,9 +5,7 @@
 /* Case Study Nav widget: two stacked rows (progress bar + prev/title/next),
    so it needs .live-tile-frame's centering overridden the same way
    .nav-widget-status-frame already does on the main site. */
-.studies-widget-casenav-frame,
-.studies-widget-citations-frame,
-.studies-widget-exploring-frame {
+.studies-widget-casenav-frame {
   display: block;
   padding: 0.3rem 0.4rem;
   box-sizing: border-box;
@@ -69,24 +67,202 @@
   color: var(--clr-purple);
 }
 
-.studies-citation-text {
-  font-size: 0.85em;
-  margin: 0 0 0.3rem;
-}
-
-.studies-citation-note {
-  font-size: 0.75em;
-  color: var(--clr-primary-txt);
-  margin: 0;
-}
-
-.studies-exploring-text {
-  font-size: 0.85em;
-  margin: 0;
+.studies-casenav-hint {
+  opacity: 0.7;
+  font-style: italic;
 }
 
 .studies-widget-empty {
   font-size: 0.8em;
   color: var(--clr-primary-txt);
   margin: 0;
+}
+
+/* "the work" home-page section, and the matching card at the top of each
+   primary case-study page (js/studies-cards.js) -- title, summary, and
+   closing quote pulled straight from the node's existing fields, so there's
+   no separate content to keep in sync. One card per row, full width,
+   rather than a multi-column grid. */
+.work-cards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.case-study-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.8rem 0.9rem;
+  border: 0.1px solid var(--clr-border);
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  text-align: left;
+}
+
+.case-study-card-link {
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.case-study-card-link:hover,
+.case-study-card-link:focus-visible {
+  border-color: var(--clr-purple);
+}
+
+.case-study-card-title {
+  font-size: 0.95rem;
+  color: var(--clr-blue);
+}
+
+.case-study-card-summary {
+  font-size: 0.85em;
+  color: var(--clr-primary-txt);
+}
+
+.case-study-card-quote {
+  font-style: italic;
+  font-weight: bold;
+  font-size: 0.85em;
+  padding-top: 0.5rem;
+  border-top: 0.1px solid var(--clr-border);
+}
+
+.case-study-card-quote::before {
+  content: "\201C";
+}
+
+.case-study-card-quote::after {
+  content: "\201D";
+}
+
+/* Case study content -- generic-page building blocks beyond what tui.css's
+   .entry-summary/.entry-quote cover (those are built to lead or close a
+   page, not to interrupt mid-narrative). Scoped to .inner-paragraph-container
+   so heading/list resets here don't leak into other renderers. */
+
+.inner-paragraph-container h3 {
+  font-size: 0.92rem;
+  font-weight: bold;
+}
+
+.inner-paragraph-container ul,
+.inner-paragraph-container ol {
+  padding-left: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.inner-paragraph-container code {
+  font-size: 0.9em;
+  background: var(--clr-hover-overlay);
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+}
+
+.case-study-references {
+  font-size: 0.85em;
+  opacity: 0.85;
+}
+
+/* An authorial aside (IP notes, companion-piece framing) -- quieter than
+   .entry-summary/.entry-quote, meant to read as a footnote, not a beat. */
+.case-study-note {
+  font-style: italic;
+  font-size: 0.85em;
+  opacity: 0.8;
+  border-left: 2px solid var(--clr-border);
+  padding-left: 0.75rem;
+}
+
+/* A line pulled verbatim from working notes -- distinct from
+   .case-study-note (authorial) via the purple accent, echoing how
+   text-purple is used elsewhere for quoted/spoken material. */
+.case-study-worknote {
+  font-style: italic;
+  border-left: 2px solid var(--clr-purple);
+  padding-left: 0.75rem;
+}
+
+.case-study-pdf-link a {
+  color: var(--clr-purple);
+  text-decoration: none;
+  transition: color 0.1s ease;
+}
+
+.case-study-pdf-link a:hover {
+  color: var(--clr-primary-txt);
+}
+
+.case-study-figure {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0.5rem;
+  border: 0.1px solid var(--clr-blue);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.case-study-figure img {
+  width: 100%;
+  /* The <img> tags carry width/height so the browser reserves space before
+     they load; this keeps that height from overriding the 100% width. */
+  height: auto;
+  background-color: var(--clr-secondary-bg);
+}
+
+.case-study-figure figcaption {
+  font-size: 0.75em;
+  opacity: 0.75;
+  text-align: center;
+}
+
+/* Wider variant for real product/UI screenshots -- .case-study-figure's
+   640px cap is sized for the SVG diagrams it was built for, too narrow for
+   screenshots with UI text that needs to stay legible. */
+.case-study-figure-wide {
+  max-width: 900px;
+}
+
+/* Chapter-by-source mapping tables (e.g. a research index) -- the site has
+   no prior table styling since generic pages are prose-only otherwise. */
+.case-study-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85em;
+}
+
+.case-study-table th {
+  text-align: left;
+  color: var(--clr-purple);
+  font-weight: bold;
+  padding: 0.3rem 0.6rem 0.3rem 0;
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.case-study-table td {
+  padding: 0.5rem 0.6rem 0.5rem 0;
+  border-bottom: 0.1px solid var(--clr-border);
+  vertical-align: top;
+}
+
+.case-study-table td:first-child {
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* Keyboard focus for nav rows (js/studies-render.js makes them tab stops).
+   Same tint as hover, plus an outline so focus is visible on the selected
+   row too. */
+.nav-folder:focus-visible,
+.nav-page:focus-visible {
+  outline: 1px solid var(--clr-purple);
+  outline-offset: -1px;
+  background-color: var(--clr-tertiary-bg);
 }

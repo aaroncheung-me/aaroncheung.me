@@ -38,22 +38,31 @@
     <meta property="og:description" content="Academic portfolio and case studies by Aaron Cheung." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://aaroncheung.me/studies/" />
+    <meta property="og:image" content="https://aaroncheung.me/studies/data/images/og-preview.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Aaron Cheung — Studies" />
+    <meta name="twitter:description" content="Academic portfolio and case studies by Aaron Cheung." />
+    <meta name="twitter:image" content="https://aaroncheung.me/studies/data/images/og-preview.jpg" />
 
-    <link rel="preload" as="font" href="fonts/lekton-v21-latin-regular.woff2" type="font/woff2" crossorigin="anonymous">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="stylesheet" type="text/css" href="css/tui.css">
-    <link rel="stylesheet" type="text/css" href="css/studies.css">
+    <link rel="preload" as="font" href="/fonts/lekton-v21-latin-regular.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" type="text/css" href="/css/tui.css?v=53">
+    <link rel="stylesheet" type="text/css" href="css/studies.css?v=4">
 
-    <script src="js/overlay-esc.js" defer></script>
-    <script src="js/theme.js" defer></script>
-    <script src="js/lofi-player.js" defer></script>
-    <script src="js/glitch-artifacts.js" defer></script>
-    <script src="js/include-partials.js" defer></script>
-    <script src="js/mobile-nav.js" defer></script>
-    <script src="js/studies-render.js" defer></script>
-    <script src="js/studies-router.js" defer></script>
-    <script src="js/studies-widgets.js" defer></script>
-    <script src="js/studies-boot.js" defer></script>
+    <script src="/js/overlay-esc.js" defer></script>
+    <script src="/js/theme.js?v=2" defer></script>
+    <script src="/js/lofi-player.js" defer></script>
+    <script src="/js/glitch-artifacts.js" defer></script>
+    <script src="/js/include-partials.js" defer></script>
+    <script src="/js/mobile-nav.js" defer></script>
+    <script src="/js/home-tiles.js?v=2" defer></script>
+    <script src="js/studies-render.js?v=5" defer></script>
+    <script src="js/studies-cards.js?v=5" defer></script>
+    <script src="js/studies-router.js?v=6" defer></script>
+    <script src="js/studies-widgets.js?v=5" defer></script>
+    <script src="js/studies-boot.js?v=2" defer></script>
 
     <!-- Private visitor count only, nothing shown on-site -- see /analytics/. -->
     <script data-goatcounter="https://aaroncheung.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
@@ -64,8 +73,8 @@
 <body class="darkmode at-home">
     <div id="glitch-artifacts" aria-hidden="true"></div>
     <div id="main-container" role="main">
-        <div data-include="partials/mobile-tabbar.html"></div>
-        <div data-include="partials/mobile-header.html"></div>
+        <div data-include="/partials/mobile-tabbar.html"></div>
+        <div data-include="/partials/mobile-header.html"></div>
         <div id="section-container">
             <div id="left-section">
                 <!-- Static breadcrumb display -- not clickable: the File
@@ -77,14 +86,14 @@
                 <div id="nav-panel">
                     <div id="nav-scroll-area" tabindex="0" aria-label="Section navigation"></div>
                 </div>
-                <!-- Case-study nav / citations / currently-exploring rotator,
+                <!-- Case-study nav / Lofi Generator placeholder rotator,
                      populated by js/studies-widgets.js. -->
                 <div id="nav-widget-panel">
                     <div id="nav-widget-content"></div>
                 </div>
                 <div id="nav-logo" tabindex="0" role="button" aria-label="Go to home" onclick="goToPage('home')">
                     <div id="logo-container-nav">
-                        <img loading="eager" src="data/images/logo.png" alt="Aaron C." decoding="async" width="550" height="165">
+                        <img loading="eager" src="/data/images/logo.png" alt="Aaron C." decoding="async" width="550" height="165">
                     </div>
                 </div>
             </div>
@@ -92,12 +101,12 @@
                 <div class="container h-fill" id="main-content" tabindex="0" aria-label="Main content">
                     <div class="container-content">
                         <div id="logo-container">
-                            <img loading="eager" src="data/images/logo_home.png" id="logo" alt="Aaron C." decoding="async" width="900" height="450" />
+                            <img loading="eager" src="/data/images/logo_home.png" id="logo" alt="Aaron C." decoding="async" width="900" height="450" />
                         </div>
                         <div class="home-hero">
                             <h1 class="home-hero-name">Hi, I'm <span class="text-blue">Aaron Cheung</span></h1>
-                            <p class="home-hero-tagline">[Replace with a one-line academic-friendly intro -- what pulls you toward this field, in the site's own voice.]</p>
-                            <p class="home-hero-meta">[Optional second line -- e.g. current status/program you're applying to] &middot; <span class="text-blue">Dallas, Texas</span><span class="cursor-blink"></span></p>
+                            <p class="home-hero-tagline">A software engineer studying how creative autonomy shapes what we make.</p>
+                            <p class="home-hero-meta"><span id="case-study-count">5 case studies</span> &middot; CS grad, <span class="text-blue">Dallas, Texas</span> &middot; applying to IxD &amp; Visualization programs<span class="cursor-blink"></span></p>
                         </div>
 
                         <div class="home-section">
@@ -105,14 +114,25 @@
                                 <p>find me</p>
                                 <div></div>
                             </div>
-                            <p>A few <a onclick="goToPage('case-study-example')" class="text-purple">case studies</a> live on this site -- start there for the work itself, or the <a onclick="goToPage('about')" class="text-purple">about</a> page for the rest of the picture.</p>
-                            <p>The best way to reach me is email: <span class="text-purple">contact@aaroncheung.me</span>.</p>
+                            <p>The <span class="text-purple">case studies</span> below are the core of this site, and the <a onclick="goToPage('about')" class="text-purple">about</a> page fills in the rest of the picture.</p>
+                            <p>The engineering side of the story lives at <a href="https://aaroncheung.me/" target="_blank" rel="noopener" class="text-purple">aaroncheung.me</a>, and my CV is on the <a onclick="goToPage('resume')" class="text-purple">resume</a> page.</p>
+                            <p>The easiest way to reach me is email: <span class="text-purple">contact@aaroncheung.me</span>.</p>
+                        </div>
+
+                        <div class="home-section">
+                            <div class="title decorating-text">
+                                <p>the work</p>
+                                <div></div>
+                            </div>
+                            <!-- Populated by renderWorkCards() (js/studies-cards.js) once
+                                 data/nav.json loads -- see initStudiesRouter(). -->
+                            <div class="work-cards-grid" id="work-cards-grid"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div data-include="partials/footer.html"></div>
+        <div data-include="/partials/footer.html"></div>
         <p id="desktop-controls-hint" class="controls-hint">↓ Click [ <span class="text-blue">icons</span> ] to adjust toggles</p>
         <p id="mobile-controls-hint" class="controls-hint">Tap [ <span class="text-blue">icons</span> ] to adjust toggles ↑</p>
     </div>

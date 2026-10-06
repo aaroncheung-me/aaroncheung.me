@@ -1,0 +1,55 @@
+<svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="fd1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="460" fill="#ffffff"/>
+  <text x="30" y="34" fill="#111" font-size="16" font-weight="bold">Figure D: Role-Based Interface Structure</text>
+  <line x1="30" y1="46" x2="970" y2="46" stroke="#ccc" stroke-width="1"/>
+  <text x="30" y="66" fill="#666" font-size="10.5" font-style="italic">what each role actually needed, not just what they were allowed to see</text>
+
+  <!-- central gate -->
+  <rect x="410" y="100" width="180" height="50" rx="4" fill="#fff" stroke="#111" stroke-width="1.5"/>
+  <text x="500" y="122" text-anchor="middle" fill="#111" font-size="11">Router-level</text>
+  <text x="500" y="138" text-anchor="middle" fill="#111" font-size="11">session check</text>
+
+  <!-- three branches -->
+  <path d="M500,150 L500,180 L180,180 L180,210" stroke="#333" stroke-width="1.3" fill="none" marker-end="url(#fd1)"/>
+  <path d="M500,150 L500,210" stroke="#333" stroke-width="1.3" fill="none" marker-end="url(#fd1)"/>
+  <path d="M500,150 L500,180 L820,180 L820,210" stroke="#333" stroke-width="1.3" fill="none" marker-end="url(#fd1)"/>
+
+  <!-- anon column -->
+  <rect x="60" y="212" width="240" height="46" rx="4" fill="#fff" stroke="#666" stroke-width="1.3"/>
+  <text x="180" y="240" text-anchor="middle" fill="#111" font-size="11" font-weight="bold">Anonymous visitor</text>
+  <rect x="60" y="272" width="240" height="130" rx="4" fill="#f9f9f9" stroke="#ccc" stroke-width="1"/>
+  <text x="80" y="296" fill="#333" font-size="10">Goal: convert to a user</text>
+  <text x="80" y="318" fill="#333" font-size="10">Landing page leads with a</text>
+  <text x="80" y="334" fill="#333" font-size="10">hero message and a clear</text>
+  <text x="80" y="350" fill="#333" font-size="10">signup hook</text>
+  <text x="80" y="374" fill="#666" font-size="9" font-style="italic">design priority: persuasion</text>
+
+  <!-- business user column -->
+  <rect x="380" y="212" width="240" height="46" rx="4" fill="#fff" stroke="#666" stroke-width="1.3"/>
+  <text x="500" y="240" text-anchor="middle" fill="#111" font-size="11" font-weight="bold">Business user</text>
+  <rect x="380" y="272" width="240" height="130" rx="4" fill="#f9f9f9" stroke="#ccc" stroke-width="1"/>
+  <text x="400" y="296" fill="#333" font-size="10">Goal: get work done daily</text>
+  <text x="400" y="318" fill="#333" font-size="10">Lands directly on their</text>
+  <text x="400" y="334" fill="#333" font-size="10">dashboard, organized so full</text>
+  <text x="400" y="350" fill="#333" font-size="10">functionality is visible without</text>
+  <text x="400" y="366" fill="#333" font-size="10">feeling cluttered</text>
+  <text x="400" y="390" fill="#666" font-size="9" font-style="italic">design priority: clarity at a glance</text>
+
+  <!-- admin column -->
+  <rect x="700" y="212" width="240" height="46" rx="4" fill="#fff" stroke="#666" stroke-width="1.3"/>
+  <text x="820" y="240" text-anchor="middle" fill="#111" font-size="11" font-weight="bold">Admin</text>
+  <rect x="700" y="272" width="240" height="130" rx="4" fill="#f9f9f9" stroke="#ccc" stroke-width="1"/>
+  <text x="720" y="296" fill="#333" font-size="10">Goal: manage the system</text>
+  <text x="720" y="318" fill="#333" font-size="10">Trained users, so usability</text>
+  <text x="720" y="334" fill="#333" font-size="10">came first and polish was</text>
+  <text x="720" y="350" fill="#333" font-size="10">deliberately deprioritized,</text>
+  <text x="720" y="366" fill="#333" font-size="10">approachability wasn't the goal</text>
+  <text x="720" y="390" fill="#666" font-size="9" font-style="italic">design priority: raw usability</text>
+
+  <text x="500" y="432" text-anchor="middle" fill="#333" font-size="11">Same gate, three different interfaces, each built around what that person actually needed to do.</text>
+</svg>

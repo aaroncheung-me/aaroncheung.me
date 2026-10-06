@@ -1,0 +1,148 @@
+{
+  "type": "folder",
+  "id": "the-review-mediator",
+  "name": "The Review Mediator",
+  "children": [
+    {
+      "type": "page",
+      "id": "trm-case-study",
+      "name": "Case Study",
+      "title": "The Review Mediator &mdash; Built to Hold the Line",
+      "date": "Fall 2025 &middot; 13 weeks",
+      "technologies": [
+        "<span class=\"text-blue\">React</span>",
+        "<span class=\"text-blue\">TypeScript</span>",
+        "<span class=\"text-blue\">Tailwind CSS</span>",
+        "<span class=\"text-blue\">Clerk</span>",
+        "<span class=\"text-blue\">Express.js</span>",
+        "<span class=\"text-blue\">Supabase (PostgreSQL)</span>"
+      ],
+      "summary": "The Review Mediator is an online dispute-resolution platform that gives small businesses one place to manage reviews and disputes across platforms they don't control. Working on a six-person capstone team, I implemented Clerk authentication and role-based routing at the router level, and built a Tailwind style guide that kept five other developers' pages visually consistent. I also owned the Contact Page end to end, interface, validation, API, and database, one of the only features on the project handled by a single person. The sponsor ended up far enough ahead of schedule that she skipped a planned second round of student developers and shipped what we built directly.",
+      "content": [
+        "<p class=\"case-study-note\">This project was built for an external company sponsor as part of a university capstone. Per the project's intellectual property agreement, I can describe my role, the architecture, and my technical decisions in detail, but I can't reproduce screenshots of the live product or actual source code. The figures throughout are illustrative diagrams recreating the underlying concepts, not literal implementation artifacts.</p>",
+        "<p class=\"case-study-pdf-link\">[<a href=\"data/documents/TRM_Case_Study.pdf\" target=\"_blank\" rel=\"noopener\">view original PDF</a>]</p>",
+        "<h2>The Problem</h2>",
+        "The Review Mediator (TRM) is an online dispute-resolution platform that provides small businesses one place to see their reviews across platforms, flag the ones that need a response, and manage the resulting disputes end to end.",
+        "Small businesses don't have much control over their own reputation on platforms they don't own. A single unfair or policy-violating review on Google or Yelp can sit there for months, and the tools you'd normally use to dispute it are scattered and slow, built around the platform's terms of service instead of how a business owner actually works.",
+        "TRM tries to fix the workflow itself, not just the review, letting a business reach out to a reviewer directly without leaving the dashboard, solving the problem of working across a variety of scattered platform tools. My team of six was asked to build the MVP: a working prototype that proved the core loop end to end, covering secure login, role-based dashboards, review import, dispute submission, and case tracking.",
+        "<h2>Goals &amp; Constraints</h2>",
+        "Two things shaped every decision that we made: a 13-week timeline, and the fact that we weren't starting from a blank slate.",
+        "The inherited code worked for the scenarios it had been written for, but it didn't generalize well. Much of the logic was page-specific, and the architecture had evolved feature by feature rather than around reusable patterns. The bigger issue was access control: login and account creation worked, but once someone was in, they could see everything, with no real distinction between an anonymous visitor, a business user, and an admin.",
+        "The team itself was six developers, cross-functional, mentored by a senior developer. Early on we rotated through frontend, backend, and database before settling into fixed roles, so everyone had at least some grounding in the other layers before specializing.",
+        "<h2>My Role</h2>",
+        "I worked on the frontend team, mostly on two things that ended up mattering architecturally: authentication and access integration, and design system governance, plus full ownership of the Contact Page feature.",
+        "<h3>Authentication integration</h3>",
+        "I implemented the Clerk authentication flow on the frontend, making sure session tokens correctly gated access to protected pages and got attached to outgoing API requests.",
+        "<h3>Full ownership of two features</h3>",
+        "I built the Contact Page from front to back &mdash; form, validation, Express route, Supabase write &mdash; and the role-based dashboard routing logic described below. Most features on the project were split across teams: one team built the interface, another wired up the endpoints, a third handled the database, so owning a feature end to end was rare. The Contact Page became one of the few features where I owned the full stack lifecycle: interface, validation, API integration, and database persistence.",
+        "<h2>Key Decisions</h2>",
+        "<h3>The Shared Design System</h3>",
+        "Given the state of the inherited code, we decided to tear most of it down and rebuild using atomic design principles<sup class=\"text-blue\">1</sup> instead of patching around what was already there. A senior developer mentored the rebuild, which helped the team figure out what was actually worth keeping. The taxonomy itself mattered less than what got built on top of it. Using that component architecture, I broke shared UI elements &mdash; buttons, form fields, layout shells, and navigation &mdash; into reusable components instead of letting each page rebuild its own version of the same thing. But the part of this that actually mattered day to day was the Tailwind CSS style guide I built and maintained on top of those components: a shared set of spacing, type, and color decisions that the rest of the team pulled from instead of picking their own values page by page.",
+        "Five other people were building pages at the same time I was. Without a shared system, that's five slightly different interpretations of \"the same\" button, five different gaps between a label and an input, five different shades of the same gray. The style guide was the thing that kept that from happening &mdash; a design decision only had to get made once, in one place, instead of re-litigated on every page it showed up on. That's a small thing to say and a genuinely tedious thing to maintain in practice, since it meant reviewing other people's UI work against a standard I'd set, not just building my own.",
+        "<p class=\"entry-quote\">The style guide was the thing that kept that from happening &mdash; a design decision only had to get made once, in one place, instead of re-litigated on every page it showed up on.</p>",
+        "<h3>Routing by Role, Not by Page</h3>",
+        "I implemented role-based routing at the router level rather than page by page, because the enforcement point scales with the size of the application instead of with the number of pages: as the surface area grows, the check doesn't move, it just keeps working. The idea came out of a team discussion. Something I said pointed the conversation in that direction, and our senior developer mentor took it from there and fleshed out the actual pattern, drawing on standard role-based access control practice.<sup class=\"text-blue\">2</sup> I'm the one who implemented it: a check using the user's Clerk session token to decide what a person could see before any individual page even loaded.",
+        "<ul><li>No valid session, and you're routed to the public landing page no matter what URL you typed, so you can't get around the gate by guessing a dashboard URL directly</li><li>Valid session, and you're routed into the authenticated shell, where the dashboard, cases page, and account tools live</li></ul>",
+        "Putting the check at the routing layer meant every new authenticated page inherited the correct behavior instead of requiring individual guards. It also created a single enforcement point for debugging and future expansion.",
+        "The roles weren't just about who could see what, they were about what each type of user actually needed from the interface. We identified three distinct user journeys, each with different interface priorities:",
+        "<ul><li>An anonymous visitor's job is to become a user, so the landing page leads with a hook toward signing up rather than functionality they can't access yet.</li><li>A business user's dashboard needed to lead with itself: organized, not cluttered, surfacing the full range of functionality without burying any of it.</li><li>An admin's experience deprioritized polish for usability, since admins would be trained to use the tool rather than encountering it cold.</li></ul>",
+        "<figure class=\"case-study-figure\"><img src=\"data/images/trm/figure-d-role-based-interface-structure.svg\" alt=\"Diagram showing a single router-level session check branching into three different interface priorities: an anonymous visitor's landing page optimized for conversion, a business user's dashboard optimized for clarity, and an admin interface optimized for raw usability over polish.\" loading=\"lazy\" decoding=\"async\" width=\"1000\" height=\"460\"><figcaption>Figure D &mdash; Role-Based Interface Structure</figcaption></figure>",
+        "<h2>Lessons Learned</h2>",
+        "This wasn't a solo project, and a big part of what I actually learned was less about React and more about working inside a shared codebase for the first time. Early on I struggled with git in a real team setting: branch hygiene, rebasing onto the latest release branch, and cleaning up a branch before it was ready for review. None of that was intuitive to me at first, and I leaned on our technical advisor and a lot of outside reading to learn collaborative version-control workflows properly. By the second half of the project it had become routine instead of a source of dread.",
+        "The bigger shift for me was architectural, not procedural. I already knew component libraries and reusable patterns existed before this project, I just hadn't felt the actual cost of skipping them until I was the person responsible for keeping five other people's pages looking like they belonged together. Even once I understood the theory, applying it wasn't obvious &mdash; I remember being genuinely unsure why some organisms in our structure skipped straight to atoms while others routed through molecules first, and why some pages resolved down to a template and others didn't. Atomic design stopped being a term from a lecture slide and became something I had to actually reason through case by case, which is a very different kind of understanding.",
+        "<p class=\"entry-quote\">I already knew component libraries and reusable patterns existed before this project, I just hadn't felt the actual cost of skipping them until I was the person responsible for keeping five other people's pages looking like they belonged together.</p>",
+        "<h2>Outcome</h2>",
+        "Going in, the sponsor's expectations were pretty modest, calibrated to what the previous student team had managed: a skeleton frontend that worked but wasn't fully fleshed out, a functional backend with proper endpoints, and a database structured with room to grow.",
+        "The frontend portion of the project progressed furthest beyond that initial baseline. We moved past a bare skeleton into a fully fleshed-out UI &mdash; the Contact Page, the dashboard and menu pages, the navigation header &mdash; with actual UI/UX decisions behind each one instead of placeholder structure. It was enough that the sponsor told us the project was well ahead of where she expected it to be. That had a real consequence too. She'd originally planned on bringing in another round of student developers to keep building it out before handing it off to her own team for final polish. Instead she skipped that step entirely and went straight into polishing and publishing what we'd built. The version of TRM that's live today is based directly on what my team shipped, and some of the structural decisions I made in the navigation and the pages I owned are still visible on the current site. That outcome traced directly back to the architecture: the routing structure meant every page added after us automatically inherited the correct access rules without anyone having to remember to add a guard clause, and the shared design system helped keep the interface visually consistent across six developers, reducing the need for later UI cleanup before handoff.",
+        "<h2>Reflection</h2>",
+        "Looking back, I'd spread myself out more. I came out of this project with a strong grasp of UI/UX and frontend work, but the capstone was really structured as a place to learn, not a place to perform, and looking back I stayed in my strongest area instead of using the time to build up weaker ones. The time on frontend wasn't wasted &mdash; that's actually where I found a real interest in UI/UX philosophy that's carried past the project, into how much time I've put into experimenting with and tweaking my own portfolio since. But I think I could have gotten more out of the semester by spending some of it uncomfortable, on backend or database work I wasn't already good at.",
+        "The clearest example is the rewrite itself. Our senior developer mentor led the teardown and rebuild of the old codebase into a proper component architecture, and honestly, for good reason &mdash; none of us had the git or codebase experience yet to be trusted with something like that. But I never asked to be more involved in it, and I wish I had.",
+        "<h2>References</h2>",
+        "<ol class=\"case-study-references\"><li>Frost, B. (2016). <em>Atomic Design</em>. Brad Frost. ISBN 978-0-9982966-0-9. Also available at atomicdesign.bradfrost.com.</li><li>OWASP Foundation. <em>Authorization Cheat Sheet</em>. OWASP Cheat Sheet Series. cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html.</li></ol>"
+      ],
+      "closingQuote": "Actually restructuring an existing system, instead of building new features on top of a clean one, is a different and useful skill &mdash; I let the chance to learn it pass by default instead of by choice."
+    },
+    {
+      "type": "page",
+      "id": "trm-process-notes",
+      "title": "Process Notes",
+      "summary": "A companion to The Review Mediator case study &mdash; closer to what the semester actually felt like week to week than the curated version above.",
+      "content": [
+        "<p class=\"case-study-note\">This isn't the polished version. The case study is the curated account of what I did and why it mattered. This is closer to what the semester actually felt like week to week, cleaned up just enough to read, but not smoothed over. Some of this is pulled directly from my own working notes at the time.</p>",
+        "<p class=\"case-study-pdf-link\">[<a href=\"data/documents/TRM_Process_Notes.pdf\" target=\"_blank\" rel=\"noopener\">view original PDF</a>]</p>",
+        "<h2>Clerk auth, and not really understanding what a session token was</h2>",
+        "Early on I genuinely did not understand what <code>Clerk.session.getToken()</code> was giving me or why. I knew a token got a user access to the Express side, which had access to Supabase, but I could not have explained the chain if you'd asked me directly. I spent a while calling <code>getToken()</code> and getting a token that just did not work the way I expected &mdash; wrong encryption, wrong shape &mdash; before realizing I needed <code>getToken({ template: 'supabase-local' })</code> specifically, a named template that formats the token the way Supabase's row-level security actually expects.",
+        "It sounds small written out like that. At the time it was a solid chunk of confused Googling and re-reading Clerk's docs before it clicked that \"a token\" was not one universal thing, it was shaped differently depending on what was going to consume it.",
+        "<figure class=\"case-study-figure\"><img src=\"data/images/trm/figure-a-clerk-token-flow.svg\" alt=\"Diagram of the Clerk session token flow: calling getToken() with the default template produces a token in the wrong shape for Supabase row-level security, while getToken with the supabase-local template produces a token that Express and Supabase correctly validate.\" loading=\"lazy\" decoding=\"async\" width=\"1000\" height=\"320\"><figcaption>Figure A &mdash; Clerk Session Token Flow</figcaption></figure>",
+        "<h2>Atomic design, in theory vs. actually placing a file</h2>",
+        "I thought I understood atomic design going in. Atoms, molecules, organisms, templates, pages &mdash; felt straightforward as a concept. Actually working inside the folder structure was a different problem entirely.",
+        "<blockquote class=\"case-study-worknote\">the mainmenu.tsx is the only thing in molecules... everything else seems to just connect directly from organisms to atoms, skipping molecules level... why can some organisms skip the molecules level and grab directly from atoms and others go step by step</blockquote>",
+        "That was a real question I had, taken from my own notes at the time. I did not have a clean answer for a while. What I eventually worked out, partly from the codebase and partly from asking, is that the levels are not a strict pipeline every piece of UI has to pass through &mdash; they're a vocabulary for how composed something is. A molecule only needs to exist if that specific grouping gets reused somewhere else. If it doesn't, going straight from atoms to an organism isn't a violation of the system, it's just what that particular piece needed. Same logic applies to templates: some pages have enough unique layout to earn one, some don't. Knowing the five words was not the same as knowing when each one applied.",
+        "<figure class=\"case-study-figure\"><img src=\"data/images/trm/figure-b-atomic-design-logic.svg\" alt=\"Diagram contrasting an assumed atomic design pipeline, where every UI element passes through all five tiers, against the rule actually used: skip a tier when that level's composition isn't reused elsewhere.\" loading=\"lazy\" decoding=\"async\" width=\"1000\" height=\"480\"><figcaption>Figure B &mdash; Atomic Design, the Question I Actually Had</figcaption></figure>",
+        "<h2>Git, actually learning it instead of memorizing commands</h2>",
+        "This was probably the single biggest time sink of the semester, and also the thing I feel like I actually learned the most from by the end. The specific sequence I had to internalize, mostly through trial, error, and a lot of YouTube:",
+        "<ul><li>Rebase a feature branch onto the latest release branch before opening a PR</li><li>If the branch had multiple messy commits, squash them: <code>git rebase -i {commit hash}</code>, change <code>pick</code> to <code>s</code> for the commits being squashed, then rewrite the final commit message</li><li>Run <code>npm run format</code> and <code>npm run lint</code> before pushing</li><li>After a squash or rebase, a normal push usually gets rejected, since history changed &mdash; that's where <code>git push -f</code> comes in, and I remember being warned pretty directly that the -f flag is dangerous and not something to reach for casually</li><li>A few times things got tangled enough that the fix was <code>git reset --hard {commit hash}</code> followed by <code>git fetch</code> and <code>git pull</code>, essentially throwing away my local mess and starting clean from origin</li></ul>",
+        "None of this was taught to me in a lecture. It was Marvin, our senior developer mentor, explaining it in the moment when something broke, plus a lot of independent reading afterward to make sure I actually understood why a command did what it did, not just which one to type.",
+        "<figure class=\"case-study-figure\"><img src=\"data/images/trm/figure-c-git-rebase-squash.svg\" alt=\"Flowchart of the git workflow learned during the project: commit on a feature branch, rebase onto the release branch, squash commits interactively, lint and format, push (occasionally force), and code review, with a side path for resetting hard and pulling fresh from origin when a branch got tangled.\" loading=\"lazy\" decoding=\"async\" width=\"1000\" height=\"560\"><figcaption>Figure C &mdash; Rebase &amp; Squash, the Sequence I Actually Learned</figcaption></figure>",
+        "<h2>Tooling ramp-up</h2>",
+        "Docker, Postman, Prettier, Tailwind &mdash; none of these were things I'd used seriously before this project. Tailwind in particular took a bit to click: I understood it was \"a CSS library\" in the abstract but didn't have a real feel for why utility classes over traditional CSS until I'd actually built a few components with it and felt the consistency it forced across the team. Postman ended up being more useful than I expected once I actually needed to test endpoints in isolation instead of only through the running app.",
+        "<h2>The Honest Reflection</h2>",
+        "The thing I keep coming back to, and this is close to word for word what I wrote to myself partway through the semester:",
+        "<blockquote class=\"case-study-worknote\">one thing that would have saved a bunch of time was learning and understanding the tools we were working with and the goals we were working towards before trying to work on the project, not just getting the gist of something, but actually understanding it</blockquote>",
+        "I said basically the same thing about git and about atomic design separately, before realizing it was really one pattern repeating. It worked, mostly, but it wasn't efficient."
+      ],
+      "closingQuote": "I kept starting with just enough understanding to begin, then paying for the gaps later instead of front-loading the confusion &mdash; the clearest, most specific thing I'd actually change if I did this again."
+    },
+    {
+      "type": "folder",
+      "id": "trm-diagrams",
+      "name": "Diagrams",
+      "children": [
+        {
+          "type": "page",
+          "id": "trm-figure-a",
+          "name": "Figure A",
+          "title": "Figure A &mdash; Clerk Session Token Flow",
+          "summary": "The mistake: treating a token as one universal thing.",
+          "content": [
+            "<figure class=\"case-study-figure\"><img src=\"data/images/trm/figure-a-clerk-token-flow.svg\" alt=\"Diagram of the Clerk session token flow: calling getToken() with the default template produces a token in the wrong shape for Supabase row-level security, while getToken with the supabase-local template produces a token that Express and Supabase correctly validate.\" loading=\"lazy\" decoding=\"async\" width=\"1000\" height=\"320\"><figcaption>Figure A &mdash; Clerk Session Token Flow</figcaption></figure>",
+            "<p>From <a onclick=\"goToPage('trm-process-notes')\" class=\"text-purple\">Process Notes</a>: the section on Clerk auth and session tokens.</p>"
+          ]
+        },
+        {
+          "type": "page",
+          "id": "trm-figure-b",
+          "name": "Figure B",
+          "title": "Figure B &mdash; Atomic Design, the Question I Actually Had",
+          "summary": "Why do some organisms skip molecules and go straight to atoms?",
+          "content": [
+            "<figure class=\"case-study-figure\"><img src=\"data/images/trm/figure-b-atomic-design-logic.svg\" alt=\"Diagram contrasting an assumed atomic design pipeline, where every UI element passes through all five tiers, against the rule actually used: skip a tier when that level's composition isn't reused elsewhere.\" loading=\"lazy\" decoding=\"async\" width=\"1000\" height=\"480\"><figcaption>Figure B &mdash; Atomic Design, the Question I Actually Had</figcaption></figure>",
+            "<p>From <a onclick=\"goToPage('trm-process-notes')\" class=\"text-purple\">Process Notes</a>: the section on atomic design, in theory vs. actually placing a file.</p>"
+          ]
+        },
+        {
+          "type": "page",
+          "id": "trm-figure-c",
+          "name": "Figure C",
+          "title": "Figure C &mdash; Rebase &amp; Squash, the Sequence I Actually Learned",
+          "summary": "Redrawn from memory after learning it through trial, error, and a lot of Marvin's patience.",
+          "content": [
+            "<figure class=\"case-study-figure\"><img src=\"data/images/trm/figure-c-git-rebase-squash.svg\" alt=\"Flowchart of the git workflow learned during the project: commit on a feature branch, rebase onto the release branch, squash commits interactively, lint and format, push (occasionally force), and code review, with a side path for resetting hard and pulling fresh from origin when a branch got tangled.\" loading=\"lazy\" decoding=\"async\" width=\"1000\" height=\"560\"><figcaption>Figure C &mdash; Rebase &amp; Squash, the Sequence I Actually Learned</figcaption></figure>",
+            "<p>From <a onclick=\"goToPage('trm-process-notes')\" class=\"text-purple\">Process Notes</a>: the section on git, actually learning it instead of memorizing commands.</p>"
+          ]
+        },
+        {
+          "type": "page",
+          "id": "trm-figure-d",
+          "name": "Figure D",
+          "title": "Figure D &mdash; Role-Based Interface Structure",
+          "summary": "What each role actually needed, not just what they were allowed to see.",
+          "content": [
+            "<figure class=\"case-study-figure\"><img src=\"data/images/trm/figure-d-role-based-interface-structure.svg\" alt=\"Diagram showing a single router-level session check branching into three different interface priorities: an anonymous visitor's landing page optimized for conversion, a business user's dashboard optimized for clarity, and an admin interface optimized for raw usability over polish.\" loading=\"lazy\" decoding=\"async\" width=\"1000\" height=\"460\"><figcaption>Figure D &mdash; Role-Based Interface Structure</figcaption></figure>",
+            "<p>From <a onclick=\"goToPage('trm-case-study')\" class=\"text-purple\">The Review Mediator</a>: the section on routing by role, not by page.</p>"
+          ]
+        }
+      ]
+    }
+  ]
+}

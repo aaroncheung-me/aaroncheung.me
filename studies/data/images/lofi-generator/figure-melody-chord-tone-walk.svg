@@ -1,0 +1,63 @@
+<svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="lf1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="480" fill="#ffffff"/>
+  <text x="30" y="34" fill="#111" font-size="16" font-weight="bold">Figure: Melody Walk vs. Chord-Tone Anchoring</text>
+  <line x1="30" y1="46" x2="970" y2="46" stroke="#ccc" stroke-width="1"/>
+  <text x="30" y="66" fill="#666" font-size="10.5" font-style="italic">passing tones move by small steps; the first note of each phrase jumps to the nearest chord tone instead</text>
+
+  <!-- scale ladder -->
+  <text x="70" y="100" fill="#111" font-size="11" font-weight="bold">WALK_SCALE</text>
+  <g font-size="10">
+    <!-- 9 scale positions as a vertical ladder -->
+    <line x1="120" y1="120" x2="120" y2="420" stroke="#ccc" stroke-width="1"/>
+  </g>
+
+  <!-- positions, spaced vertically, some marked as chord tones -->
+  <!-- pos 8 top .. pos 0 bottom, label a few -->
+  <g font-size="10.5">
+    <circle cx="120" cy="130" r="5" fill="#fff" stroke="#999" stroke-width="1.3"/>
+    <text x="135" y="134" fill="#888">scale step 8</text>
+
+    <circle cx="120" cy="167" r="6" fill="#27803e" stroke="#27803e" stroke-width="1.3"/>
+    <text x="135" y="171" fill="#27803e" font-weight="bold">scale step 7 — chord tone</text>
+
+    <circle cx="120" cy="204" r="5" fill="#fff" stroke="#999" stroke-width="1.3"/>
+    <text x="135" y="208" fill="#888">scale step 6</text>
+
+    <circle cx="120" cy="241" r="5" fill="#fff" stroke="#999" stroke-width="1.3"/>
+    <text x="135" y="245" fill="#888">scale step 5</text>
+
+    <circle cx="120" cy="278" r="7" fill="#2980b9" stroke="#2980b9" stroke-width="1.5"/>
+    <text x="135" y="282" fill="#2980b9" font-weight="bold">scale step 4 — current position</text>
+
+    <circle cx="120" cy="315" r="5" fill="#fff" stroke="#999" stroke-width="1.3"/>
+    <text x="135" y="319" fill="#888">scale step 3</text>
+
+    <circle cx="120" cy="352" r="6" fill="#27803e" stroke="#27803e" stroke-width="1.3"/>
+    <text x="135" y="356" fill="#27803e" font-weight="bold">scale step 2 — chord tone</text>
+
+    <circle cx="120" cy="389" r="5" fill="#fff" stroke="#999" stroke-width="1.3"/>
+    <text x="135" y="393" fill="#888">scale step 1</text>
+  </g>
+
+  <!-- right side: two scenarios -->
+  <text x="500" y="100" fill="#c0392b" font-size="11.5" font-weight="bold">Passing tone (mid-phrase)</text>
+  <path d="M175,278 L420,278" stroke="#2980b9" stroke-width="1.3" fill="none" marker-end="url(#lf1)" stroke-dasharray="4,3"/>
+  <rect x="430" y="255" width="260" height="50" rx="4" fill="#f7f7f5" stroke="#c0392b" stroke-width="1.3"/>
+  <text x="450" y="275" fill="#333" font-size="10.5">small step, up or down 1</text>
+  <text x="450" y="291" fill="#333" font-size="10.5">no chord awareness, just motion</text>
+
+  <text x="500" y="360" fill="#27803e" font-size="11.5" font-weight="bold">First note of a new phrase</text>
+  <path d="M175,278 L200,352" stroke="#27803e" stroke-width="1.5" fill="none" marker-end="url(#lf1)"/>
+  <rect x="430" y="375" width="290" height="60" rx="4" fill="#f7f7f5" stroke="#27803e" stroke-width="1.3"/>
+  <text x="450" y="396" fill="#333" font-size="10.5">search up to 4 steps for the</text>
+  <text x="450" y="412" fill="#333" font-size="10.5">nearest chord tone, jump there</text>
+  <text x="450" y="428" fill="#333" font-size="10.5">instead of a small random step</text>
+
+  <text x="500" y="450" text-anchor="start" fill="#333" font-size="11">Same walk engine, two different rules depending on whether the note starts a new phrase.</text>
+
+</svg>
