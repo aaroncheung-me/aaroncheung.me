@@ -332,6 +332,26 @@ const FOOTER_POPUP_CONFIGS = {
 
 let _popupCloseHandler = null;
 
+// Closes #footer-popup on the next click outside it (or its trigger
+// button). Every opener goes through here so there's only ever one handler
+// attached: openers used to each attach their own a frame later without
+// removing the previous one, so switching popups (e.g. settings -> palette)
+// leaked handlers that went on closing every popup the instant it opened,
+// leaving the mobile header dead until a reload.
+//
+// Checks composedPath() rather than popup.contains(e.target): the path is
+// fixed when the click starts, so a click whose own handler re-renders the
+// popup (detaching the clicked button) still counts as inside it. The same
+// check skips the click that opened the popup, so no frame delay is needed.
+function armPopupOutsideClose(popup, button) {
+  if (_popupCloseHandler) document.removeEventListener('click', _popupCloseHandler);
+  _popupCloseHandler = (e) => {
+    const path = e.composedPath();
+    if (!path.includes(popup) && !path.includes(button)) closeFooterPopup();
+  };
+  document.addEventListener('click', _popupCloseHandler);
+}
+
 // Shared by toggleFooterPopup and toggleNavWidgetPopup -- only the
 // positioning differs between them (footer-bar-relative vs. anchored to
 // whichever button opened it), the option-list content is identical.
@@ -381,12 +401,7 @@ function toggleFooterPopup(button, type) {
   }
   popup.removeAttribute('hidden');
 
-  requestAnimationFrame(() => {
-    _popupCloseHandler = (e) => {
-      if (!popup.contains(e.target) && e.target !== button) closeFooterPopup();
-    };
-    document.addEventListener('click', _popupCloseHandler);
-  });
+  armPopupOutsideClose(popup, button);
 }
 
 // Same palette/font pickers as the footer tray, opened from the nav
@@ -398,23 +413,26 @@ function toggleNavWidgetPopup(button, type) {
   const popup = document.getElementById('footer-popup');
   if (!popup.hidden && popup.dataset.type === type) { closeFooterPopup(); return; }
 
+  // Opened from a row inside the mobile settings menu: the picker replaces
+  // the menu in place, keeping its position. That row is detached by
+  // renderPopupOptions below, so measuring it afterward would read 0,0 and
+  // center the picker on the screen's left edge, half off-screen.
+  const replacingOpenPopup = !popup.hidden && popup.contains(button);
+  const rect = button.getBoundingClientRect();
+
   renderPopupOptions(popup, type);
 
-  const rect = button.getBoundingClientRect();
-  const openAbove = rect.top > window.innerHeight / 2;
-  popup.style.left      = (rect.left + rect.width / 2) + 'px';
-  popup.style.right     = '';
-  popup.style.transform = 'translateX(-50%)';
-  popup.style.top    = openAbove ? '' : (rect.bottom + 6) + 'px';
-  popup.style.bottom = openAbove ? (window.innerHeight - rect.top + 6) + 'px' : '';
+  if (!replacingOpenPopup) {
+    const openAbove = rect.top > window.innerHeight / 2;
+    popup.style.left      = (rect.left + rect.width / 2) + 'px';
+    popup.style.right     = '';
+    popup.style.transform = 'translateX(-50%)';
+    popup.style.top    = openAbove ? '' : (rect.bottom + 6) + 'px';
+    popup.style.bottom = openAbove ? (window.innerHeight - rect.top + 6) + 'px' : '';
+  }
   popup.removeAttribute('hidden');
 
-  requestAnimationFrame(() => {
-    _popupCloseHandler = (e) => {
-      if (!popup.contains(e.target) && e.target !== button) closeFooterPopup();
-    };
-    document.addEventListener('click', _popupCloseHandler);
-  });
+  armPopupOutsideClose(popup, button);
 }
 
 function closeFooterPopup() {
@@ -501,12 +519,7 @@ function toggleMobileQuickSettings(button) {
   popup.style.bottom = '';
   popup.removeAttribute('hidden');
 
-  requestAnimationFrame(() => {
-    _popupCloseHandler = (e) => {
-      if (!popup.contains(e.target) && e.target !== button) closeFooterPopup();
-    };
-    document.addEventListener('click', _popupCloseHandler);
-  });
+  armPopupOutsideClose(popup, button);
 }
 
 // Desktop footer overflow dropdown -- between the mobile breakpoint and full
@@ -571,12 +584,7 @@ function toggleFooterTraySettings(button) {
   popup.style.bottom = (window.innerHeight - footerRect.top + 4) + 'px';
   popup.removeAttribute('hidden');
 
-  requestAnimationFrame(() => {
-    _popupCloseHandler = (e) => {
-      if (!popup.contains(e.target) && e.target !== button) closeFooterPopup();
-    };
-    document.addEventListener('click', _popupCloseHandler);
-  });
+  armPopupOutsideClose(popup, button);
 }
 
 // Shared script loader (site-wide) -- lets js/home-tiles.js and
