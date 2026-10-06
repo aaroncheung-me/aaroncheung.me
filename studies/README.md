@@ -72,6 +72,15 @@ page doesn't jump while it loads, and save screenshots as WebP.
 Folders start collapsed. To open one by default, add its id to
 `DEFAULT_EXPANDED_FOLDERS` in `js/studies-render.js`.
 
+## Page links
+
+Every page has its own link: `aaroncheung.me/studies/#<page-id>` (e.g.
+`#trm-case-study`, `#resume`); Home is the bare `/studies/`. The back
+button, refresh, and the tab title all follow the current page. The ids are
+the `id` fields in `data/case-studies/*.json`, so renaming one breaks any
+link already sent out (it falls back to Home). The main portfolio uses the
+same scheme in `js/tui.js` (e.g. `aaroncheung.me/#proj-lofi`).
+
 ## Live Lofi Generator demo
 
 The Lofi Generator case study embeds the same full control panel as the

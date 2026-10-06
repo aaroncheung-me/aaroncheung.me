@@ -150,9 +150,35 @@ function renderRootBreadcrumb(pageLabel) {
   content.textContent = `portfolio / ${toNavLabel(pageLabel)}`;
 }
 
-async function goToPage(id, { skipRender = false } = {}) {
+// Each page gets its own link: aaroncheung.me/#<page-id> (Home is the bare
+// URL), e.g. a resume can point straight at #proj-lofi. goToPage() pushes a
+// history entry so the back button walks back through pages; back/forward
+// themselves pass fromHistory so they don't push a duplicate. Same scheme
+// as studies/js/studies-router.js.
+const BASE_TITLE = document.title;
+
+function pageIdFromHash() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  return PAGE_REGISTRY.has(id) ? id : "home";
+}
+
+function pushPageUrl(id) {
+  if (pageIdFromHash() === id && (id !== "home" || !location.hash)) return;
+  history.pushState(null, "", id === "home" ? location.pathname + location.search : `#${encodeURIComponent(id)}`);
+}
+
+function setPageTitle(id, node) {
+  if (id === "home") { document.title = BASE_TITLE; return; }
+  const label = document.createElement("span");
+  label.innerHTML = node.title ?? node.name;
+  document.title = `${label.textContent} · ${BASE_TITLE}`;
+}
+
+async function goToPage(id, { skipRender = false, fromHistory = false } = {}) {
   const entry = PAGE_REGISTRY.get(id);
   if (!entry) return;
+  if (!fromHistory) pushPageUrl(id);
+  setPageTitle(id, entry.node);
 
   if (currentPageId != null) {
     document.querySelector(`.nav-page[data-page-id="${currentPageId}"]`)?.classList.remove("selected-item");
@@ -965,5 +991,15 @@ async function init() {
   initCommandPalette();
   initMobileNav();
 
-  await goToPage("home", { skipRender: true });
+  window.addEventListener("popstate", () => goToPage(pageIdFromHash(), { fromHistory: true }));
+
+  // A link straight to a page (aaroncheung.me/#proj-lofi) opens that page;
+  // an unknown or missing hash falls back to Home and drops the bad hash.
+  const startId = pageIdFromHash();
+  if (startId === "home") {
+    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+    await goToPage("home", { skipRender: true, fromHistory: true });
+  } else {
+    await goToPage(startId, { fromHistory: true });
+  }
 }

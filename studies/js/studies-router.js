@@ -135,9 +135,33 @@ function renderBreadcrumb(rowEl, pageLabel) {
   content.textContent = segments.join(" / ");
 }
 
-async function goToPage(id, { skipRender = false } = {}) {
+// Each page gets its own link: /studies/#<page-id> (Home is the bare
+// /studies/). goToPage() pushes a history entry, so the back button walks
+// back through pages; navigating via back/forward passes fromHistory so it
+// doesn't push a duplicate.
+const BASE_TITLE = document.title;
+
+function pageIdFromHash() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  return PAGE_REGISTRY.has(id) ? id : "home";
+}
+
+function pushPageUrl(id) {
+  if (pageIdFromHash() === id && (id !== "home" || !location.hash)) return;
+  history.pushState(null, "", id === "home" ? location.pathname + location.search : `#${encodeURIComponent(id)}`);
+}
+
+function setPageTitle(node) {
+  document.title = node.id === "home"
+    ? BASE_TITLE
+    : `${decodeEntities(node.title ?? node.name)} · ${BASE_TITLE}`;
+}
+
+async function goToPage(id, { skipRender = false, fromHistory = false } = {}) {
   const node = PAGE_REGISTRY.get(id);
   if (!node) return;
+  if (!fromHistory) pushPageUrl(id);
+  setPageTitle(node);
 
   if (currentPageId != null) {
     document.querySelector(`.nav-page[data-page-id="${currentPageId}"]`)?.classList.remove("selected-item");
@@ -380,5 +404,16 @@ async function initStudiesRouter() {
 
   applyDefaultExpandedFolders();
   initMobileNav();
-  await goToPage("home", { skipRender: true });
+
+  window.addEventListener("popstate", () => goToPage(pageIdFromHash(), { fromHistory: true }));
+
+  // A link straight to a page (/studies/#trm-case-study) opens that page;
+  // an unknown or missing hash falls back to Home and drops the bad hash.
+  const startId = pageIdFromHash();
+  if (startId === "home") {
+    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+    await goToPage("home", { skipRender: true, fromHistory: true });
+  } else {
+    await goToPage(startId, { fromHistory: true });
+  }
 }
